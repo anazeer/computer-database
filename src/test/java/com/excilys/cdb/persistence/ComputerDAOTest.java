@@ -1,19 +1,22 @@
 package com.excilys.cdb.persistence;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.ComputerDAO;
 
 /**
- * ComputerDAO test class. We assume that the database is not empty
+ * ComputerDAO test class. We assume that the database is not empty and contains more than 500 elements
  * @author excilys
  *
  */
@@ -32,9 +35,22 @@ public class ComputerDAOTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testFind() throws Exception {
+	public void testFindOk() throws Exception {
 		Computer computer = computerDAO.findById(52L);
 		assertNotNull(computer);
+	}
+	
+	@Test
+	public void testFindNotOk() throws Exception {
+		Computer computer = computerDAO.findById(2500L);
+		assertNull(computer);
+	}
+	
+	@Test
+	public void testFindFromOffset() {
+		List<Computer> list = computerDAO.findFromOffset(0, 10);
+		assertNotNull(list);
+		assertEquals(list.size(), 10);
 	}
 	
 	@Test
@@ -45,11 +61,43 @@ public class ComputerDAOTest {
 	}
 	
 	@Test
+	public void testCountEntries() {
+		assertTrue(computerDAO.countEntries() > 500);
+	}
+	
+	@Test
 	public void testCreate() throws Exception {
+		Computer computer = new Computer();
+		computer.setName("Sony Cie");
+		computer.setIntroduced(LocalDate.now());
+		computer.setDiscontinued(LocalDate.now().plusDays(1));
+		computer.setCompany(new Company());
+		computer = computerDAO.create(computer);
+		assertNotNull(msgId, computer.getId());
+		assertNull(computer.getCompany().getId());
+	}
+	
+	@Test
+	public void testCreateWithCompany() throws Exception {
+		Computer computer = new Computer();
+		Company company = new Company();
+		company.setId(40L);
+		computer.setName("Sony Cie");
+		computer.setCompany(company);
+		computer = computerDAO.create(computer);
+		assertNotNull(msgId, computer.getId());
+		assertEquals(computer.getCompany().getId(), (Long) 40L);
+	}
+	
+	@Test
+	public void testCreateAndDelete() throws Exception {
 		Computer computer = new Computer();
 		computer.setName("Sony Cie");
 		computer = computerDAO.create(computer);
 		assertNotNull(msgId, computer.getId());
+		computerDAO.delete(computer);
+		computer = computerDAO.findById(computer.getId());
+		assertNull(computer);
 	}
 	
 	@Test

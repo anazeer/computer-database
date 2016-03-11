@@ -142,7 +142,7 @@ public class Main {
 		String entry = null;
 		while(entry == null) {
 			System.out.println("Select the name:");
-			entry = scan.nextLine();
+			entry = scan.nextLine().trim();
 			if(entry.isEmpty()) {
 				entry = null;
 				System.err.println("Enter a valid name");
@@ -157,17 +157,26 @@ public class Main {
 	 */
 	static Date readDate() {
 		Date date = null;
+		String entry = null;
+		//String parse = "yyyy/mm/dd";
+		String parse = "dd/mm/yyyy";
 		while(date == null) {
 			try {
-				System.out.println("Select date (dd/mm/yyyy): (If unknown, enter u)");
-				String entry = scan.next("(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)");
-			    date = new SimpleDateFormat("dd/MM/yyyy").parse(entry);
+				System.out.println("Select date " + parse + ": (If unknown, enter u)");
+				entry = scan.next("((0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d))|u");
+				//entry = scan.next("(((19|20)\\d\\d)/(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01]))|u");
+			    date = new SimpleDateFormat(parse).parse(entry);
 			} catch (ParseException e) {
-			    e.printStackTrace();
+				if("u".equals(entry)) {
+					break;
+				}
+				else {
+					e.printStackTrace();
+				}
 			}
 			catch(InputMismatchException e) {
 				date = null;
-				System.err.println(("Enter a correct date (dd/mm/yyyy) or u to ignore it"));
+				System.err.println(("Enter a correct date " + parse + " or u to ignore it"));
 			}
 			finally {
 				scan.nextLine(); // consume new line left-over
@@ -228,14 +237,23 @@ public class Main {
 		do {
 			introducedDate = readDate();
 			discontinuedDate = readDate();
+			if(introducedDate == null || discontinuedDate == null) {
+				break;
+			}
 		}
 		while(!introducedDate.before(discontinuedDate));
-
-		Instant instant = Instant.ofEpochMilli(introducedDate.getTime());
-	    LocalDate introduced = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
-	
-		instant = Instant.ofEpochMilli(discontinuedDate.getTime());
-	    LocalDate discontinued = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
+		
+		Instant instant = null;
+	    LocalDate introduced = null;
+	    LocalDate discontinued = null;
+		if(introducedDate != null) {
+			instant = Instant.ofEpochMilli(introducedDate.getTime());
+			introduced = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
+		}
+		if(discontinuedDate != null) {
+			instant = Instant.ofEpochMilli(discontinuedDate.getTime());
+			discontinued = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
+		}
 		
 		System.out.println("Select company id");
 		Long company_id = readId();
@@ -253,7 +271,6 @@ public class Main {
 	 */
 	static void session() {
 		initLists();
-		scan = new Scanner(System.in);
 		boolean exit = false;
 		int step = 0;
 		while(!exit) {
@@ -297,7 +314,7 @@ public class Main {
 					case 1 :
 						ComputerPagination page = new ComputerPagination(computerService.countEntries(), entriesPerPage);
 						System.out.println("---------------------");
-						System.out.println("- List of companies -");
+						System.out.println("- List of computers -");
 						System.out.println("---------------------");
 						boolean end = false;
 						while(!end) {
@@ -320,6 +337,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
+		scan = new Scanner(System.in);
 		session();
 		scan.close();
 	}

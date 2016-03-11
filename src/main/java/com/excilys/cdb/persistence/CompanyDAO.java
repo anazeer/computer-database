@@ -106,7 +106,12 @@ public class CompanyDAO implements DAO<Company> {
 		catch (SQLException e) {
 			log.error(e.getMessage());
 		}
-		log.info("Company " + (company == null ? "not " : "") + "retrieved (id = " + id + ")");
+		if(company == null) {
+			log.warn("Company not retrieved (id = " + id + ")");
+		}
+		else {
+			log.info("Company retrieved (id = " + id + ")");
+		}
 		return company;
 	}
 

@@ -118,8 +118,8 @@ public class ComputerDAO implements DAO<Computer> {
 		String query = "INSERT INTO computer "
 				+ "(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 		try(PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
-			Date introducedDate = obj.getIntroduced() == null ? null : Date.valueOf(obj.getIntroduced());
-			Date discontinuedDate = obj.getIntroduced() == null ? null : Date.valueOf(obj.getIntroduced());
+			Date introducedDate = obj.getIntroduced() == null ? null : Date.valueOf(obj.getIntroduced().atTime(0, 0, 0).toLocalDate());
+			Date discontinuedDate = obj.getIntroduced() == null ? null : Date.valueOf(obj.getIntroduced().atTime(0, 0, 0).toLocalDate());
 			Long company_id = obj.getCompany() == null ? null : obj.getCompany().getId();
 			stmt.setString(1, obj.getName());
 			stmt.setDate(2, introducedDate);
@@ -153,7 +153,13 @@ public class ComputerDAO implements DAO<Computer> {
 				+ "WHERE id = " + obj.getId();
 		try(PreparedStatement stmt = conn.prepareStatement(query);) {
 			stmt.setString(1, obj.getName());
-			stmt.setLong(2, obj.getCompany() == null ? null : obj.getCompany().getId());
+			Long company_id = obj.getCompany() == null ? null : obj.getCompany().getId();
+			if(company_id == null) {
+				stmt.setNull(2, Types.NULL);
+			}
+			else {
+				stmt.setLong(2, company_id);
+			}
 			stmt.executeUpdate();
 			stmt.close();
 			log.info("Computer updated (id = " + obj.getId() + ")");

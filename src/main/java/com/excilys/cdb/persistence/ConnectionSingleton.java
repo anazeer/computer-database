@@ -20,7 +20,7 @@ public class ConnectionSingleton {
 	
 	/**
 	 * 
-	 * @return the current instance of Connection if it exists, otherwise a new nstance
+	 * @return the current instance of Connection if it exists, otherwise a new instance
 	 */
 	public static Connection getInstance() {
 		if(conn == null) {

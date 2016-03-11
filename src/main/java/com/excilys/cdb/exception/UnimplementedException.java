@@ -22,5 +22,4 @@ public class UnimplementedException extends Exception {
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
-
 }

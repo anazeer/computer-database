@@ -61,28 +61,53 @@ public class Computer {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if(obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if(getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		Computer other = (Computer) obj;
-		return id.equals(other.id)
-				&& name.equals(other.name) 
-				&& introduced.equals(other.introduced)
-				&& discontinued.equals(other.discontinued)
-				&& company.equals(other.company);
+		if (company == null) {
+			if (other.company != null)
+				return false;
+		} else if (!company.equals(other.company))
+			return false;
+		if (discontinued == null) {
+			if (other.discontinued != null)
+				return false;
+		} else if (!discontinued.equals(other.discontinued))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (introduced == null) {
+			if (other.introduced != null)
+				return false;
+		} else if (!introduced.equals(other.introduced))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 	
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
+		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name + " (id: " + id + ")";

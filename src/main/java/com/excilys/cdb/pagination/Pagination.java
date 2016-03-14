@@ -38,6 +38,13 @@ public abstract class Pagination<T> {
 	public int getCurrentPage() {
 		return currentPage;
 	}
+	
+	public void setCurrentPage(int currentPage) {
+		if(currentPage >= 1 && currentPage <= countPages && this.currentPage != currentPage) {
+			this.currentPage = currentPage;
+			changed = true;
+		}
+	}
 
 	public void next() {
 		if(currentPage < countPages) {
@@ -53,5 +60,5 @@ public abstract class Pagination<T> {
 		}
 	}
 	
-	public abstract List<T> listFromOffset();
+	public abstract List<T> getListFromOffset();
 }

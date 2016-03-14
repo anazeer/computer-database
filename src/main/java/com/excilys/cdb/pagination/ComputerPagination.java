@@ -8,7 +8,7 @@ import com.excilys.cdb.persistence.ComputerDAO;
 public class ComputerPagination extends Pagination<Computer> {
 	
 	private ComputerDAO ComputerDAO;
-	private List<Computer> listComputer;
+	private List<Computer> listFromOffset;
 
 
 	public ComputerPagination(int countEntries, int countPerPage) {
@@ -16,14 +16,14 @@ public class ComputerPagination extends Pagination<Computer> {
 		ComputerDAO = new ComputerDAO();
 	}
 	
-	public List<Computer> listFromOffset() {
+	public List<Computer> getListFromOffset() {
 		if(!changed) {
-			return listComputer;
+			return listFromOffset;
 		}
 		int from = (getCurrentPage() - 1) * getCountPerPage();
 		int offset = getCountPerPage();
-		listComputer = ComputerDAO.findFromOffset(from, offset);
+		listFromOffset = ComputerDAO.findFromOffset(from, offset);
 		changed = false;
-		return listComputer;
-	}
+		return listFromOffset;
+	}		
 }

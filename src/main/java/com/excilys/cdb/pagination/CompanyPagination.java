@@ -8,7 +8,7 @@ import com.excilys.cdb.persistence.CompanyDAO;
 public class CompanyPagination extends Pagination<Company> {
 	
 	private CompanyDAO companyDAO;
-	private List<Company> listCompany;
+	private List<Company> listFromOffset;
 
 
 	public CompanyPagination(int countEntries, int countPerPage) {
@@ -16,14 +16,14 @@ public class CompanyPagination extends Pagination<Company> {
 		companyDAO = new CompanyDAO();
 	}
 	
-	public List<Company> listFromOffset() {
+	public List<Company> getListFromOffset() {
 		if(!changed) {
-			return listCompany;
+			return listFromOffset;
 		}
 		int from = (getCurrentPage() - 1) * getCountPerPage();
 		int offset = getCountPerPage();
-		listCompany = companyDAO.findFromOffset(from, offset);
+		listFromOffset = companyDAO.findFromOffset(from, offset);
 		changed = false;
-		return listCompany;
+		return listFromOffset;
 	}
 }

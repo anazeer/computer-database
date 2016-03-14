@@ -109,9 +109,6 @@ public class CompanyDAO implements DAO<Company> {
 		if(company == null) {
 			log.warn("Company not retrieved (id = " + id + ")");
 		}
-		else {
-			log.info("Company retrieved (id = " + id + ")");
-		}
 		return company;
 	}
 

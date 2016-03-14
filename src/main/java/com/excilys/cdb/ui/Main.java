@@ -298,7 +298,7 @@ public class Main {
 						System.out.println("---------------------");
 						boolean end = false;
 						while(!end) {
-							showPage(page.listFromOffset());
+							showPage(page.getListFromOffset());
 							switch(readPage()) {
 								case 'n' : page.next(); break;
 								case 'p' : page.previous(); break;
@@ -318,7 +318,7 @@ public class Main {
 						System.out.println("---------------------");
 						boolean end = false;
 						while(!end) {
-							showPage(page.listFromOffset());
+							showPage(page.getListFromOffset());
 							switch(readPage()) {
 								case 'n' : page.next(); break;
 								case 'p' : page.previous(); break;

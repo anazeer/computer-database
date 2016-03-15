@@ -1,4 +1,4 @@
 #NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
-#Tue Mar 15 17:42:14 CET 2016
-plexus-utils-3.0.8.jar>central=
-plexus-utils-3.0.8.pom>central=
+#Tue Mar 15 17:34:55 CET 2016
+maven-war-plugin-2.2.jar>central=
+maven-war-plugin-2.2.pom>central=

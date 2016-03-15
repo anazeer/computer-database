@@ -1,6 +1,8 @@
 package com.excilys.cdb.persistence;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -8,7 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.CompanyDAO;
+import com.excilys.cdb.persistence.dao.CompanyDAO;
 
 /**
  * CompanyDAO test class. We assume that the database is not empty and contains 42 elements

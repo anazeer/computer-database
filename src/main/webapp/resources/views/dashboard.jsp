@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<%@page import="com.excilys.cdb.servlets.computer.ListServlet"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -90,7 +89,7 @@
                         </td>
                         <td><c:out value="${computer.introduced}"/> </td>
                         <td><c:out value="${computer.discontinued}"/> </td>
-                        <td><c:out value="${computer.company.name}"/> </td>
+                        <td><c:out value="${computer.companyName}"/> </td>
 
                     </tr>
                 </c:forEach>
@@ -147,12 +146,12 @@
               </c:if>
 
         </ul>
-		</div>
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+            <a href="computer.show?page=${pagination.currentPage}&noElt=10" class="btn btn-default" role="button">10</a>
+            <a href="computer.show?page=${pagination.currentPage}&noElt=20" class="btn btn-default" role="button">20</a>
+            <a href="computer.show?page=${pagination.currentPage}&noElt=50" class="btn btn-default" role="button">50</a>
         </div>
+      </div>
     </footer>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>

@@ -2,27 +2,27 @@ package com.excilys.cdb.pagination;
 
 import java.util.List;
 
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.CompanyDAO;
+import com.excilys.cdb.service.CompanyService;
+import com.excilys.cdb.service.dto.CompanyDTO;
 
-public class CompanyPagination extends Pagination<Company> {
+public class CompanyPagination extends Pagination<CompanyDTO> {
 	
-	private CompanyDAO companyDAO;
-	private List<Company> listFromOffset;
+	private CompanyService companyService;
+	private List<CompanyDTO> listFromOffset;
 
 
 	public CompanyPagination(int countEntries, int countPerPage) {
 		super(countEntries, countPerPage);
-		companyDAO = new CompanyDAO();
+		companyService = new CompanyService();
 	}
 	
-	public List<Company> getListFromOffset() {
+	public List<CompanyDTO> getListFromOffset() {
 		if(!changed) {
 			return listFromOffset;
 		}
 		int from = (getCurrentPage() - 1) * getCountPerPage();
 		int offset = getCountPerPage();
-		listFromOffset = companyDAO.findFromOffset(from, offset);
+		listFromOffset = companyService.listFromOffset(from, offset);
 		changed = false;
 		return listFromOffset;
 	}

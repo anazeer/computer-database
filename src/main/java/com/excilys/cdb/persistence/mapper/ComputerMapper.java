@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.CompanyDAO;
+import com.excilys.cdb.persistence.dao.CompanyDAO;
 
 public class ComputerMapper implements DAOMapper<Computer> {
 
@@ -16,11 +16,10 @@ public class ComputerMapper implements DAOMapper<Computer> {
 	@Override
 	public Computer find(ResultSet result) {
 		try {
-			Computer computer = new Computer();
+			Computer computer = new Computer(result.getString("name"));
 			LocalDate introducedDate = result.getDate("introduced") == null ? null : result.getDate("introduced").toLocalDate();
 			LocalDate discontinuedDate = result.getDate("introduced") == null ? null : result.getDate("introduced").toLocalDate();
 			computer.setId(result.getLong("id"));
-			computer.setName(result.getString("name"));
 			computer.setIntroduced(introducedDate);
 			computer.setDiscontinued(discontinuedDate);
 			computer.setCompany(new CompanyDAO().findById(result.getLong("company_id")));

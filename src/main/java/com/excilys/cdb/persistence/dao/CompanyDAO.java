@@ -1,4 +1,4 @@
-package com.excilys.cdb.persistence;
+package com.excilys.cdb.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.ConnectionSingleton;
 import com.excilys.cdb.persistence.mapper.CompanyMapper;
 import com.excilys.cdb.persistence.mapper.DAOMapper;
 
@@ -30,6 +31,8 @@ public class CompanyDAO implements DAO<Company> {
 		conn = ConnectionSingleton.getInstance();
 		log = Logger.getLogger(getClass());
 	}
+	
+
 
 	@Override
 	public List<Company> findAll() {

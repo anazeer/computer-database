@@ -15,8 +15,8 @@ public class Computer {
 	private LocalDate discontinued;
 	private Company company;
 
-	public Computer() {
-
+	public Computer(String name) {
+		setName(name);
 	}
 
 	public Long getId() {
@@ -32,6 +32,8 @@ public class Computer {
 	}
 
 	public void setName(String name) {
+		if(name.trim().isEmpty())
+			throw new IllegalArgumentException("Name should'nt be empty");
 		this.name = name;
 	}
 

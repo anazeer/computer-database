@@ -15,7 +15,7 @@ import java.util.Scanner;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.CompanyPagination;
 import com.excilys.cdb.pagination.ComputerPagination;
-import com.excilys.cdb.persistence.CompanyDAO;
+import com.excilys.cdb.persistence.dao.CompanyDAO;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
@@ -258,8 +258,7 @@ public class Main {
 		System.out.println("Select company id");
 		Long company_id = readId();
 		
-		Computer computer = new Computer();
-		computer.setName(name);
+		Computer computer = new Computer(name);
 		computer.setIntroduced(introduced);
 		computer.setDiscontinued(discontinued);
 		computer.setCompany(new CompanyDAO().findById(company_id));
@@ -326,8 +325,17 @@ public class Main {
 							}
 						}
 						break;
-					case 2 : Long id = readId(); computerService.showDetails(id); break;
-					case 3 : Computer computer = constructComputer(); computerService.create(computer); break;
+					case 2 :
+						Long id = readId();
+						Computer computer = computerService.getComputer(id);
+						if(computer == null) {
+							System.out.println("No computer is referenced by id " + id);
+						}
+						else {
+							System.out.println(computer.toDetailedString());
+						}
+						break;
+					case 3 : Computer comp = constructComputer(); computerService.create(comp); break;
 					case 4 : Computer updateComputer = constructComputer(); Long updateId = readId(); updateComputer.setId(updateId);computerService.update(updateComputer); break;
 					case 5 : Long delId = readId(); computerService.delete(delId); break;
 					case 6 : step = 0; break;

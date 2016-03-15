@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.cdb.service.CompanyService;
+
 
 /*
  * TODO
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AddServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	private CompanyService companyService;
 
     /**
      * Default constructor. 
@@ -34,21 +37,24 @@ public class AddServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
     	super.init();
+    	companyService = new CompanyService();
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("companies", companyService.list());
 		getServletContext().getRequestDispatcher("/resources/views/addComputer.jsp").forward(request, response);
-		System.out.println(request.getParameter("computerName"));
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		System.out.println(request.getParameter("computerName"));
+		System.out.println(request.getParameter("companyId"));
+		//response.sendRedirect("computer.show");
 	}
 
 }

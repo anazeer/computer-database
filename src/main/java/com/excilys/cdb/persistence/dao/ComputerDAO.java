@@ -1,4 +1,4 @@
-package com.excilys.cdb.persistence;
+package com.excilys.cdb.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.ConnectionSingleton;
 import com.excilys.cdb.persistence.mapper.ComputerMapper;
 import com.excilys.cdb.persistence.mapper.DAOMapper;
 
@@ -86,7 +87,7 @@ public class ComputerDAO implements DAO<Computer> {
 			}
 			result.close();
 			stmt.close();
-			log.info("Computer created (id = " + id + ")");
+			log.info("Computer retrieved (id = " + id + ")");
 		}
 		catch (SQLException e) {
 			log.error(e.getMessage());

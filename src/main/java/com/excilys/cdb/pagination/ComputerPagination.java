@@ -2,27 +2,27 @@ package com.excilys.cdb.pagination;
 
 import java.util.List;
 
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.ComputerDAO;
+import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.dto.ComputerDTO;
 
-public class ComputerPagination extends Pagination<Computer> {
+public class ComputerPagination extends Pagination<ComputerDTO> {
 	
-	private ComputerDAO ComputerDAO;
-	private List<Computer> listFromOffset;
+	private ComputerService computerService;
+	private List<ComputerDTO> listFromOffset;
 
 
 	public ComputerPagination(int countEntries, int countPerPage) {
 		super(countEntries, countPerPage);
-		ComputerDAO = new ComputerDAO();
+		computerService = new ComputerService();
 	}
 	
-	public List<Computer> getListFromOffset() {
+	public List<ComputerDTO> getListFromOffset() {
 		if(!changed) {
 			return listFromOffset;
 		}
 		int from = (getCurrentPage() - 1) * getCountPerPage();
 		int offset = getCountPerPage();
-		listFromOffset = ComputerDAO.findFromOffset(from, offset);
+		listFromOffset = computerService.listFromOffset(from, offset);
 		changed = false;
 		return listFromOffset;
 	}		

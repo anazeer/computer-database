@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.dao.ComputerDAO;
 
 /**
  * ComputerDAO test class. We assume that the database is not empty and contains more than 500 elements
@@ -67,8 +68,18 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void testCreate() throws Exception {
-		Computer computer = new Computer();
-		computer.setName("Sony Cie");
+		Computer computer = new Computer("Sony Cie");
+		computer.setIntroduced(LocalDate.now());
+		computer.setDiscontinued(LocalDate.now().plusDays(1));
+		computer.setCompany(new Company());
+		computer = computerDAO.create(computer);
+		assertNotNull(msgId, computer.getId());
+		assertNull(computer.getCompany().getId());
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testBadCreate() {
+		Computer computer = new Computer("    ");
 		computer.setIntroduced(LocalDate.now());
 		computer.setDiscontinued(LocalDate.now().plusDays(1));
 		computer.setCompany(new Company());
@@ -79,7 +90,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void testCreateWithCompany() throws Exception {
-		Computer computer = new Computer();
+		Computer computer = new Computer("All");
 		Company company = new Company();
 		company.setId(40L);
 		computer.setName("Sony Cie");
@@ -91,8 +102,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void testCreateAndDelete() throws Exception {
-		Computer computer = new Computer();
-		computer.setName("Sony Cie");
+		Computer computer = new Computer("Sony Cie");
 		computer = computerDAO.create(computer);
 		assertNotNull(msgId, computer.getId());
 		computerDAO.delete(computer);

@@ -2,7 +2,9 @@ package com.excilys.cdb.pagination;
 
 import java.util.List;
 
-public abstract class Pagination<T> {
+import com.excilys.cdb.service.dto.DTO;
+
+public abstract class Pagination<T extends DTO> {
 	
 	private int countEntries;
 	private int countPerPage;
@@ -12,10 +14,7 @@ public abstract class Pagination<T> {
 
 	public Pagination(int countEntries, int countPerPage) {
 		this.countEntries = countEntries;
-		this.countPerPage = countPerPage;
-		countPages = (int) Math.ceil(countEntries/countPerPage);
-		currentPage = 1;
-		changed = true;
+		setCountPerPage(countPerPage);
 	}
 
 	public int getCountEntries() {
@@ -44,6 +43,19 @@ public abstract class Pagination<T> {
 			this.currentPage = currentPage;
 			changed = true;
 		}
+	}
+	
+	public void setCountPerPage(int countPerPage) {
+		if(countPerPage <= 0) {
+			throw new IllegalArgumentException("countPerPage should be positive");
+		}
+		if(countPerPage == this.countPerPage)
+			return;
+		this.countPerPage = countPerPage;
+		countPages = (int) Math.ceil(countEntries/countPerPage);
+		countPages += countPages%10 == 0 ? 0 : 1;
+		currentPage = 1;
+		changed = true;
 	}
 
 	public void next() {

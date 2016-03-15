@@ -50,15 +50,36 @@ public class ListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		if(request.getParameter("page") == null) {
-			pagination.setCurrentPage(1);
+		String page = request.getParameter("page");
+		String noElt = request.getParameter("noElt");
+		int currentPage = pagination.getCurrentPage();
+		int currentElements = pagination.getCountPerPage();
+		if(page == null) {
+			pagination.setCurrentPage(currentPage);
 		}
 		else {
 			try {
-				pagination.setCurrentPage(Integer.parseInt(request.getParameter("page")));
+				int i = Integer.parseInt(page);
+				pagination.setCurrentPage(i);
 			}
 			catch(NumberFormatException e) {
+				pagination.setCurrentPage(currentPage);
+				e.printStackTrace();
+			}
+		}
+		if(noElt == null) {
+			pagination.setCountPerPage(currentElements);
+		}
+		else {
+			try {
+				int i = Integer.parseInt(noElt);
+				if(i == 10 || i == 20 || i == 50)
+					pagination.setCountPerPage(i);
+				else
+					pagination.setCountPerPage(currentElements);
+			}
+			catch(NumberFormatException e) {
+				pagination.setCountPerPage(currentElements);
 			}
 		}
 		request.setAttribute("pagination", pagination);

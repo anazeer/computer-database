@@ -11,10 +11,18 @@ import com.excilys.cdb.service.dto.DTO;
 public class CompanyService implements ServiceOperations<Company> {
 	
 	private CompanyDAO companyDAO;
+	private static CompanyService instance;
 	
 	public CompanyService() {
 		super();
 		companyDAO = new CompanyDAO();
+	}
+	
+	public static CompanyService getInstance() {
+		if(instance == null) {
+			instance = new CompanyService();
+		}
+		return instance;
 	}
 	
 	@Override

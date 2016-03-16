@@ -13,7 +13,7 @@ public class ComputerPagination extends Pagination<ComputerDTO> {
 
 	public ComputerPagination(int countEntries, int countPerPage) {
 		super(countEntries, countPerPage);
-		computerService = new ComputerService();
+		computerService = ComputerService.getInstance();
 	}
 	
 	public List<ComputerDTO> getListFromOffset() {

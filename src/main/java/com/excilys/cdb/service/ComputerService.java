@@ -13,10 +13,18 @@ import com.excilys.cdb.service.dto.DTO;
 public class ComputerService implements ServiceOperations<Computer> {
 
 	private ComputerDAO computerDAO;
+	private static ComputerService instance;
 	
-	public ComputerService() {
+	private ComputerService() {
 		super();
 		computerDAO = new ComputerDAO();
+	}
+	
+	public static ComputerService getInstance() {
+		if(instance == null) {
+			instance = new ComputerService();
+		}
+		return instance;
 	}
 	
 	@Override

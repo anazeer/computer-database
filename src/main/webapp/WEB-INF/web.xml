@@ -7,8 +7,8 @@
 
 	<display-name>Archetype Created Web Application</display-name>
 	<servlet>
-		<servlet-name>ListServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.servlets.computer.ListServlet</servlet-class>
+		<servlet-name>ComputerServlet</servlet-name>
+		<servlet-class>com.excilys.cdb.servlets.computer.ComputerServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>AddServlet</servlet-name>
@@ -22,34 +22,34 @@
 	<!-- Servlets mapping -->
 
 	<servlet-mapping>
-		<servlet-name>ListServlet</servlet-name>
-		<url-pattern>/computer.show</url-pattern>
+		<servlet-name>ComputerServlet</servlet-name>
+		<url-pattern>/computer</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>AddServlet</servlet-name>
-		<url-pattern>/computer.add</url-pattern>
+		<url-pattern>/computerAdd</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>EditServlet</servlet-name>
-		<url-pattern>/computer.edit</url-pattern>
+		<url-pattern>/computerEdit</url-pattern>
 	</servlet-mapping>
 
 	<!-- Error pages -->
 	<error-page>
 		<error-code>403</error-code>
-		<location>/resources/views/403.html</location>
+		<location>/WEB-INF/403.jsp</location>
 	</error-page>
 
 	<error-page>
 		<error-code>404</error-code>
-		<location>/resources/views/404.html</location>
+		<location>/WEB-INF/404.jsp</location>
 	</error-page>
 
 	<error-page>
 		<error-code>500</error-code>
-		<location>/resources/views/500.html</location>
+		<location>/WEB-INF/500.jsp</location>
 	</error-page>
 
 

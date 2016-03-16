@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="page" uri="page.tld" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
 <html>
@@ -16,7 +17,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="computer"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -35,7 +36,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="computer.add">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="computerAdd">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -103,7 +104,7 @@
             <ul class="pagination">
             <c:if test="${pagination.currentPage gt 1}">
                 <li>
-                    <a href="computer.show?page=${pagination.currentPage - 1}" aria-label="Previous">
+                    <a href="computer?page=${pagination.currentPage - 1}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               	</li>
@@ -133,13 +134,13 @@
 	              		<li><a href="">${i}</a></li>
 	              	</c:when>
 	              	<c:otherwise>
-	              		<li><a href="computer.show?page=${i}">${i}</a></li>
+	              		<li><a href="computer?page=${i}">${i}</a></li>
 	              	</c:otherwise>
               	</c:choose>
               </c:forEach>
               <c:if test="${pagination.currentPage lt pagination.countPages}">
               	<li>
-              		<a href="computer.show?page=${pagination.currentPage + 1}" aria-label="Next">
+              		<a href="computer?page=${pagination.currentPage + 1}" aria-label="Next">
                 		<span aria-hidden="true">&raquo;</span>
                 	</a>
                 </li>
@@ -147,9 +148,9 @@
 
         </ul>
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <a href="computer.show?page=${pagination.currentPage}&noElt=10" class="btn btn-default" role="button">10</a>
-            <a href="computer.show?page=${pagination.currentPage}&noElt=20" class="btn btn-default" role="button">20</a>
-            <a href="computer.show?page=${pagination.currentPage}&noElt=50" class="btn btn-default" role="button">50</a>
+            <a href="computer?page=${pagination.currentPage}&noElt=10" class="btn btn-default" role="button">10</a>
+            <a href="computer?page=${pagination.currentPage}&noElt=20" class="btn btn-default" role="button">20</a>
+            <a href="computer?page=${pagination.currentPage}&noElt=50" class="btn btn-default" role="button">50</a>
         </div>
       </div>
     </footer>

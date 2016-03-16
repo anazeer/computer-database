@@ -22,8 +22,8 @@ import com.excilys.cdb.service.ComputerService;
 public class Main {
 	
 	// Services
-	static ComputerService computerService = new ComputerService();
-	static CompanyService companyService = new CompanyService();
+	static ComputerService computerService = ComputerService.getInstance();
+	static CompanyService companyService = CompanyService.getInstance();
 	
 	// List containing valid inputs for each menu
 	static List<Integer> generalInstr = new ArrayList<Integer>();
@@ -166,7 +166,8 @@ public class Main {
 				entry = scan.next("((0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d))|u");
 				//entry = scan.next("(((19|20)\\d\\d)/(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01]))|u");
 			    date = new SimpleDateFormat(parse).parse(entry);
-			} catch (ParseException e) {
+			}
+			catch (ParseException e) {
 				if("u".equals(entry)) {
 					break;
 				}

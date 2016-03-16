@@ -22,7 +22,7 @@ import com.excilys.cdb.service.ComputerService;
 /**
  * Servlet implementation class AddServlet
  */
-public class ListServlet extends HttpServlet {
+public class ComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private ComputerService computerService;
@@ -33,7 +33,7 @@ public class ListServlet extends HttpServlet {
     /**
      * Default constructor. 
      */
-    public ListServlet() {
+    public ComputerServlet() {
         // TODO Auto-generated constructor stub
     }
     
@@ -41,7 +41,7 @@ public class ListServlet extends HttpServlet {
     public void init() throws ServletException {
     	super.init();
     	entriesPerPage = 10;
-    	computerService = new ComputerService();
+    	computerService = ComputerService.getInstance();
     	count = computerService.countEntries();
     	pagination = new ComputerPagination(count, entriesPerPage);
     }
@@ -50,6 +50,7 @@ public class ListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("On a page a : " + request.getParameter("page"));
 		String page = request.getParameter("page");
 		String noElt = request.getParameter("noElt");
 		int currentPage = pagination.getCurrentPage();
@@ -84,7 +85,7 @@ public class ListServlet extends HttpServlet {
 		}
 		request.setAttribute("pagination", pagination);
 		request.setAttribute("countComputer", count);
-		getServletContext().getRequestDispatcher("/resources/views/dashboard.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
 	}
 
 	/**

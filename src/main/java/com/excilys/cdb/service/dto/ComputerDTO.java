@@ -10,8 +10,8 @@ public class ComputerDTO implements DTO {
 	private Long companyId;
 	private String companyName;
 
-	public ComputerDTO() {
-		
+	public ComputerDTO(String name) {
+		setName(name);
 	}
 
 	public Long getId() {

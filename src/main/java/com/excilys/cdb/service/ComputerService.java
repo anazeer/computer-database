@@ -52,9 +52,8 @@ public class ComputerService implements ServiceOperations<Computer> {
 	
 	@Override
 	public ComputerDTO createDTO(Computer source) {
-		ComputerDTO dto = new ComputerDTO();
+		ComputerDTO dto = new ComputerDTO(source.getName());
 		dto.setId(source.getId());
-		dto.setName(source.getName());
 		if(source.getIntroduced() != null)
 			dto.setIntroduced(source.getIntroduced().toString());
 		if(source.getDiscontinued() != null)
@@ -75,7 +74,7 @@ public class ComputerService implements ServiceOperations<Computer> {
 			computer.setIntroduced(LocalDate.parse(dto.getIntroduced()));
 		if(dto.getDiscontinued() != null)
 			computer.setDiscontinued(LocalDate.parse(dto.getDiscontinued()));
-		computer.setCompany(new CompanyDAO().findById(dto.getId()));
+		computer.setCompany(new CompanyDAO().findById(dto.getCompanyId()));
 		return computer;
 	}
 	
@@ -84,15 +83,20 @@ public class ComputerService implements ServiceOperations<Computer> {
 		return computer;
 	}
 	
-	public void create(Computer computer) {
+	public void create(ComputerDTO dto) {
+		System.out.println("company id dans computerservice avant transformation : " + dto.getCompanyId());
+		Computer computer = getFromDTO(dto);
+		System.out.println("company id dans computerservice après transformation : " + dto.getCompanyId());
 		computerDAO.create(computer);
 	}
 	
-	public void update(Computer computer) {
+	public void update(ComputerDTO dto) {
+		Computer computer = getFromDTO(dto);
 		computerDAO.update(computer);
 	}
 	
-	public void delete(Computer computer) {
+	public void delete(ComputerDTO dto) {
+		Computer computer = getFromDTO(dto);
 		computerDAO.delete(computer);
 	}
 	

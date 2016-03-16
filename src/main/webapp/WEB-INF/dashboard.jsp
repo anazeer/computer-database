@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="page" uri="page.tld" %>
+<%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
 <html>
@@ -17,7 +17,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="computer"> Application - Computer Database </a>
+            <mylib:link target="computer" classLink="navbar-brand" text=" Application - Computer Database "/>
         </div>
     </header>
 
@@ -86,7 +86,7 @@
                             <input type="checkbox" name="cb" class="cb" value="0">
                         </td>
                         <td>
-                            <a href="editComputer.html" onclick=""><c:out value="${computer.name}"/> </a>
+                        	<mylib:link target="editComputer.html" text="${computer.name}"/>
                         </td>
                         <td><c:out value="${computer.introduced}"/> </td>
                         <td><c:out value="${computer.discontinued}"/> </td>
@@ -102,55 +102,12 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-            <c:if test="${pagination.currentPage gt 1}">
-                <li>
-                    <a href="computer?page=${pagination.currentPage - 1}" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                  </a>
-              	</li>
-              </c:if>
-              <c:choose>
-	              <c:when test="${pagination.currentPage - 5 gt 1}">
-	              	<c:set var="begin" scope="page" value="${pagination.currentPage - 5}"/>
-	              </c:when>
-	              <c:otherwise>
-	              	<c:set var="begin" scope="page" value="1"/>
-	              </c:otherwise>
-              </c:choose>
-              <c:choose>
-	              <c:when test="${pagination.currentPage + 5 ge pagination.countPages}">
-	              	<c:set var="end" scope="page" value="${pagination.countPages}"/>
-	              </c:when>
-	              <c:when test="${begin lt 5}">
-	              	<c:set var="end" scope="page" value="${pagination.currentPage + 5 + 5 - begin + 1}"/>
-	              </c:when>
-	              <c:otherwise>
-	              	<c:set var="end" scope="page" value="${pagination.currentPage + 5}"/>
-	              </c:otherwise>
-              </c:choose>
-              <c:forEach begin="${begin}" end="${end}" var="i">
-              	<c:choose>
-	              	<c:when test="${pagination.currentPage eq i}">
-	              		<li><a href="">${i}</a></li>
-	              	</c:when>
-	              	<c:otherwise>
-	              		<li><a href="computer?page=${i}">${i}</a></li>
-	              	</c:otherwise>
-              	</c:choose>
-              </c:forEach>
-              <c:if test="${pagination.currentPage lt pagination.countPages}">
-              	<li>
-              		<a href="computer?page=${pagination.currentPage + 1}" aria-label="Next">
-                		<span aria-hidden="true">&raquo;</span>
-                	</a>
-                </li>
-              </c:if>
-
-        </ul>
+            	<mylib:pagination countpage="${pagination.countPages}" count="${pagination.countPerPage}" currentpage="${pagination.currentPage}"/>
+        	</ul>
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <a href="computer?page=${pagination.currentPage}&noElt=10" class="btn btn-default" role="button">10</a>
-            <a href="computer?page=${pagination.currentPage}&noElt=20" class="btn btn-default" role="button">20</a>
-            <a href="computer?page=${pagination.currentPage}&noElt=50" class="btn btn-default" role="button">50</a>
+        	<button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=10'">10</button>
+        	<button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=20'">20</button>
+        	<button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=50'">50</button>
         </div>
       </div>
     </footer>

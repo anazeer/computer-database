@@ -13,7 +13,7 @@ public class CompanyPagination extends Pagination<CompanyDTO> {
 
 	public CompanyPagination(int countEntries, int countPerPage) {
 		super(countEntries, countPerPage);
-		companyService = new CompanyService();
+		companyService = CompanyService.getInstance();
 	}
 	
 	public List<CompanyDTO> getListFromOffset() {

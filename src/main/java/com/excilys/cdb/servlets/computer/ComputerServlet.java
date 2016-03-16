@@ -50,9 +50,8 @@ public class ComputerServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("On a page a : " + request.getParameter("page"));
 		String page = request.getParameter("page");
-		String noElt = request.getParameter("noElt");
+		String noElt = request.getParameter("limit");
 		int currentPage = pagination.getCurrentPage();
 		int currentElements = pagination.getCountPerPage();
 		if(page == null) {
@@ -61,11 +60,18 @@ public class ComputerServlet extends HttpServlet {
 		else {
 			try {
 				int i = Integer.parseInt(page);
-				pagination.setCurrentPage(i);
+				if(i > pagination.getCountPages()) {
+					pagination.setCurrentPage(currentPage);
+				}
+				else if(i < 0) {
+					pagination.setCurrentPage(1);
+				}
+				else {
+					pagination.setCurrentPage(i);
+				}
 			}
 			catch(NumberFormatException e) {
 				pagination.setCurrentPage(currentPage);
-				e.printStackTrace();
 			}
 		}
 		if(noElt == null) {

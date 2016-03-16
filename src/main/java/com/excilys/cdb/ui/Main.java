@@ -15,9 +15,9 @@ import java.util.Scanner;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.CompanyPagination;
 import com.excilys.cdb.pagination.ComputerPagination;
-import com.excilys.cdb.persistence.dao.CompanyDAO;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.dto.ComputerDTO;
 
 public class Main {
 	
@@ -230,7 +230,7 @@ public class Main {
 	 * Construct a new computer in line command
 	 * @return
 	 */
-	static Computer constructComputer() {
+	static ComputerDTO constructComputer() {
 		String name = readName();
 		
 		Date introducedDate;
@@ -259,10 +259,10 @@ public class Main {
 		System.out.println("Select company id");
 		Long company_id = readId();
 		
-		Computer computer = new Computer(name);
-		computer.setIntroduced(introduced);
-		computer.setDiscontinued(discontinued);
-		computer.setCompany(new CompanyDAO().findById(company_id));
+		ComputerDTO computer = new ComputerDTO(name);
+		computer.setIntroduced(introduced.toString());
+		computer.setDiscontinued(discontinued.toString());
+		computer.setCompanyId(company_id);
 		return computer;
 	}
 	
@@ -336,8 +336,8 @@ public class Main {
 							System.out.println(computer.toDetailedString());
 						}
 						break;
-					case 3 : Computer comp = constructComputer(); computerService.create(comp); break;
-					case 4 : Computer updateComputer = constructComputer(); Long updateId = readId(); updateComputer.setId(updateId);computerService.update(updateComputer); break;
+					case 3 : ComputerDTO comp = constructComputer(); computerService.create(comp); break;
+					case 4 : ComputerDTO updateComputer = constructComputer(); Long updateId = readId(); updateComputer.setId(updateId);computerService.update(updateComputer); break;
 					case 5 : Long delId = readId(); computerService.delete(delId); break;
 					case 6 : step = 0; break;
 				}

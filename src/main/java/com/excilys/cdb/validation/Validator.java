@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 public class Validator {
 
 	public static boolean dateValidator(String date) {
-		String parse = "dd/mm/yyyy";
+		String parse = "yyyy-mm-dd";
 		if(date == null) {
 			return true;
 		}

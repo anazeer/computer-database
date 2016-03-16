@@ -13,7 +13,7 @@ public class CompanyService implements ServiceOperations<Company> {
 	private CompanyDAO companyDAO;
 	private static CompanyService instance;
 	
-	public CompanyService() {
+	private CompanyService() {
 		super();
 		companyDAO = new CompanyDAO();
 	}

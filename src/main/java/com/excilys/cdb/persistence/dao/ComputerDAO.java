@@ -120,7 +120,7 @@ public class ComputerDAO implements DAO<Computer> {
 				+ "(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 		try(PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
 			Date introducedDate = obj.getIntroduced() == null ? null : Date.valueOf(obj.getIntroduced().atTime(0, 0, 0).toLocalDate());
-			Date discontinuedDate = obj.getIntroduced() == null ? null : Date.valueOf(obj.getIntroduced().atTime(0, 0, 0).toLocalDate());
+			Date discontinuedDate = obj.getDiscontinued() == null ? null : Date.valueOf(obj.getDiscontinued().atTime(0, 0, 0).toLocalDate());
 			Long company_id = obj.getCompany() == null ? null : obj.getCompany().getId();
 			stmt.setString(1, obj.getName());
 			stmt.setDate(2, introducedDate);

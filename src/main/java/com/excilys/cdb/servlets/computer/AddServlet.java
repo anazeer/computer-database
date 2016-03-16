@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.service.CompanyService;
+import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.dto.ComputerDTO;
 import com.excilys.cdb.validation.Validator;
 
 
@@ -27,7 +29,7 @@ public class AddServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private CompanyService companyService;
-	private CompanyService computerService;
+	private ComputerService computerService;
 	private static final String dateError = "incorrect date";
 
     /**
@@ -40,7 +42,8 @@ public class AddServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
     	super.init();
-    	companyService = new CompanyService();
+    	companyService = CompanyService.getInstance();
+    	computerService = ComputerService.getInstance();
     }
 
 	/**
@@ -56,7 +59,7 @@ public class AddServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name = request.getParameter("computerName");
-		//String companyId = request.getParameter("companyId");
+		String companyId = request.getParameter("companyId");
 		String introduced = request.getParameter("introduced");
 		introduced = introduced.trim().isEmpty() ? null : introduced;
 		String discontinued = request.getParameter("discontinued");
@@ -75,7 +78,12 @@ public class AddServlet extends HttpServlet {
 			getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
 		}
 		else {
-			getServletContext().getRequestDispatcher("/ComputerServlet").forward(request, response);
+			ComputerDTO dto = new ComputerDTO(name);
+			dto.setIntroduced(introduced);
+			dto.setDiscontinued(discontinued);
+			dto.setCompanyId(Long.parseLong(companyId));
+			computerService.create(dto);
+			getServletContext().getRequestDispatcher("/computer").forward(request, response);
 		}
 	}
 

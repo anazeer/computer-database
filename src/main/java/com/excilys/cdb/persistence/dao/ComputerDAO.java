@@ -125,8 +125,6 @@ public class ComputerDAO implements DAO<Computer> {
 			stmt.setString(1, obj.getName());
 			stmt.setDate(2, introducedDate);
 			stmt.setDate(3, discontinuedDate);
-			System.out.println("intro " + introducedDate );
-			System.out.println("discontinued " + discontinuedDate);
 			if(company_id == null) {
 				stmt.setNull(4, Types.NULL);
 			}

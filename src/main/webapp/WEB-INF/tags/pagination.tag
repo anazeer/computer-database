@@ -9,7 +9,7 @@
 <%@ attribute name="countpage" required="true" type="java.lang.String"
 	description="The total number of pages"%>
 
-<c:set var="offset" scope="page" value="5" />
+<c:set var="offset" scope="page" value="2" />
 
 <c:if test="${currentpage gt 1}">
 	<li><a href="computer?page=${currentpage - 1}"
@@ -17,7 +17,7 @@
 	</a></li>
 </c:if>
 <c:choose>
-	<c:when test="${currentpage - offset gt 1}">
+	<c:when test="${currentpage - offset ge 1}">
 		<c:set var="begin" scope="page" value="${currentpage - offset}" />
 	</c:when>
 	<c:otherwise>
@@ -28,14 +28,15 @@
 	<c:when test="${currentpage + offset ge countpage}">
 		<c:set var="end" scope="page" value="${countpage}" />
 	</c:when>
-	<c:when test="${begin lt offset}">
-		<c:set var="end" scope="page"
-			value="${currentpage + 2 * offset - begin + 1}" />
-	</c:when>
 	<c:otherwise>
 		<c:set var="end" scope="page" value="${currentpage + offset}" />
 	</c:otherwise>
 </c:choose>
+
+<c:if test="${begin != 1}">
+	<li><a href="computer?page=1&limit=${count}">1</a></li>
+</c:if>
+
 <c:forEach begin="${begin}" end="${end}" var="i">
 	<c:choose>
 		<c:when test="${currentpage eq i}">
@@ -46,6 +47,11 @@
 		</c:otherwise>
 	</c:choose>
 </c:forEach>
+
+<c:if test="${end != countpage}">
+	<li><a href="computer?page=${countpage}&limit=${count}">${countpage}</a></li>
+</c:if>
+
 <c:if test="${currentpage lt countpage}">
 	<li><a href="computer?page=${currentpage + 1}&limit=${count}"
 		aria-label="Next"> <span aria-hidden="true">&raquo;</span>

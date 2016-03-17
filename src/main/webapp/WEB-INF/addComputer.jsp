@@ -35,12 +35,12 @@
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
                                 <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date (yyyy-mm-dd)" value="${pintro}">
-                                <span id="computerNameError" style="color:red;">${vintroduced}</span>
+                                <span id="computerIntroError" style="color:red;">${vintroduced}</span>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date (yyyy-mm-dd)" value="${pdiscontinued}">
-                                <span id="computerNameError" style="color:red;">${vdiscontinued}</span>
+                                <span id="computerDiscontinuedError" style="color:red;">${vdiscontinued}</span>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
@@ -49,7 +49,7 @@
                                     	<option value="${company.id}"><c:out value="${company.name}"/></option>
                                 	</c:forEach>
                                 </select>
-                                <span id="computerNameError" style="color:red;">${vdate}</span>
+                                <span id="computerError" style="color:red;">${vdate}</span>
                             </div>
                         </fieldset>
                         <div class="actions pull-right">
@@ -58,6 +58,7 @@
                             <mylib:link target="computer" classLink="btn btn-default" text="Cancel"/>
                         </div>
                     </form>
+                    <script type="text/javascript"></script>
                 </div>
             </div>
         </div>

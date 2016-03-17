@@ -1,5 +1,6 @@
 package com.excilys.cdb.servlets.computer;
 
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -8,7 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.excilys.cdb.exception.DateException;
+import com.excilys.cdb.exception.NameException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.dto.ComputerDTO;
@@ -32,7 +36,6 @@ public class AddServlet extends HttpServlet {
 	
 	private CompanyService companyService;
 	private ComputerService computerService;
-	private static final String dateError = "incorrect date";
 
     /**
      * Default constructor. 
@@ -63,21 +66,40 @@ public class AddServlet extends HttpServlet {
 		String name = request.getParameter("computerName");
 		String companyId = request.getParameter("companyId");
 		String introduced = request.getParameter("introduced");
-		introduced = introduced.trim().isEmpty() ? null : introduced;
+		introduced = introduced.trim().isEmpty() ? null : introduced.trim();
 		String discontinued = request.getParameter("discontinued");
-		discontinued = discontinued.trim().isEmpty() ? null : discontinued;
-		boolean vname = Validator.nameValidator(name);
-		boolean vintro = Validator.dateValidator(introduced);
-		boolean vdiscontinued = Validator.dateValidator(discontinued);
-		String ename = vname ? "" : "name should not be empty";
-		String eintro = vintro ? "" : dateError;
-		String ediscontinued = vdiscontinued ? "" : dateError;
+		discontinued = discontinued.trim().isEmpty() ? null : discontinued.trim();
+		String ename = "";
+		String eintro = "";
+		String ediscontinued = "";
+		boolean good = true;
+		try {
+			Validator.nameValidator(name);
+		}
+		catch(NameException e) {
+			ename = e.getMessage();
+			good = false;
+		}
+		try {
+			Validator.dateValidator(introduced);
+			Validator.dateValidator(discontinued);
+		}
+		catch(DateException e) {
+			eintro = e.getMessage();
+			good = false;
+		}
+		try {
+			Validator.dateValidator(discontinued);
+		}
+		catch(DateException e) {
+			ediscontinued = e.getMessage();
+			good = false;
+		}
 		request.setAttribute("vcomputerName", ename);
 		request.setAttribute("vintroduced", eintro);
 		request.setAttribute("vdiscontinued", ediscontinued);
 		request.setAttribute("companies", companyService.list());
-		boolean good = false;
-		if(vname && vintro && vdiscontinued) {
+		if(good) {
 			ComputerDTO dto = new ComputerDTO(name);
 			dto.setIntroduced(introduced);
 			dto.setDiscontinued(discontinued);
@@ -86,15 +108,17 @@ public class AddServlet extends HttpServlet {
 				computerService.create(dto);
 				good = true;
 			}
-			catch (SQLException e) {
-				request.setAttribute("vdate", "Error on computer creation, a date might be invalid");
-			}
 			catch(DateException e) {
-				request.setAttribute("vdate", "Date is invalid (date doesn't exist or introduced date is earlier than discontinued date)");
+				request.setAttribute("vdiscontinued", e.getMessage());
+				good = false;
+			}
+			catch (SQLException e) {
+				request.setAttribute("vdate", Validator.COMP_ERROR);
+				good = false;
 			}
 		}
 		if(good) {
-			getServletContext().getRequestDispatcher("/computer").forward(request, response);
+			getServletContext().getRequestDispatcher("/Computer").forward(request, response);
 		}
 		else {
 			request.setAttribute("pname", name);

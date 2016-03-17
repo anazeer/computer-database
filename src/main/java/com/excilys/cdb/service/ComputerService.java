@@ -94,10 +94,10 @@ public class ComputerService implements ServiceOperations<Computer> {
 		computer = getFromDTO(dto);
 		}
 		catch(DateTimeParseException e) {
-			throw new DateException();
+			throw new DateException(e.getMessage());
 		}
 		if(computer.getIntroduced() != null && computer.getDiscontinued() != null && computer.getIntroduced().isAfter(computer.getDiscontinued())) {
-			throw new DateException();
+			throw new DateException("discontinued date should be after introduced date");
 		}
 		computerDAO.create(computer);
 	}

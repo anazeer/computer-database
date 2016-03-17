@@ -96,7 +96,6 @@ public class CompanyDAO implements DAO<Company> {
 	@Override
 	public Company findById(Long id) {
 		Company company = null;
-		System.out.println("On trouve compagn,ie ID a " + id);
 		String query = "SELECT * FROM company WHERE company.id = " + id;
 		try(Statement stmt = conn.createStatement();) {
 			ResultSet result = stmt.executeQuery(query);

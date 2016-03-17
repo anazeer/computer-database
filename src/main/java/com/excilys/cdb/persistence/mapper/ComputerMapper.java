@@ -18,7 +18,7 @@ public class ComputerMapper implements DAOMapper<Computer> {
 		try {
 			Computer computer = new Computer(result.getString("name"));
 			LocalDate introducedDate = result.getDate("introduced") == null ? null : result.getDate("introduced").toLocalDate();
-			LocalDate discontinuedDate = result.getDate("introduced") == null ? null : result.getDate("introduced").toLocalDate();
+			LocalDate discontinuedDate = result.getDate("discontinued") == null ? null : result.getDate("discontinued").toLocalDate();
 			computer.setId(result.getLong("id"));
 			computer.setIntroduced(introducedDate);
 			computer.setDiscontinued(discontinuedDate);

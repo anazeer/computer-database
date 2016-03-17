@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -83,9 +84,28 @@ public class ComputerDAOTest {
 		computer.setIntroduced(LocalDate.now());
 		computer.setDiscontinued(LocalDate.now().plusDays(1));
 		computer.setCompany(new Company());
-		computer = computerDAO.create(computer);
-		assertNotNull(msgId, computer.getId());
-		assertNull(computer.getCompany().getId());
+		try {
+			computer = computerDAO.create(computer);
+			assertNotNull(msgId, computer.getId());
+			assertNull(computer.getCompany().getId());
+		}
+		catch(SQLException e) {
+		}
+	}
+	
+	@Test(expected = SQLException.class)
+	public void testBadDateCreate() {
+		Computer computer = new Computer("    ");
+		computer.setIntroduced(LocalDate.parse("1111/11/11"));
+		computer.setDiscontinued(LocalDate.now().plusDays(1));
+		computer.setCompany(new Company());
+		try {
+			computer = computerDAO.create(computer);
+			assertNotNull(msgId, computer.getId());
+			assertNull(computer.getCompany().getId());
+		}
+		catch(SQLException e) {
+		}
 	}
 	
 	@Test

@@ -1,5 +1,6 @@
 package com.excilys.cdb.ui;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -12,6 +13,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.CompanyPagination;
 import com.excilys.cdb.pagination.ComputerPagination;
@@ -336,7 +338,18 @@ public class Main {
 							System.out.println(computer.toDetailedString());
 						}
 						break;
-					case 3 : ComputerDTO comp = constructComputer(); computerService.create(comp); break;
+					case 3 : ComputerDTO comp = constructComputer();
+							 try {
+								 computerService.create(comp);
+								 break;
+							 }
+							 catch(SQLException e) {
+								 System.err.println("Error on computer creation");
+								 break;
+							 } catch (DateException e) {
+								 System.err.println("The introduced date should be earlier than the discontinued date");
+								 e.printStackTrace();
+							}
 					case 4 : ComputerDTO updateComputer = constructComputer(); Long updateId = readId(); updateComputer.setId(updateId);computerService.update(updateComputer); break;
 					case 5 : Long delId = readId(); computerService.delete(delId); break;
 					case 6 : step = 0; break;

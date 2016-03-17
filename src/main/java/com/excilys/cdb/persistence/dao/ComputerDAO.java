@@ -115,7 +115,7 @@ public class ComputerDAO implements DAO<Computer> {
 	}
 
 	@Override
-	public Computer create(Computer obj) {
+	public Computer create(Computer obj) throws SQLException {
 		String query = "INSERT INTO computer "
 				+ "(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 		try(PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
@@ -125,6 +125,8 @@ public class ComputerDAO implements DAO<Computer> {
 			stmt.setString(1, obj.getName());
 			stmt.setDate(2, introducedDate);
 			stmt.setDate(3, discontinuedDate);
+			System.out.println("intro " + introducedDate );
+			System.out.println("discontinued " + discontinuedDate);
 			if(company_id == null) {
 				stmt.setNull(4, Types.NULL);
 			}
@@ -140,6 +142,7 @@ public class ComputerDAO implements DAO<Computer> {
 		}
 		catch (SQLException e) {
 			log.error(e.getMessage());
+			throw new SQLException(e);
 		}
 		return obj;
 	}

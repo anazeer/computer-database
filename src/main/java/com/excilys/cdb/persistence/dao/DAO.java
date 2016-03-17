@@ -1,5 +1,6 @@
 package com.excilys.cdb.persistence.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.excilys.cdb.exception.UnimplementedException;
@@ -46,7 +47,7 @@ public interface DAO<T> {
 	 * @param obj the object we want to persist
 	 * @return true if the object has been successfully inserted in the table
 	 */
-	default public T create(T obj) throws UnimplementedException {
+	default public T create(T obj) throws UnimplementedException, SQLException {
 		throw new UnimplementedException(unimplementedException);
 	}
 	

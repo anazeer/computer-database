@@ -1,9 +1,12 @@
 package com.excilys.cdb.service;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
@@ -70,10 +73,12 @@ public class ComputerService implements ServiceOperations<Computer> {
 		ComputerDTO dto = (ComputerDTO) source;
 		Computer computer = new Computer(dto.getName());
 		computer.setId(dto.getId());
-		if(dto.getIntroduced() != null)
+		if(dto.getIntroduced() != null) {
 			computer.setIntroduced(LocalDate.parse(dto.getIntroduced()));
-		if(dto.getDiscontinued() != null)
+		}
+		if(dto.getDiscontinued() != null) {
 			computer.setDiscontinued(LocalDate.parse(dto.getDiscontinued()));
+		}
 		computer.setCompany(new CompanyDAO().findById(dto.getCompanyId()));
 		return computer;
 	}
@@ -83,10 +88,17 @@ public class ComputerService implements ServiceOperations<Computer> {
 		return computer;
 	}
 	
-	public void create(ComputerDTO dto) {
-		System.out.println("company id dans computerservice avant transformation : " + dto.getCompanyId());
-		Computer computer = getFromDTO(dto);
-		System.out.println("company id dans computerservice après transformation : " + dto.getCompanyId());
+	public void create(ComputerDTO dto) throws SQLException, DateException {
+		Computer computer = null;
+		try {
+		computer = getFromDTO(dto);
+		}
+		catch(DateTimeParseException e) {
+			throw new DateException();
+		}
+		if(computer.getIntroduced() != null && computer.getDiscontinued() != null && computer.getIntroduced().isAfter(computer.getDiscontinued())) {
+			throw new DateException();
+		}
 		computerDAO.create(computer);
 	}
 	

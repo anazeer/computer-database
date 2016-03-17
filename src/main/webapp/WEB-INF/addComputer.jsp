@@ -29,17 +29,17 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" value="${pname}">
                                 <span id="computerNameError" style="color:red;">${vcomputerName}</span>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date (yyyy-mm-dd)">
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date (yyyy-mm-dd)" value="${pintro}">
                                 <span id="computerNameError" style="color:red;">${vintroduced}</span>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date (yyyy-mm-dd)">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date (yyyy-mm-dd)" value="${pdiscontinued}">
                                 <span id="computerNameError" style="color:red;">${vdiscontinued}</span>
                             </div>
                             <div class="form-group">
@@ -49,6 +49,7 @@
                                     	<option value="${company.id}"><c:out value="${company.name}"/></option>
                                 	</c:forEach>
                                 </select>
+                                <span id="computerNameError" style="color:red;">${vdate}</span>
                             </div>
                         </fieldset>
                         <div class="actions pull-right">

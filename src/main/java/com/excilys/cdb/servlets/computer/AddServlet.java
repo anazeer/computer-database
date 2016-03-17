@@ -1,12 +1,14 @@
 package com.excilys.cdb.servlets.computer;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.dto.ComputerDTO;
@@ -74,17 +76,31 @@ public class AddServlet extends HttpServlet {
 		request.setAttribute("vintroduced", eintro);
 		request.setAttribute("vdiscontinued", ediscontinued);
 		request.setAttribute("companies", companyService.list());
-		if(!vname || !vintro || !vdiscontinued) {
-			getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
-		}
-		else {
+		boolean good = false;
+		if(vname && vintro && vdiscontinued) {
 			ComputerDTO dto = new ComputerDTO(name);
 			dto.setIntroduced(introduced);
 			dto.setDiscontinued(discontinued);
 			dto.setCompanyId(Long.parseLong(companyId));
-			computerService.create(dto);
+			try {
+				computerService.create(dto);
+				good = true;
+			}
+			catch (SQLException e) {
+				request.setAttribute("vdate", "Error on computer creation, a date might be invalid");
+			}
+			catch(DateException e) {
+				request.setAttribute("vdate", "Date is invalid (date doesn't exist or introduced date is earlier than discontinued date)");
+			}
+		}
+		if(good) {
 			getServletContext().getRequestDispatcher("/computer").forward(request, response);
 		}
+		else {
+			request.setAttribute("pname", name);
+			request.setAttribute("pintro", introduced);
+			request.setAttribute("pdiscontinued", discontinued);
+			getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
+		}
 	}
-
 }

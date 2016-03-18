@@ -117,6 +117,7 @@ public class AddServlet extends HttpServlet {
 			}
 		}
 		if(good) {
+			request.setAttribute("success", true);
 			request.setAttribute("vsuccess", Validator.COMP_SUCCESS);
 			getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
 		}

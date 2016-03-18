@@ -26,6 +26,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
+                <c:if test="${success}"><div class="alert alert-success" role="alert">${vsuccess}</div></c:if>
                     <h1>Add Computer</h1>
                     <form action="computerAdd" method="POST" id ="computerForm">
                         <fieldset>
@@ -53,7 +54,6 @@
                                 	</c:forEach>
                                 </select>
                                 <span id="computerError" style="color:red;">${vdate}</span>
-                                <span id="computerSuccess">${vsuccess}</span>
                             </div>
                         </fieldset>
                         <div class="actions pull-right">

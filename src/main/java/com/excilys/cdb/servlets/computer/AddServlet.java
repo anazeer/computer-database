@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 
 import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.exception.NameException;
@@ -118,7 +117,8 @@ public class AddServlet extends HttpServlet {
 			}
 		}
 		if(good) {
-			getServletContext().getRequestDispatcher("/Computer").forward(request, response);
+			request.setAttribute("vsuccess", Validator.COMP_SUCCESS);
+			getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
 		}
 		else {
 			request.setAttribute("pname", name);

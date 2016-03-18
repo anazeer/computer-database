@@ -12,6 +12,9 @@
 <link href="resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="resources/css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="resources/css/main.css" rel="stylesheet" media="screen">
+<script src="resources/js/jquery.min.js"></script>
+<script src="resources/js/jquery.validate.js"></script>
+<!-- <script src="resources/js/jquery.validation.js"></script> -->
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -19,13 +22,12 @@
             <mylib:link target="computer" classLink="navbar-brand" text=" Application - Computer Database "/>
         </div>
     </header>
-
     <section id="main">
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="computerAdd" method="POST">
+                    <form action="computerAdd" method="POST" id ="computerForm">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -45,11 +47,13 @@
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyId" >
+                                	<option value="0"><c:out value="Ignore"/></option>
                                		<c:forEach items="${companies}" var="company">
                                     	<option value="${company.id}"><c:out value="${company.name}"/></option>
                                 	</c:forEach>
                                 </select>
                                 <span id="computerError" style="color:red;">${vdate}</span>
+                                <span id="computerSuccess">${vsuccess}</span>
                             </div>
                         </fieldset>
                         <div class="actions pull-right">
@@ -58,7 +62,6 @@
                             <mylib:link target="computer" classLink="btn btn-default" text="Cancel"/>
                         </div>
                     </form>
-                    <script type="text/javascript"></script>
                 </div>
             </div>
         </div>

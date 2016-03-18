@@ -41,6 +41,7 @@
 					<suppressionsLocation>src/main/resources/suppressions.xml</suppressionsLocation>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</reporting>
 

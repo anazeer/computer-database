@@ -14,11 +14,12 @@ public class Validator {
 	
 	public static final String NULL_NAME = "name is required";
 	public static final String EMPTY_NAME = "name should not be empty";
-	public static final String ILLEGAL_NAME = "illegal character in name (only alphanumeric and .'- are allowed";
+	public static final String ILLEGAL_NAME = "illegal character in name (only alphanumeric and .+/)('- are allowed";
 	public static final String NULL_DATE = "date is required";
 	public static final String INCORRECT_DATE = "date format is incorrect";
 	public static final String ILLEGAL_DATE = "date is illegal";
 	public static final String COMP_ERROR = "computer creation failed (date might be illegal, for example too old such as 1111-11-11)";
+	public static final String COMP_SUCCESS = "Computer successfully added !";
 	
 	public static void dateValidator(String date) throws DateException {
 		if(date == null) {
@@ -48,7 +49,7 @@ public class Validator {
 		name = name.trim();
 		if(name.isEmpty())
 			throw new NameException(EMPTY_NAME);
-		Pattern pattern = Pattern.compile("^[\\p{L} 01234567 .'-]+$");
+		Pattern pattern = Pattern.compile("^[\\p{L}][\\p{L} 0123456789.+/)('-]*$");
 		Matcher matcher = pattern.matcher(name);
 		if(!matcher.find()) {
 			throw new NameException(ILLEGAL_NAME);

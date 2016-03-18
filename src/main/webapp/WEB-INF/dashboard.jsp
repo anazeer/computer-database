@@ -20,7 +20,6 @@
             <mylib:link target="computer" classLink="navbar-brand" text=" Application - Computer Database "/>
         </div>
     </header>
-
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">

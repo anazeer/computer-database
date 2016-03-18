@@ -41,6 +41,7 @@
 					<suppressionsLocation>src/main/resources/suppressions.xml</suppressionsLocation>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</reporting>
 
@@ -91,6 +92,17 @@
 			<version>2.17</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.53.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.5</version>
+		</dependency>
 
 	</dependencies>
 

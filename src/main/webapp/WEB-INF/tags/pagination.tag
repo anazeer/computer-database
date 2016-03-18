@@ -12,7 +12,7 @@
 <c:set var="offset" scope="page" value="2" />
 
 <c:if test="${currentpage gt 1}">
-	<li><a href="computer?page=${currentpage - 1}"
+	<li><a href="computer?page=${currentpage - 1}&limit=${count}"
 		aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 	</a></li>
 </c:if>

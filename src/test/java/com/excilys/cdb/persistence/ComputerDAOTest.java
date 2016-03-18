@@ -93,7 +93,7 @@ public class ComputerDAOTest {
 		}
 	}
 	
-	@Test(expected = SQLException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testBadDateCreate() {
 		Computer computer = new Computer("    ");
 		computer.setIntroduced(LocalDate.parse("1111/11/11"));

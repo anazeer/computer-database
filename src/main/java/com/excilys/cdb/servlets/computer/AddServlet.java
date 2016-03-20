@@ -12,29 +12,49 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.exception.NameException;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.mapper.MapperFactory;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.ServiceFactory;
 import com.excilys.cdb.service.dto.ComputerDTO;
 import com.excilys.cdb.validation.Validator;
-
-
-/*
- * TODO
- * Servlets : appelle les méthodes de la base de données et récupère par exemple une liste, qu'on va passer à la page JSP
- * JSP : la liste qu'il reçoit il va l'afficher. 
- * web.xml : il faut le modifier pour que la page correspondant au servlet s'affiche effectivement quand on entre la bonne URL
- * dashboard.html : il faut le transformer en jsp et c'est là qu'on fait le traitement avec l'objet JAVA
- * 
- */
 
 /**
  * Servlet implementation class AddServlet
  */
 public class AddServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
+    // The services
 	private CompanyService companyService;
 	private ComputerService computerService;
+
+    // ID from the POST form
+    private final String nameParam = "computerName";
+    private final String introParam = "introduced";
+    private final String discontinuedParam = "discontinued";
+    private final String companyIdParam = "companyId";
+
+    // ID for the addComputer JSP for error messages
+    private final String nameError= "vcomputerName";
+    private final String introError = "vintroduced";
+    private final String discontinuedError = "vdiscontinued";
+    private final String dateError = "vdate";
+
+    // ID for the addComputer JSP for companies listing
+    private final String companyList = "companies";
+
+    // ID for the addComputer JSP boolean for an adding success
+    private final String success = "success";
+
+    // ID for the addComputer JSP for an adding success message
+    private final String addSuccess = "vsuccess";
+
+    // ID for the addComputer JSP to retrieves the previous user inputs after an adding failure
+    private final String oldName = "pname";
+    private final String oldIntro = "pintro";
+    private final String oldDiscontinued = "pdiscontinued";
 
     /**
      * Default constructor. 
@@ -46,15 +66,15 @@ public class AddServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
     	super.init();
-    	companyService = CompanyService.getInstance();
-    	computerService = ComputerService.getInstance();
+    	companyService = ServiceFactory.getCompanyService();
+    	computerService = ServiceFactory.getComputerService();
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setAttribute("companies", companyService.list());
+		request.setAttribute("companies", companyService.listAll());
 		getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
 	}
 
@@ -62,12 +82,15 @@ public class AddServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("computerName");
-		String companyId = request.getParameter("companyId");
-		String introduced = request.getParameter("introduced");
+        // We first get the parameters from the POST form
+		String name = request.getParameter(nameParam);
+		String companyId = request.getParameter(companyIdParam);
+		String introduced = request.getParameter(introParam);
 		introduced = introduced.trim().isEmpty() ? null : introduced.trim();
-		String discontinued = request.getParameter("discontinued");
+		String discontinued = request.getParameter(discontinuedParam);
 		discontinued = discontinued.trim().isEmpty() ? null : discontinued.trim();
+
+        // Then we check the user inputs with the help of Validator class (name and dates)
 		String ename = "";
 		String eintro = "";
 		String ediscontinued = "";
@@ -94,37 +117,44 @@ public class AddServlet extends HttpServlet {
 			ediscontinued = e.getMessage();
 			good = false;
 		}
-		request.setAttribute("vcomputerName", ename);
-		request.setAttribute("vintroduced", eintro);
-		request.setAttribute("vdiscontinued", ediscontinued);
-		request.setAttribute("companies", companyService.list());
+
+        // If the inputs are not good, we set some error messages
+		request.setAttribute(nameError, ename);
+		request.setAttribute(introError, eintro);
+		request.setAttribute(discontinuedError, ediscontinued);
+		request.setAttribute(companyList, companyService.listAll());
+
+        // If the validation went good, we try to persist the computer (some more checking are done in the lower layout)
 		if(good) {
 			ComputerDTO dto = new ComputerDTO(name);
 			dto.setIntroduced(introduced);
 			dto.setDiscontinued(discontinued);
 			dto.setCompanyId(Long.parseLong(companyId));
 			try {
-				computerService.create(dto);
-				good = true;
+                Computer computer = MapperFactory.getComputerMapper().getFromDTO(dto);
+				computerService.create(computer);
 			}
 			catch(DateException e) {
-				request.setAttribute("vdiscontinued", e.getMessage());
+				request.setAttribute(discontinuedError, e.getMessage());
 				good = false;
 			}
 			catch (SQLException e) {
-				request.setAttribute("vdate", Validator.COMP_ERROR);
+				request.setAttribute(dateError, Validator.COMP_ERROR);
 				good = false;
 			}
 		}
+
+        // If the persistence is successful we print a success message on the page
 		if(good) {
-			request.setAttribute("success", true);
-			request.setAttribute("vsuccess", Validator.COMP_SUCCESS);
+			request.setAttribute(success, true);
+			request.setAttribute(addSuccess, Validator.COMP_SUCCESS);
 			getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
 		}
+        // Otherwise something went wrong at the validation or the persistence, we keep users inputs and show error messages
 		else {
-			request.setAttribute("pname", name);
-			request.setAttribute("pintro", introduced);
-			request.setAttribute("pdiscontinued", discontinued);
+			request.setAttribute(oldName, name);
+			request.setAttribute(oldIntro, introduced);
+			request.setAttribute(oldDiscontinued, discontinued);
 			getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
 		}
 	}

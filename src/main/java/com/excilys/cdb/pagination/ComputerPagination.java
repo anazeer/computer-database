@@ -1,29 +1,23 @@
 package com.excilys.cdb.pagination;
 
-import java.util.List;
 
-import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.service.dto.ComputerDTO;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.mapper.MapperFactory;
+import com.excilys.cdb.service.ServiceFactory;
 
-public class ComputerPagination extends Pagination<ComputerDTO> {
-	
-	private ComputerService computerService;
-	private List<ComputerDTO> listFromOffset;
+/**
+ * Pagination implementation for computers
+ */
+public final class ComputerPagination extends Pagination<Computer> {
 
-
-	public ComputerPagination(int countEntries, int countPerPage) {
-		super(countEntries, countPerPage);
-		computerService = ComputerService.getInstance();
+    /**
+     *
+     * @param count the total number of elements
+     * @param limit the maximum number of elements per page
+     */
+	public ComputerPagination(int count, int limit) {
+		super(count, limit);
+		service = ServiceFactory.getComputerService();
+        mapper = MapperFactory.getComputerMapper();
 	}
-	
-	public List<ComputerDTO> getListFromOffset() {
-		if(!changed) {
-			return listFromOffset;
-		}
-		int from = (getCurrentPage() - 1) * getCountPerPage();
-		int offset = getCountPerPage();
-		listFromOffset = computerService.listFromOffset(from, offset);
-		changed = false;
-		return listFromOffset;
-	}		
 }

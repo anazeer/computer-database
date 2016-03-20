@@ -27,7 +27,7 @@ public class ComputerServlet extends HttpServlet {
 	
 	private ComputerService computerService;
 	private ComputerPagination pagination;
-	private static int entriesPerPage;
+	private static int limit;
 	private static int count;
 
     /**
@@ -40,10 +40,10 @@ public class ComputerServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
     	super.init();
-    	entriesPerPage = 10;
+    	limit = 10;
     	computerService = ComputerService.getInstance();
-    	count = computerService.countEntries();
-    	pagination = new ComputerPagination(count, entriesPerPage);
+    	count = computerService.count();
+    	pagination = new ComputerPagination(count, limit);
     }
 
 	/**
@@ -53,14 +53,14 @@ public class ComputerServlet extends HttpServlet {
 		String page = request.getParameter("page");
 		String noElt = request.getParameter("limit");
 		int currentPage = pagination.getCurrentPage();
-		int currentElements = pagination.getCountPerPage();
+		int currentElements = pagination.getLimit();
 		if(page == null) {
 			pagination.setCurrentPage(currentPage);
 		}
 		else {
 			try {
 				int i = Integer.parseInt(page);
-				if(i > pagination.getCountPages()) {
+				if(i > pagination.getLastPage()) {
 					pagination.setCurrentPage(currentPage);
 				}
 				else if(i < 0) {
@@ -75,18 +75,18 @@ public class ComputerServlet extends HttpServlet {
 			}
 		}
 		if(noElt == null) {
-			pagination.setCountPerPage(currentElements);
+			pagination.setLimit(currentElements);
 		}
 		else {
 			try {
 				int i = Integer.parseInt(noElt);
 				if(i == 10 || i == 20 || i == 50)
-					pagination.setCountPerPage(i);
+					pagination.setLimit(i);
 				else
-					pagination.setCountPerPage(currentElements);
+					pagination.setLimit(currentElements);
 			}
 			catch(NumberFormatException e) {
-				pagination.setCountPerPage(currentElements);
+				pagination.setLimit(currentElements);
 			}
 		}
 		request.setAttribute("pagination", pagination);

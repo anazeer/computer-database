@@ -21,48 +21,48 @@ public class DashboardIntegrationTest {
 
 	@Test
 	public void testPageNavigation() throws Exception {
-		driver.get(baseUrl + "/computer-database/computer");
+		driver.get(baseUrl + "computer");
 		driver.findElement(By.linkText("2")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=2&limit=10", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=2&limit=10", driver.getCurrentUrl());
 		driver.findElement(By.linkText("3")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=3&limit=10", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=3&limit=10", driver.getCurrentUrl());
 		driver.findElement(By.linkText("2")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=2&limit=10", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=2&limit=10", driver.getCurrentUrl());
 		driver.findElement(By.linkText("1")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=1&limit=10", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=1&limit=10", driver.getCurrentUrl());
 		driver.findElement(By.linkText("»")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=2&limit=10", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=2&limit=10", driver.getCurrentUrl());
 		driver.findElement(By.linkText("»")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=3&limit=10", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=3&limit=10", driver.getCurrentUrl());
 		driver.findElement(By.linkText("«")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=2&limit=10", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=2&limit=10", driver.getCurrentUrl());
 		driver.findElement(By.linkText("«")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=1&limit=10", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=1&limit=10", driver.getCurrentUrl());
 		driver.findElement(By.linkText("1")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=1&limit=10", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=1&limit=10", driver.getCurrentUrl());
 	}
 	
 	@Test
 	public void testPageLimit() throws Exception {
-	    driver.get(baseUrl + "/computer-database/computer");
+	    driver.get(baseUrl + "computer");
 	    driver.findElement(By.cssSelector("button.btn.btn-default")).click();
-	    assertEquals(baseUrl + "/computer-database/computer?page=1&limit=10", driver.getCurrentUrl());
+	    assertEquals(baseUrl + "computer?page=1&limit=10", driver.getCurrentUrl());
 	    driver.findElement(By.xpath("(//button[@type='button'])[2]")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=1&limit=20", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=1&limit=20", driver.getCurrentUrl());
 	    driver.findElement(By.xpath("(//button[@type='button'])[3]")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=1&limit=50", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=1&limit=50", driver.getCurrentUrl());
 	    driver.findElement(By.xpath("(//button[@type='button'])[2]")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=1&limit=20", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=1&limit=20", driver.getCurrentUrl());
 	    driver.findElement(By.linkText("2")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=2&limit=20", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=2&limit=20", driver.getCurrentUrl());
 	    driver.findElement(By.xpath("(//button[@type='button'])[3]")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=1&limit=50", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=1&limit=50", driver.getCurrentUrl());
 	    driver.findElement(By.linkText("»")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=2&limit=50", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=2&limit=50", driver.getCurrentUrl());
 	    driver.findElement(By.linkText("1")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=1&limit=50", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=1&limit=50", driver.getCurrentUrl());
 		driver.findElement(By.cssSelector("button.btn.btn-default")).click();
-		assertEquals(baseUrl + "/computer-database/computer?page=1&limit=10", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer?page=1&limit=10", driver.getCurrentUrl());
 	}
 
 	@After

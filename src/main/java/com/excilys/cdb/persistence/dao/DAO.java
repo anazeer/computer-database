@@ -1,9 +1,10 @@
 package com.excilys.cdb.persistence.dao;
 
+import com.excilys.cdb.persistence.ConnectionSingleton;
+
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
-import com.excilys.cdb.exception.UnimplementedException;
 
 /**
  * Generic DAO for CRUD implementation
@@ -11,62 +12,63 @@ import com.excilys.cdb.exception.UnimplementedException;
  *
  * @param <T>
  */
-public interface DAO<T> {
+    interface DAO<T> {
 
-	final String unimplementedException = "Call to non inplemented method";
+    Connection conn = ConnectionSingleton.getInstance();
+
+	String unimplementedException = "Call to non implemented method";
 	
 	/**
 	 * 
-	 * @return a list with all table's elements
+	 * @return the list containing all the objects from the rows of the table
 	 */
 	List<T> findAll();
 	
 	/**
 	 * 
-	 * @param id
-	 * @return the object referenced by id
+	 * @param id the row primary key
+	 * @return the object representing the table's row referenced by id
 	 */
 	T findById(Long id);
 	
 	/**
 	 * 
-	 * @return the number of rows in the table
+	 * @return the total number of rows in the table
 	 */
-	int countEntries();
+	int count();
 	
 	/**
-	 * Retrieves offset number of rows after the from number row
-	 * @param from
-	 * @param to
-	 * @return
+	 *
+	 * @param offset the number of rows we first ignore
+	 * @param limit the maximum number of elements
+	 * @return the list containing at most limit elements from offset
 	 */
-	List<T> findFromOffset(int from, int offset);
+	List<T> findPage(int offset, int limit);
 	
 	/**
 	 * 
 	 * @param obj the object we want to persist
-	 * @return true if the object has been successfully inserted in the table
+	 * @return the object completed by its fresh id if the object has been successfully inserted in the table
 	 */
-	default public T create(T obj) throws UnimplementedException, SQLException {
-		throw new UnimplementedException(unimplementedException);
+	default T create(T obj) throws NoSuchMethodError, SQLException {
+		throw new NoSuchMethodError(unimplementedException);
 	}
 	
 	/**
-	 * 
-	 * @param obj 
+	 * Updates the row referenced by the same id as obj, with obj fields
+	 * @param obj the object containing the updated fields
 	 * @return true if the object has been successfully updated in the table
 	 */
-	default public boolean update(T obj) throws UnimplementedException {
-		throw new UnimplementedException(unimplementedException);
+	default boolean update(T obj) throws NoSuchMethodError {
+		throw new NoSuchMethodError(unimplementedException);
 	}
 	
 	/**
-	 * 
-	 * @param obj
+	 * Deletes the object referenced by the same id as obj
+	 * @param obj the object with the correct id we want to delete
 	 * @return true if the object has been successfully deleted from the table
 	 */
-	default public boolean delete(T obj) throws UnimplementedException {
-		throw new UnimplementedException(unimplementedException);
+	default boolean delete(T obj) throws NoSuchMethodError {
+		throw new NoSuchMethodError(unimplementedException);
 	}
-	
 }

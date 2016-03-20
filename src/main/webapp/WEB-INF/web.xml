@@ -5,6 +5,8 @@
 		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
 
+	<!-- Servlets declaration -->
+
 	<display-name>Archetype Created Web Application</display-name>
 	<servlet>
 		<servlet-name>ComputerServlet</servlet-name>
@@ -37,6 +39,7 @@
 	</servlet-mapping>
 
 	<!-- Error pages -->
+
 	<error-page>
 		<error-code>403</error-code>
 		<location>/WEB-INF/403.jsp</location>

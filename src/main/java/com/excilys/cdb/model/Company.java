@@ -62,8 +62,6 @@ public class Company {
 	
 	@Override
 	public String toString() {
-		String result = new String();
-		result += name + " (id : " + id + ")";
-		return result;
+		return name + " (id : " + id + ")";
 	}
 }

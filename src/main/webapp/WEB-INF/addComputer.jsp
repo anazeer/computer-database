@@ -26,8 +26,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                <c:if test="${success}"><div class="alert alert-success" role="alert">${vsuccess}</div></c:if>
+                    <!-- Print the success alert -->
+                    <c:if test="${success}"><div class="alert alert-success" id="computerSuccess" role="alert">${vsuccess}</div></c:if>
                     <h1>Add Computer</h1>
+                    <!-- Computer adding form -->
                     <form action="computerAdd" method="POST" id ="computerForm">
                         <fieldset>
                             <div class="form-group">
@@ -47,6 +49,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
+                                <!-- Brows companies -->
                                 <select class="form-control" id="companyId" name="companyId" >
                                 	<option value="0"><c:out value="Ignore"/></option>
                                		<c:forEach items="${companies}" var="company">
@@ -56,6 +59,7 @@
                                 <span id="computerError" style="color:red;">${vdate}</span>
                             </div>
                         </fieldset>
+                        <!-- Add or Cancel the addition of the computer -->
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or

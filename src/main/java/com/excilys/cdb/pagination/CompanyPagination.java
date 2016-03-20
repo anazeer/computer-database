@@ -1,29 +1,23 @@
 package com.excilys.cdb.pagination;
 
-import java.util.List;
 
-import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.dto.CompanyDTO;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.mapper.MapperFactory;
+import com.excilys.cdb.service.ServiceFactory;
 
-public class CompanyPagination extends Pagination<CompanyDTO> {
-	
-	private CompanyService companyService;
-	private List<CompanyDTO> listFromOffset;
+/**
+ * Pagination implementation for companies
+ */
+public final class CompanyPagination extends Pagination<Company> {
 
-
-	public CompanyPagination(int countEntries, int countPerPage) {
-		super(countEntries, countPerPage);
-		companyService = CompanyService.getInstance();
-	}
-	
-	public List<CompanyDTO> getListFromOffset() {
-		if(!changed) {
-			return listFromOffset;
-		}
-		int from = (getCurrentPage() - 1) * getCountPerPage();
-		int offset = getCountPerPage();
-		listFromOffset = companyService.listFromOffset(from, offset);
-		changed = false;
-		return listFromOffset;
+    /**
+     *
+     * @param count the total number of elements
+     * @param limit the maximum number of elements per page
+     */
+	public CompanyPagination(int count, int limit) {
+		super(count, limit);
+		service = ServiceFactory.getCompanyService();
+        mapper = MapperFactory.getCompanyMapper();
 	}
 }

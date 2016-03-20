@@ -15,6 +15,17 @@ public class Computer {
 	private LocalDate discontinued;
 	private Company company;
 
+	public Computer() {
+	}
+
+    private Computer(ComputerBuilder computerBuilder) {
+        this.id = computerBuilder.id;
+        this.name = computerBuilder.name;
+        this.introduced = computerBuilder.introduced;
+        this.discontinued = computerBuilder.discontinued;
+        this.company = computerBuilder.company;
+    }
+
 	public Computer(String name) {
 		setName(name);
 	}
@@ -31,6 +42,10 @@ public class Computer {
 		return name;
 	}
 
+    /**
+     * The name is required and should not be empty
+     * @param name the computer name
+     */
 	public void setName(String name) {
 		if(name.trim().isEmpty())
 			throw new IllegalArgumentException("Name should'nt be empty");
@@ -122,4 +137,50 @@ public class Computer {
 		result += company != null ? "Company: " + company + "\n" : "";
 		return result;
 	}
+
+    /**
+     * Computer builder
+     */
+    public static class ComputerBuilder {
+        private Long id;
+        private String name;
+        private LocalDate introduced;
+        private LocalDate discontinued;
+        private Company company;
+
+        /**
+         * Computer builder to build a custom computer
+         * @param name the computer name
+         */
+        public ComputerBuilder(String name) {
+            this.name = name;
+        }
+
+        public ComputerBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public ComputerBuilder introduced(LocalDate introduced) {
+            this.introduced = introduced;
+            return this;
+        }
+
+        public ComputerBuilder discontinued(LocalDate discontinued) {
+            this.discontinued = discontinued;
+            return this;
+        }
+
+        public ComputerBuilder company(Company company) {
+            this.company = company;
+            return this;
+        }
+
+        public Computer build() {
+            Computer computer = new Computer(this);
+            if(computer.getName().trim().isEmpty())
+                throw new IllegalStateException("Name should'nt be empty");
+            return computer;
+        }
+    }
 }

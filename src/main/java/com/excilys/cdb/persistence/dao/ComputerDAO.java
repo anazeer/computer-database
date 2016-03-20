@@ -1,6 +1,5 @@
 package com.excilys.cdb.persistence.dao;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,41 +9,51 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.cdb.persistence.mapper.MapperFactory;
 import org.apache.log4j.Logger;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.ConnectionSingleton;
 import com.excilys.cdb.persistence.mapper.ComputerMapper;
-import com.excilys.cdb.persistence.mapper.DAOMapper;
 
 /**
- * Computer DAO implementation
+ * DAO implementation for computers
  * @author excilys
  *
  */
-public class ComputerDAO implements DAO<Computer> {
+public final class ComputerDAO implements DAO<Computer> {
 	
-	private Connection conn;
 	private Logger log;
+    private static ComputerDAO instance;
+    private ComputerMapper computerMapper;
 
 	/**
 	 * ComputerDAO new instance for Computer type object persistence
 	 */
-	public ComputerDAO() {
-		conn = ConnectionSingleton.getInstance();
+	private ComputerDAO() {
 		log = Logger.getLogger(getClass());
+        computerMapper = MapperFactory.getComputerMapper();
 	}
-	
+
+    /**
+     *
+     * @return the computer DAO implementation instance
+     */
+	public static ComputerDAO getInstance() {
+        if(instance == null) {
+            instance = new ComputerDAO();
+        }
+        return instance;
+    }
+
 	@Override
 	public List<Computer> findAll() {
 		List<Computer> listComputer = null;
 		String query = "SELECT * FROM computer";
-		try(Statement stmt = conn.createStatement(); 
-			ResultSet result = stmt.executeQuery(query);) {
-			DAOMapper<Computer> mapper = new ComputerMapper();
-			listComputer = new ArrayList<Computer>();
+		try(Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery(query)) {
+			listComputer = new ArrayList<>();
 			while(result.next())
-				listComputer.add(mapper.find(result));
+				listComputer.add(computerMapper.getFromResultSet(result));
 			result.close();
 			stmt.close();
 			log.info("Computers retrieved (" + listComputer.size() + ")");
@@ -54,17 +63,16 @@ public class ComputerDAO implements DAO<Computer> {
 		}
 		return listComputer;
 	}
-	
+
 	@Override
-	public List<Computer> findFromOffset(int from, int offset) {
+	public List<Computer> findPage(int offset, int limit) {
 		List<Computer> listComputer = null;
-		String query = "SELECT * FROM computer LIMIT " + from + ", " + offset;
-		try(Statement stmt = conn.createStatement(); 
-			ResultSet result = stmt.executeQuery(query);) {
-			DAOMapper<Computer> mapper = new ComputerMapper();
-			listComputer = new ArrayList<Computer>();
+		String query = "SELECT * FROM computer LIMIT " + offset + ", " + limit;
+		try(Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery(query)) {
+			listComputer = new ArrayList<>();
 			while(result.next())
-				listComputer.add(mapper.find(result));
+				listComputer.add(computerMapper.getFromResultSet(result));
 			result.close();
 			stmt.close();
 			log.info("Computers page (" + listComputer.size() + ")");
@@ -74,16 +82,15 @@ public class ComputerDAO implements DAO<Computer> {
 		}
 		return listComputer;
 	}
-	
+
 	@Override
 	public Computer findById(Long id) {
 		Computer computer = null;
 		String query = "SELECT * FROM computer WHERE computer.id = " + id;
-		try(Statement stmt = conn.createStatement(); 
-			ResultSet result = stmt.executeQuery(query);) {
-			DAOMapper<Computer> mapper = new ComputerMapper();
+		try(Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery(query)) {
 			if(result.next()) {
-				computer = mapper.find(result);
+				computer = computerMapper.getFromResultSet(result);
 			}
 			result.close();
 			stmt.close();
@@ -96,11 +103,11 @@ public class ComputerDAO implements DAO<Computer> {
 	}
 	
 	@Override
-	public int countEntries() {
+	public int count() {
 		int count = 0;
 		String query = "SELECT COUNT(*) as entries FROM computer";
 		try(Statement stmt = conn.createStatement(); 
-			ResultSet result = stmt.executeQuery(query);) {
+			ResultSet result = stmt.executeQuery(query)) {
 			if(result.next()) {
 				count = result.getInt("entries");
 			}
@@ -118,7 +125,7 @@ public class ComputerDAO implements DAO<Computer> {
 	public Computer create(Computer obj) throws SQLException {
 		String query = "INSERT INTO computer "
 				+ "(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-		try(PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+		try(PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 			Date introducedDate = obj.getIntroduced() == null ? null : Date.valueOf(obj.getIntroduced().atTime(0, 0, 0).toLocalDate());
 			Date discontinuedDate = obj.getDiscontinued() == null ? null : Date.valueOf(obj.getDiscontinued().atTime(0, 0, 0).toLocalDate());
 			Long company_id = obj.getCompany() == null ? null : obj.getCompany().getId();
@@ -153,7 +160,7 @@ public class ComputerDAO implements DAO<Computer> {
 				+ "discontinued = " + obj.getDiscontinued() + ", "
 				+ "company_id = ? "
 				+ "WHERE id = " + obj.getId();
-		try(PreparedStatement stmt = conn.prepareStatement(query);) {
+		try(PreparedStatement stmt = conn.prepareStatement(query)) {
 			stmt.setString(1, obj.getName());
 			Long company_id = obj.getCompany() == null ? null : obj.getCompany().getId();
 			if(company_id == null) {
@@ -176,7 +183,7 @@ public class ComputerDAO implements DAO<Computer> {
 	@Override
 	public boolean delete(Computer obj) {
 		String query = "DELETE FROM computer WHERE id = " + obj.getId();
-		try(Statement stmt = conn.createStatement();) {
+		try(Statement stmt = conn.createStatement()) {
 			stmt.executeUpdate(query);
 			stmt.close();
 			log.info("Computer deleted (id = " + obj.getId() + ")");
@@ -190,7 +197,7 @@ public class ComputerDAO implements DAO<Computer> {
 	
 	public boolean delete(Long id) {
 		String query = "DELETE FROM computer WHERE id = " + id;
-		try(Statement stmt = conn.createStatement();) {
+		try(Statement stmt = conn.createStatement()) {
 			stmt.executeUpdate(query);
 			stmt.close();
 			log.info("Computer deleted (id = " + id + ")");
@@ -201,5 +208,4 @@ public class ComputerDAO implements DAO<Computer> {
 		}
 		return false;
 	}
-	
 }

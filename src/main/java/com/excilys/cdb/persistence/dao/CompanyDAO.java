@@ -1,49 +1,56 @@
 package com.excilys.cdb.persistence.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.cdb.persistence.mapper.MapperFactory;
 import org.apache.log4j.Logger;
 
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.ConnectionSingleton;
 import com.excilys.cdb.persistence.mapper.CompanyMapper;
-import com.excilys.cdb.persistence.mapper.DAOMapper;
 
 /**
- * Company DAO implementation
+ * DAO implementation for companies
  * @author excilys
  *
  */
-public class CompanyDAO implements DAO<Company> {
+public final class CompanyDAO implements DAO<Company> {
 	
-	private Connection conn;
 	private Logger log;
+	private static CompanyDAO instance;
+    private CompanyMapper companyMapper;
 
 	/**
-	 * ComputerDAO new instance for Computer type object persistence
+	 * CompanyDAO new instance for Company type object persistence
 	 */
-	public CompanyDAO() {
-		conn = ConnectionSingleton.getInstance();
+	private CompanyDAO() {
 		log = Logger.getLogger(getClass());
+        companyMapper = MapperFactory.getCompanyMapper();
 	}
-	
 
+    /**
+     *
+     * @return the company DAO implementation instance
+     */
+    public static CompanyDAO getInstance() {
+        if(instance == null) {
+            instance = new CompanyDAO();
+        }
+        return instance;
+    }
 
 	@Override
 	public List<Company> findAll() {
 		List<Company> listCompany = null;
-		try(Statement stmt = conn.createStatement();) {
+		try(Statement stmt = conn.createStatement()) {
 			String query = "SELECT * FROM company";
 			ResultSet result = stmt.executeQuery(query);
-			DAOMapper<Company> mapper = new CompanyMapper();
-			listCompany = new ArrayList<Company>();
+			listCompany = new ArrayList<>();
 			while(result.next())
-				listCompany.add(mapper.find(result));
+				listCompany.add(companyMapper.getFromResultSet(result));
 			result.close();
 			stmt.close();
 			log.info("Companies retrieved (" + listCompany.size() + ")");
@@ -55,15 +62,14 @@ public class CompanyDAO implements DAO<Company> {
 	}
 	
 	@Override
-	public List<Company> findFromOffset(int from, int offset) {
+	public List<Company> findPage(int offset, int limit) {
 		List<Company> listCompany = null;
-		try(Statement stmt = conn.createStatement();) {
-			String query = "SELECT * FROM company LIMIT " + from + ", " + offset;
+		try(Statement stmt = conn.createStatement()) {
+			String query = "SELECT * FROM company LIMIT " + offset + ", " + limit;
 			ResultSet result = stmt.executeQuery(query);
-			DAOMapper<Company> mapper = new CompanyMapper();
-			listCompany = new ArrayList<Company>();
+			listCompany = new ArrayList<>();
 			while(result.next())
-				listCompany.add(mapper.find(result));
+				listCompany.add(companyMapper.getFromResultSet(result));
 			result.close();
 			stmt.close();
 			log.info("Computers page (" + listCompany.size() + ")");
@@ -75,9 +81,9 @@ public class CompanyDAO implements DAO<Company> {
 	}
 	
 	@Override
-	public int countEntries() {
+	public int count() {
 		int count = 0;
-		try(Statement stmt = conn.createStatement();) {
+		try(Statement stmt = conn.createStatement()) {
 			String query = "SELECT COUNT(*) as entries FROM company";
 			ResultSet result = stmt.executeQuery(query);
 			if(result.next()) {
@@ -97,11 +103,10 @@ public class CompanyDAO implements DAO<Company> {
 	public Company findById(Long id) {
 		Company company = null;
 		String query = "SELECT * FROM company WHERE company.id = " + id;
-		try(Statement stmt = conn.createStatement();) {
+		try(Statement stmt = conn.createStatement()) {
 			ResultSet result = stmt.executeQuery(query);
-			DAOMapper<Company> mapper = new CompanyMapper();
 			if(result.next()) {
-				company = mapper.find(result);
+				company = companyMapper.getFromResultSet(result);
 			}
 			result.close();
 			stmt.close();
@@ -114,5 +119,4 @@ public class CompanyDAO implements DAO<Company> {
 		}
 		return company;
 	}
-
 }

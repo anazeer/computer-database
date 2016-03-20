@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.excilys.cdb.persistence.dao.DAOFactory;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class ComputerDAOTest {
 	
 	@BeforeClass
 	public static void init() {
-		computerDAO = new ComputerDAO();
+		computerDAO = DAOFactory.getComputerDAO();
 	}
 	
 	/**
@@ -50,7 +51,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void testFindFromOffset() {
-		List<Computer> list = computerDAO.findFromOffset(0, 10);
+		List<Computer> list = computerDAO.findPage(0, 10);
 		assertNotNull(list);
 		assertEquals(list.size(), 10);
 	}
@@ -64,7 +65,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void testCountEntries() {
-		assertTrue(computerDAO.countEntries() > 500);
+		assertTrue(computerDAO.count() > 500);
 	}
 	
 	@Test

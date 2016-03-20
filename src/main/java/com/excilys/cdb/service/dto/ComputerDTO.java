@@ -1,6 +1,8 @@
 package com.excilys.cdb.service.dto;
 
-
+/**
+ * DTO implementation for computers
+ */
 public class ComputerDTO implements DTO {
 	
 	private Long id;
@@ -9,6 +11,18 @@ public class ComputerDTO implements DTO {
 	private String discontinued;
 	private Long companyId;
 	private String companyName;
+
+    public ComputerDTO() {
+    }
+
+    private ComputerDTO(ComputerDTOBuilder computerDTOBuilder) {
+        this.id = computerDTOBuilder.id;
+        this.name = computerDTOBuilder.name;
+        this.introduced = computerDTOBuilder.introduced;
+        this.discontinued = computerDTOBuilder.discontinued;
+        this.companyId = computerDTOBuilder.companyId;
+        this.companyName = computerDTOBuilder.companyName;
+    }
 
 	public ComputerDTO(String name) {
 		setName(name);
@@ -123,5 +137,49 @@ public class ComputerDTO implements DTO {
 	public String toString() {
 		return name + " (id: " + id + ")";
 	}
-	
+
+    public static class ComputerDTOBuilder {
+        private Long id;
+        private String name;
+        private String introduced;
+        private String discontinued;
+        private Long companyId;
+        private String companyName;
+
+        public ComputerDTOBuilder(String name) {
+            this.name = name;
+        }
+
+        public ComputerDTOBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public ComputerDTOBuilder introduced(String introduced) {
+            this.introduced = introduced;
+            return this;
+        }
+
+        public ComputerDTOBuilder discontinued(String discontinued) {
+            this.discontinued = discontinued;
+            return this;
+        }
+
+        public ComputerDTOBuilder companyId(Long companyId) {
+            this.companyId = companyId;
+            return this;
+        }
+
+        public ComputerDTOBuilder companyName(String companyName) {
+            this.companyName = companyName;
+            return this;
+        }
+
+        public ComputerDTO build() {
+            ComputerDTO computer = new ComputerDTO(this);
+            if (computer.getName().trim().isEmpty())
+                throw new IllegalStateException("Name should'nt be empty");
+            return computer;
+        }
+    }
 }

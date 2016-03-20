@@ -2,17 +2,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<!-- Project information -->
+
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
-
 	<name>computer-database</name>
 	<url>http://maven.apache.org</url>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
+    <!-- Maven configuration -->
 
 	<build>
 		<plugins>
@@ -30,6 +32,8 @@
 		</plugins>
 	</build>
 
+    <!-- Reporting -->
+
 	<reporting>
 		<plugins>
 			<plugin>
@@ -45,40 +49,56 @@
 		</plugins>
 	</reporting>
 
+    <!-- Dependencies -->
+
 	<dependencies>
+
+        <!-- Servlet API -->
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
+            <scope>provided</scope>
 		</dependency>
 
+        <!-- MySQL driver -->
 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.38</version>
+            <scope>runtime</scope>
 		</dependency>
+
+        <!-- JSTL API -->
 
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
+            <scope>compile</scope>
 		</dependency>
 
+        <!-- JUnit API -->
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.4</version>
+            <scope>test</scope>
 		</dependency>
 
+        <!-- Log4j API -->
 
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
+            <scope>compile</scope>
 		</dependency>
+
+        <!-- Mockito API -->
 
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -86,22 +106,31 @@
 			<version>1.10.19</version>
 		</dependency>
 
+        <!-- Maven checkstyle API -->
+
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-checkstyle-plugin</artifactId>
 			<version>2.17</version>
+            <scope>test</scope>
 		</dependency>
+
+        <!-- Selenium API -->
 
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>2.53.0</version>
+            <scope>test</scope>
 		</dependency>
+
+        <!-- Use by Selenium -->
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.3.5</version>
+            <scope>test</scope>
 		</dependency>
 
 	</dependencies>

@@ -193,7 +193,7 @@ Version 35:
     </mailingList>
   </mailingLists>
   <build>
-    <!-- TODO find a better way to add N&L files to jars and test jars
+    <!-- TODO getFromResultSet a better way to add N&L files to jars and test jars
          See also maven-remote-resources-plugin configuration below.
     -->
     <resources>
@@ -308,7 +308,7 @@ Version 35:
           <version>2.5.1</version>
         </plugin>
         <plugin>
-          <!-- TODO see above - find better way to add N&L files to jars and test jars -->
+          <!-- TODO see above - getFromResultSet better way to add N&L files to jars and test jars -->
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-remote-resources-plugin</artifactId>
           <!-- override old version from Apache pom 13 -->

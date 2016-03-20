@@ -23,7 +23,8 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-            <c:out value="${countComputer}"/> Computer<c:if test="${countComputer gt 1}"><c:out value="s"/></c:if> found
+                <!-- Print computers count -->
+                <c:out value="${countComputer}"/> Computer<c:if test="${countComputer gt 1}"><c:out value="s"/></c:if> found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -79,7 +80,7 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-               	<c:forEach var="computer" items="${pagination.listFromOffset}">
+               	<c:forEach var="computer" items="${pagination.listFromPage}">
                     <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
@@ -100,20 +101,23 @@
 
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
+            <!-- Links to other pages with pagination -->
             <ul class="pagination">
-            	<mylib:pagination countpage="${pagination.countPages}" count="${pagination.countPerPage}" currentpage="${pagination.currentPage}"/>
+            	<mylib:pagination countpage="${pagination.lastPage}" count="${pagination.limit}" currentpage="${pagination.currentPage}"/>
         	</ul>
-        <div class="btn-group btn-group-sm pull-right" role="group" >
-        	<button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=10'">10</button>
-        	<button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=20'">20</button>
-        	<button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=50'">50</button>
-        </div>
+            <!-- Page limit buttons -->
+            <div class="btn-group btn-group-sm pull-right" role="group" >
+                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=10'">10</button>
+                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=20'">20</button>
+                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=50'">50</button>
+            </div>
       </div>
     </footer>
-<script src="resources/js/jquery.min.js"></script>
-<script src="resources/js/bootstrap.min.js"></script>
-<script src="resources/js/dashboard.js"></script>
-<script src="resources/js/jquery.validate.js"></script>
+    <!-- Scripts -->
+    <script src="resources/js/jquery.min.js"></script>
+    <script src="resources/js/bootstrap.min.js"></script>
+    <script src="resources/js/dashboard.js"></script>
+    <script src="resources/js/jquery.validate.js"></script>
 
-</body>
+    </body>
 </html>

@@ -1,13 +1,14 @@
 package com.excilys.cdb.service.dto;
 
-
+/**
+ * DTO implementation for companies
+ */
 public class CompanyDTO implements DTO {
 	
 	private Long id;
 	private String name;
 
 	public CompanyDTO() {
-		
 	}
 
 	public Long getId() {
@@ -59,9 +60,6 @@ public class CompanyDTO implements DTO {
 
 	@Override
 	public String toString() {
-		String result = new String();
-		result += name + " (id : " + id + ")";
-		return result;
+		return name + " (id : " + id + ")";
 	}
-	
 }

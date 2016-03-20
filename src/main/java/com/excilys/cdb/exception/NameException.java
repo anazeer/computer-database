@@ -3,32 +3,19 @@ package com.excilys.cdb.exception;
 public class NameException extends Exception {
 
 	/**
-	 * 
+	 * Custom exception for miscellaneous name mistakes
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public NameException() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public NameException(String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
-	}
-
-	public NameException(Throwable cause) {
-		super(cause);
-		// TODO Auto-generated constructor stub
-	}
-
-	public NameException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
-
-	public NameException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-		// TODO Auto-generated constructor stub
-	}
-
+    /**
+     * Constructs a new exception with the specified detail message.  The
+     * cause is not initialized, and may subsequently be initialized by
+     * a call to {@link #initCause}.
+     *
+     * @param message the detail message. The detail message is saved for
+     *                later retrieval by the {@link #getMessage()} method.
+     */
+    public NameException(String message) {
+        super(message);
+    }
 }

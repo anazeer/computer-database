@@ -17,6 +17,8 @@ import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.CompanyPagination;
 import com.excilys.cdb.pagination.ComputerPagination;
+import com.excilys.cdb.pagination.Pagination;
+import com.excilys.cdb.persistence.mapper.MapperFactory;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.dto.ComputerDTO;
@@ -24,30 +26,27 @@ import com.excilys.cdb.service.dto.ComputerDTO;
 public class Main {
 	
 	// Services
-	static ComputerService computerService = ComputerService.getInstance();
-	static CompanyService companyService = CompanyService.getInstance();
+	private static ComputerService computerService = ComputerService.getInstance();
+	private static CompanyService companyService = CompanyService.getInstance();
 	
 	// List containing valid inputs for each menu
-	static List<Integer> generalInstr = new ArrayList<Integer>();
-	static List<Integer> companyInstr = new ArrayList<Integer>();
-	static List<Integer> computerInstr = new ArrayList<Integer>();
-	static List<Character> paginatorInstr = new ArrayList<Character>();
+	private static List<Integer> generalInstr = new ArrayList<>();
+	private static List<Integer> companyInstr = new ArrayList<>();
+	private static List<Integer> computerInstr = new ArrayList<>();
+	private static List<Character> pageInstr = new ArrayList<>();
 	
 	// Number of options for each menu
-	static final int countGeneralInstr = 3;
-	static final int countCompanyInstr = 2;
-	static final int countComputerInstr = 6;
+	private static final int countGeneralInstr = 3;
+	private static final int countCompanyInstr = 2;
+	private static final int countComputerInstr = 6;
 	
 	// Read inputs
-	static Scanner scan;
-	
-	// Maximum elements per page
-	static int entriesPerPage = 10;
+	private static Scanner scan;
 	
 	/**
 	 * Show main menu
 	 */
-	static void showGeneralInstr() {
+	private static void showGeneralInstr() {
 		System.out.println("\nComputer database management");
 		System.out.println("Choose your database:");
 		System.out.println("1. Company");
@@ -58,7 +57,7 @@ public class Main {
 	/**
 	 * Show company menu
 	 */
-	static void showCompanyInstr() {
+	private static void showCompanyInstr() {
 		System.out.println("\nCompany");
 		System.out.println("Choose your operation:");
 		System.out.println("1. List companies");
@@ -68,7 +67,7 @@ public class Main {
 	/**
 	 * Show computer menu
 	 */
-	static void showComputerInstr() {
+	private static void showComputerInstr() {
 		System.out.println("\nComputer");
 		System.out.println("Choose your operation:");
 		System.out.println("1. List computers");
@@ -82,7 +81,7 @@ public class Main {
 	/**
 	 * Show pagination menu
 	 */
-	static void showPage(List<?> list) {
+	private static void showPage(List<?> list) {
 		for(Object o : list) {
 			System.out.println(o);
 		}
@@ -97,8 +96,8 @@ public class Main {
 	 * @param step the current menu number (from 0 to 2)
 	 * @return the selected option
 	 */
-	static int readOption(int step) {
-		int entry = -1;
+	private static int readOption(int step) {
+		int entry;
 		try {
 			entry = Integer.parseInt(scan.nextLine());
 			if(step == 0 && !generalInstr.contains(entry)) {
@@ -120,9 +119,9 @@ public class Main {
 	
 	/**
 	 * Read a valid ID input
-	 * @return
+	 * @return the input ID
 	 */
-	static Long readId() {
+	private static Long readId() {
 		Long id = null;
 		while(id == null) {
 			System.out.println("Enter the ID:");
@@ -138,9 +137,9 @@ public class Main {
 	
 	/**
 	 * Read a valid name (not empty)
-	 * @return
+	 * @return the input name
 	 */
-	static String readName() {
+	private static String readName() {
 		String entry = null;
 		while(entry == null) {
 			System.out.println("Select the name:");
@@ -155,9 +154,9 @@ public class Main {
 	
 	/**
 	 * Read a Date input
-	 * @return
+	 * @return the input date
 	 */
-	static Date readDate() {
+	private static Date readDate() {
 		Date date = null;
 		String entry = null;
 		//String parse = "yyyy/mm/dd";
@@ -190,15 +189,15 @@ public class Main {
 	
 	/**
 	 * Read a character input for pagination
-	 * @return
+	 * @return the input char
 	 */
-	static char readPage() {
+	private static char readPage() {
 		Character c = null;
 		while(c == null) {
 			System.out.println("Enter an option:");
 			try {
 				c = scan.nextLine().charAt(0);
-				if(!paginatorInstr.contains(c)) {
+				if(!pageInstr.contains(c)) {
 					c = null;
 					throw new IllegalArgumentException();
 				}
@@ -209,11 +208,23 @@ public class Main {
 		}
 		return c;
 	}
+
+    private static void navigatePage(Pagination page) {
+        boolean end = false;
+        while(!end) {
+            showPage(page.getListFromPage());
+            switch(readPage()) {
+                case 'n' : page.next(); break;
+                case 'p' : page.previous(); break;
+                case 'q' : end = true; break;
+            }
+        }
+    }
 	
 	/**
 	 * Initialize the list containing the valid options
 	 */
-	static void initLists() {
+	private static void initLists() {
 		for(int i = 1; i <= countGeneralInstr; i++) {
 			generalInstr.add(i);
 		}
@@ -223,16 +234,16 @@ public class Main {
 		for(int i = 1; i <= countComputerInstr; i++) {
 			computerInstr.add(i);
 		}
-		paginatorInstr.add('n');
-		paginatorInstr.add('p');
-		paginatorInstr.add('q');
+		pageInstr.add('n');
+		pageInstr.add('p');
+		pageInstr.add('q');
 	}
 	
 	/**
 	 * Construct a new computer in line command
-	 * @return
+	 * @return the created computer
 	 */
-	static ComputerDTO constructComputer() {
+	private static ComputerDTO constructComputer() {
 		String name = readName();
 		
 		Date introducedDate;
@@ -246,7 +257,7 @@ public class Main {
 		}
 		while(!introducedDate.before(discontinuedDate));
 		
-		Instant instant = null;
+		Instant instant;
 	    LocalDate introduced = null;
 	    LocalDate discontinued = null;
 		if(introducedDate != null) {
@@ -262,8 +273,12 @@ public class Main {
 		Long company_id = readId();
 		
 		ComputerDTO computer = new ComputerDTO(name);
-		computer.setIntroduced(introduced.toString());
-		computer.setDiscontinued(discontinued.toString());
+		if(introduced != null) {
+            computer.setIntroduced(introduced.toString());
+        }
+        if(discontinued != null) {
+            computer.setDiscontinued(discontinued.toString());
+        }
 		computer.setCompanyId(company_id);
 		return computer;
 	}
@@ -271,7 +286,7 @@ public class Main {
 	/**
 	 * The main UI
 	 */
-	static void session() {
+	private static void session() {
 		initLists();
 		boolean exit = false;
 		int step = 0;
@@ -294,43 +309,30 @@ public class Main {
 			else if(step == 1) {
 				switch(entry) {
 					case 1 : 
-						CompanyPagination page = new CompanyPagination(companyService.countEntries(), entriesPerPage);
+						CompanyPagination page = new CompanyPagination(companyService.count(), 10);
 						System.out.println("---------------------");
 						System.out.println("- List of companies -");
 						System.out.println("---------------------");
-						boolean end = false;
-						while(!end) {
-							showPage(page.getListFromOffset());
-							switch(readPage()) {
-								case 'n' : page.next(); break;
-								case 'p' : page.previous(); break;
-								case 'q' : end = true; break;
-							}
-						}
+                        navigatePage(page);
 						break;
-					case 2 : step = 0; break;
+					case 2 : step = 0;
+                        break;
 				}
 			}
-			else if(step == 2) {
+			else {
+                Computer computer;
+                ComputerDTO computerDTO;
 				switch(entry) {
 					case 1 :
-						ComputerPagination page = new ComputerPagination(computerService.countEntries(), entriesPerPage);
+						ComputerPagination page = new ComputerPagination(computerService.count(), 10);
 						System.out.println("---------------------");
 						System.out.println("- List of computers -");
 						System.out.println("---------------------");
-						boolean end = false;
-						while(!end) {
-							showPage(page.getListFromOffset());
-							switch(readPage()) {
-								case 'n' : page.next(); break;
-								case 'p' : page.previous(); break;
-								case 'q' : end = true; break;
-							}
-						}
+                        navigatePage(page);
 						break;
 					case 2 :
 						Long id = readId();
-						Computer computer = computerService.getComputer(id);
+						computer = computerService.getComputer(id);
 						if(computer == null) {
 							System.out.println("No computer is referenced by id " + id);
 						}
@@ -338,19 +340,28 @@ public class Main {
 							System.out.println(computer.toDetailedString());
 						}
 						break;
-					case 3 : ComputerDTO comp = constructComputer();
-							 try {
-								 computerService.create(comp);
-								 break;
-							 }
-							 catch(SQLException e) {
-								 System.err.println("Error on computer creation");
-								 break;
-							 } catch (DateException e) {
-								 System.err.println("The introduced date should be earlier than the discontinued date");
-								 e.printStackTrace();
-							}
-					case 4 : ComputerDTO updateComputer = constructComputer(); Long updateId = readId(); updateComputer.setId(updateId);computerService.update(updateComputer); break;
+					case 3 :
+                        computerDTO = constructComputer();
+                        try {
+                            computer = MapperFactory.getComputerMapper().getFromDTO(computerDTO);
+                            computerService.create(computer);
+                            break;
+                        }
+                        catch(SQLException e) {
+                            System.err.println("Error on computer creation");
+                            break;
+                        }
+                        catch (DateException e) {
+                            System.err.println("The introduced date should be earlier than the discontinued date");
+                            e.printStackTrace();
+                        }
+					case 4 :
+                        computerDTO = constructComputer();
+                        Long updateId = readId();
+                        computerDTO.setId(updateId);
+                        computer = MapperFactory.getComputerMapper().getFromDTO(computerDTO);
+                        computerService.update(computer);
+                        break;
 					case 5 : Long delId = readId(); computerService.delete(delId); break;
 					case 6 : step = 0; break;
 				}

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
+import com.excilys.cdb.persistence.dao.DAOFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class CompanyDAOTest {
 	
 	@BeforeClass
 	public static void init() {
-		companyDAO = new CompanyDAO();
+		companyDAO = DAOFactory.getCompanyDAO();
 	}
 
 	/**
@@ -44,14 +45,14 @@ public class CompanyDAOTest {
 	
 	@Test
 	public void testFindFromOffset() {
-		List<Company> list = companyDAO.findFromOffset(0, 10);
+		List<Company> list = companyDAO.findPage(0, 10);
 		assertNotNull(list);
 		assertEquals(list.size(), 10);
 	}
 	
 	@Test
 	public void testCountEntries() {
-		assertEquals(companyDAO.countEntries(), 42);
+		assertEquals(companyDAO.count(), 42);
 	}
 	
 	@Test

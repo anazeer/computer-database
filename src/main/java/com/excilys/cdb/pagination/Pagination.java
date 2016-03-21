@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.cdb.persistence.mapper.Mapper;
-import com.excilys.cdb.persistence.mapper.MapperFactory;
 import com.excilys.cdb.service.Service;
 import com.excilys.cdb.service.dto.DTO;
 
@@ -47,7 +46,7 @@ public abstract class Pagination<T> {
     /**
      * The service that uses the pagination
      */
-    protected Service service;
+    protected Service<T> service;
 
     /**
      * The mapper to get only relevant data from the service

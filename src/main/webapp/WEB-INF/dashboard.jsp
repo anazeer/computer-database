@@ -22,6 +22,8 @@
     </header>
     <section id="main">
         <div class="container">
+        	<!-- Print the success alert -->
+            <c:if test="${deleteSuccess}"><div class="alert alert-success" id="computerSuccess" role="alert">${deleteMsg}</div></c:if>
             <h1 id="homeTitle">
                 <!-- Print computers count -->
                 <c:out value="${countComputer}"/> Computer<c:if test="${countComputer gt 1}"><c:out value="s"/></c:if> found
@@ -42,7 +44,7 @@
             </div>
         </div>
 
-        <form id="deleteForm" action="computer" method="POST">
+        <form id="deleteForm" action="computerDelete" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -83,10 +85,10 @@
                	<c:forEach var="computer" items="${pagination.listFromPage}">
                     <tr>
                         <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
+                            <input type="checkbox" name="cb" class="cb" value="${computer.id}">
                         </td>
                         <td>
-                        	<mylib:link target="editComputer.html" text="${computer.name}"/>
+                        	<mylib:link target="computerEdit" text="${computer.name}" id="${computer.id}"/>
                         </td>
                         <td><c:out value="${computer.introduced}"/> </td>
                         <td><c:out value="${computer.discontinued}"/> </td>

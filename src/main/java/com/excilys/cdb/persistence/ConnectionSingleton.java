@@ -68,4 +68,21 @@ public final class ConnectionSingleton {
         }
         return instance;
     }
+    
+    /**
+     * Close the current connection if it exists
+     */
+    public static void closeConnection() {
+    	if(instance != null) {
+	    	try {
+	    		if(!instance.isClosed()) {
+	    			instance.close();
+	    		}
+				instance = null;
+			} catch (SQLException e) {
+	            log.error(e.getMessage());
+	            throw new RuntimeException(e);
+			}
+	    }
+    }
 }

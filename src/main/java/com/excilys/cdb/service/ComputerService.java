@@ -12,6 +12,8 @@ import com.excilys.cdb.persistence.dao.DAOFactory;
  * Service implementation for computers
  */
 public class ComputerService implements Service<Computer> {
+	
+	// TODO : cache implementation
 
 	private ComputerDAO computerDAO;
 	private static ComputerService instance;
@@ -55,7 +57,11 @@ public class ComputerService implements Service<Computer> {
 		computerDAO.create(computer);
 	}
 	
-	public void update(Computer computer) {
+	public void update(Computer computer) throws SQLException, DateException {
+		if(computer.getIntroduced() != null && computer.getDiscontinued() != null
+                && computer.getIntroduced().isAfter(computer.getDiscontinued())) {
+			throw new DateException("discontinued date should be after introduced date");
+		}
 		computerDAO.update(computer);
 	}
 	

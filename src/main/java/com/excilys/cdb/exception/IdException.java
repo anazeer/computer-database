@@ -1,9 +1,9 @@
 package com.excilys.cdb.exception;
 
 /**
- * Custom exception for miscellaneous name mistakes
+ * Custom exception for miscellaneous id mistakes
  */
-public class NameException extends Exception {
+public class IdException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
@@ -15,7 +15,7 @@ public class NameException extends Exception {
 	 * @param message the detail message. The detail message is saved for
 	 *                later retrieval by the {@link #getMessage()} method.
 	 */
-	public NameException(String message) {
+	public IdException(String message) {
 		super(message);
 	}
 }

@@ -2,7 +2,6 @@ package com.excilys.cdb.service;
 
 import java.util.List;
 
-import com.excilys.cdb.service.dto.DTO;
 
 public interface Service<T> {
 

@@ -10,12 +10,31 @@
 	description="The page size"%>
 <%@ attribute name="page" required="false" type="java.lang.String"
 	description="The page number"%>
+<%@ attribute name="id" required="false" type="java.lang.String"
+	description="The computer id"%>
 
 <c:choose>
 	<c:when test="${target != '#'}">
-		<a href="${target}?page=${page}&limit=${size}" class="${classLink}"><c:out value="${text}"/></a>
+		<c:choose>
+			<c:when test="${not empty page}">
+				<a href="${target}?page=${page}&limit=${size}" class="${classLink}"><c:out
+						value="${text}" /></a>
+			</c:when>
+			<c:otherwise>
+				<c:choose>
+					<c:when test="${not empty id}">
+						<a href="${target}?id=${id}" class="${classLink}"><c:out
+								value="${text}" /></a>
+					</c:when>
+					<c:otherwise>
+						<a href="${target}" class="${classLink}"><c:out
+								value="${text}" /></a>
+					</c:otherwise>
+				</c:choose>
+			</c:otherwise>
+		</c:choose>
 	</c:when>
 	<c:otherwise>
-		<a href="#" class="${classLink}"><c:out value="${text}"/></a>
+		<a href="#" class="${classLink}"><c:out value="${text}" /></a>
 	</c:otherwise>
 </c:choose>

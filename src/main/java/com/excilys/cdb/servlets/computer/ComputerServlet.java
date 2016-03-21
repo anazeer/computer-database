@@ -10,15 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.cdb.pagination.ComputerPagination;
 import com.excilys.cdb.service.ComputerService;
 
-/*
- * TODO
- * Servlets : appelle les méthodes de la base de données et récupère par exemple une liste, qu'on va passer à la page JSP
- * JSP : la liste qu'il reçoit il va l'afficher. 
- * web.xml : il faut le modifier pour que la page correspondant au servlet s'affiche effectivement quand on entre la bonne URL
- * dashboard.html : il faut le transformer en jsp et c'est là qu'on fait le traitement avec l'objet JAVA
- * 
- */
-
 /**
  * Servlet implementation class AddServlet
  */
@@ -29,6 +20,13 @@ public class ComputerServlet extends HttpServlet {
 	private ComputerPagination pagination;
 	private static int limit;
 	private static int count;
+	
+	// ID for the delete success message
+	private final String deleteMsg = "deleted";
+	
+	// The delete success message
+	private final String deleteMsgText = "Computers successfully deleted !";
+	
 
     /**
      * Default constructor. 
@@ -50,10 +48,13 @@ public class ComputerServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// We first get the page informations from the URL (method GET)
 		String page = request.getParameter("page");
 		String noElt = request.getParameter("limit");
 		int currentPage = pagination.getCurrentPage();
 		int currentElements = pagination.getLimit();
+		
+		// We check the informations and put them to default values if they're incorrect
 		if(page == null) {
 			pagination.setCurrentPage(currentPage);
 		}
@@ -89,8 +90,14 @@ public class ComputerServlet extends HttpServlet {
 				pagination.setLimit(currentElements);
 			}
 		}
+		
+		// We set the outputs in attributes for the JSP
 		request.setAttribute("pagination", pagination);
 		request.setAttribute("countComputer", count);
+		
+		// If we come from the delete servlet, we print the delete successful message
+		request.setAttribute(deleteMsg, deleteMsgText);
+		
 		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
 	}
 
@@ -98,7 +105,6 @@ public class ComputerServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(request.getParameter("selection"));
 		doGet(request, response);
 	}
 

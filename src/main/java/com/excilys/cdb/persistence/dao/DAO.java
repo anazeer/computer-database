@@ -59,7 +59,7 @@ import java.util.List;
 	 * @param obj the object containing the updated fields
 	 * @return true if the object has been successfully updated in the table
 	 */
-	default boolean update(T obj) throws NoSuchMethodError {
+	default boolean update(T obj) throws NoSuchMethodError, SQLException {
 		throw new NoSuchMethodError(unimplementedException);
 	}
 	

@@ -209,7 +209,7 @@ public class Main {
 		return c;
 	}
 
-    private static void navigatePage(Pagination page) {
+    private static void navigatePage(Pagination<?> page) {
         boolean end = false;
         while(!end) {
             showPage(page.getListFromPage());
@@ -359,9 +359,19 @@ public class Main {
                         computerDTO = constructComputer();
                         Long updateId = readId();
                         computerDTO.setId(updateId);
-                        computer = MapperFactory.getComputerMapper().getFromDTO(computerDTO);
-                        computerService.update(computer);
-                        break;
+                        try {
+	                        computer = MapperFactory.getComputerMapper().getFromDTO(computerDTO);
+	                        computerService.update(computer);                     
+	                        break;
+                        }
+                        catch(SQLException e) {
+                            System.err.println("Error on computer creation");
+                            break;
+                        }
+                        catch (DateException e) {
+                            System.err.println("The introduced date should be earlier than the discontinued date");
+                            e.printStackTrace();
+                        }
 					case 5 : Long delId = readId(); computerService.delete(delId); break;
 					case 6 : step = 0; break;
 				}

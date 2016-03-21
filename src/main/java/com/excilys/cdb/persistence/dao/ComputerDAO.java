@@ -153,7 +153,7 @@ public final class ComputerDAO implements DAO<Computer> {
 	}
 	
 	@Override
-	public boolean update(Computer obj) {
+	public boolean update(Computer obj) throws SQLException {
 		String query = "UPDATE computer SET "
 				+ "name = ?, "
 				+ "introduced = " + obj.getIntroduced() + ", "
@@ -176,8 +176,8 @@ public final class ComputerDAO implements DAO<Computer> {
 		}
 		catch (SQLException e) {
 			log.error(e.getMessage());
+			throw new SQLException(e);
 		}
-		return false;
 	}
 
 	@Override

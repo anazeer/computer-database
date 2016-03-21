@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import com.excilys.cdb.exception.DateException;
+import com.excilys.cdb.exception.IdException;
 import com.excilys.cdb.exception.NameException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.mapper.MapperFactory;
@@ -40,7 +40,7 @@ public class AddServlet extends HttpServlet {
     private final String nameError= "vcomputerName";
     private final String introError = "vintroduced";
     private final String discontinuedError = "vdiscontinued";
-    private final String dateError = "vdate";
+    private final String globalError = "vglobal";
 
     // ID for the addComputer JSP for companies listing
     private final String companyList = "companies";
@@ -117,7 +117,13 @@ public class AddServlet extends HttpServlet {
 			ediscontinued = e.getMessage();
 			good = false;
 		}
-
+		try {
+			Validator.companyIdValidator(companyId);
+		}
+		catch(IdException e) {
+			request.setAttribute(globalError, Validator.ILLEGAL_ID);
+			good = false;
+		}
         // If the inputs are not good, we set some error messages
 		request.setAttribute(nameError, ename);
 		request.setAttribute(introError, eintro);
@@ -126,10 +132,12 @@ public class AddServlet extends HttpServlet {
 
         // If the validation went good, we try to persist the computer (some more checking are done in the lower layout)
 		if(good) {
-			ComputerDTO dto = new ComputerDTO(name);
-			dto.setIntroduced(introduced);
-			dto.setDiscontinued(discontinued);
-			dto.setCompanyId(Long.parseLong(companyId));
+			ComputerDTO dto = new ComputerDTO
+					.ComputerDTOBuilder(name)
+					.introduced(introduced)
+					.discontinued(discontinued)
+					.companyId(Long.parseLong(companyId))
+					.build();
 			try {
                 Computer computer = MapperFactory.getComputerMapper().getFromDTO(dto);
 				computerService.create(computer);
@@ -139,7 +147,7 @@ public class AddServlet extends HttpServlet {
 				good = false;
 			}
 			catch (SQLException e) {
-				request.setAttribute(dateError, Validator.COMP_ERROR);
+				request.setAttribute(globalError, Validator.COMP_ERROR);
 				good = false;
 			}
 		}

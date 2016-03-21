@@ -23,6 +23,12 @@ public class ComputerServlet extends HttpServlet {
 	
 	// ID for the delete success message
 	private final String deleteMsg = "deleted";
+
+    // ID for the pagination object
+    private final String pageId = "pagination";
+
+    // If for the count of computers
+    private final String countId = "countComputer";
 	
 	// The delete success message
 	private final String deleteMsgText = "Computers successfully deleted !";
@@ -40,21 +46,25 @@ public class ComputerServlet extends HttpServlet {
     	super.init();
     	limit = 10;
     	computerService = ComputerService.getInstance();
-    	count = computerService.count();
-    	pagination = new ComputerPagination(count, limit);
+        count = computerService.count();
+        pagination = new ComputerPagination(count, limit);
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// We first get the page informations from the URL (method GET)
+		// We first get the page information from the URL (method GET)
 		String page = request.getParameter("page");
 		String noElt = request.getParameter("limit");
 		int currentPage = pagination.getCurrentPage();
 		int currentElements = pagination.getLimit();
+
+        // Update the number of elements if some were added or deleted
+        count = computerService.count();
+        pagination.setCount(count);
 		
-		// We check the informations and put them to default values if they're incorrect
+		// We check the information and put them to default values if they're incorrect
 		if(page == null) {
 			pagination.setCurrentPage(currentPage);
 		}
@@ -90,10 +100,10 @@ public class ComputerServlet extends HttpServlet {
 				pagination.setLimit(currentElements);
 			}
 		}
-		
+
 		// We set the outputs in attributes for the JSP
-		request.setAttribute("pagination", pagination);
-		request.setAttribute("countComputer", count);
+		request.setAttribute(pageId, pagination);
+		request.setAttribute(countId, count);
 		
 		// If we come from the delete servlet, we print the delete successful message
 		request.setAttribute(deleteMsg, deleteMsgText);

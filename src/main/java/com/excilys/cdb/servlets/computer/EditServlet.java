@@ -87,23 +87,28 @@ public class EditServlet extends HttpServlet {
 		// We check that the parameter is valid
 		boolean good = true;
 		try {
-			Validator.computerIdValidator(computerId);
-		}
+            Validator.idValidator(computerId);
+            // The id is semantically correct, we check if it is associated to a computer
+            computer = computerService.getComputer(Long.parseLong(computerId));
+            // None computer is referenced by this id
+            if (computer == null) {
+                good = false;
+            }
+        }
 		catch(IdException e) {
 			good = false;
 		}
-		
+
 		// The id is not valid so the edit page associated doesn't exist
 		if(!good) {
 			getServletContext().getRequestDispatcher("/WEB-INF/404.jsp").forward(request, response);
 		}
-		// The id is correct, we retrieve the computer and send its DTO to the JSP
+        // The id is correct, we retrieve the computer and send its DTO to the JSP
 		else {
-			computer = computerService.getComputer(Long.parseLong(computerId));
-			ComputerDTO dto = (ComputerDTO) MapperFactory.getComputerMapper().getFromModel(computer);
-			request.setAttribute(compJSP, dto);
-			request.setAttribute(companyList, companyService.listAll());
-			getServletContext().getRequestDispatcher("/WEB-INF/editComputer.jsp").forward(request, response);
+            ComputerDTO dto = (ComputerDTO) MapperFactory.getComputerMapper().getFromModel(computer);
+            request.setAttribute(compJSP, dto);
+            request.setAttribute(companyList, companyService.listAll());
+            getServletContext().getRequestDispatcher("/WEB-INF/editComputer.jsp").forward(request, response);
 		}
 	}
 
@@ -148,7 +153,7 @@ public class EditServlet extends HttpServlet {
 			good = false;
 		}
 		try {
-			Validator.companyIdValidator(companyId);
+			Validator.idValidator(companyId);
 		}
 		catch(IdException e) {
 			request.setAttribute(globalError, Validator.ILLEGAL_ID);

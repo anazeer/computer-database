@@ -80,6 +80,23 @@ public abstract class Pagination<T> {
 	}
 
     /**
+     * This will recalculate the number of pages a
+     * @param count the new count of elements
+     */
+    public void setCount(int count) {
+        if(count !=  this.count) {
+            this.count = count;
+            boolean wasLastPage = currentPage == lastPage;
+            lastPage = (int) Math.ceil(count / limit);
+            lastPage += count % limit == 0 ? 0 : 1;
+            if(currentPage > lastPage || wasLastPage) {
+                setCurrentPage(lastPage);
+            }
+            changed = true;
+        }
+    }
+
+    /**
      * Change the current page only if 1 <= currentPage <= the last page
      * @param currentPage the new page desired.
      */
@@ -103,7 +120,7 @@ public abstract class Pagination<T> {
 			return;
 		this.limit = limit;
 		lastPage = (int) Math.ceil(count / limit);
-		lastPage += lastPage %10 == 0 ? 0 : 1;
+		lastPage += count % limit == 0 ? 0 : 1;
 		currentPage = 1;
 		changed = true;
 	}

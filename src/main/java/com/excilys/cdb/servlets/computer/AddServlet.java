@@ -60,7 +60,6 @@ public class AddServlet extends HttpServlet {
      * Default constructor. 
      */
     public AddServlet() {
-        // TODO Auto-generated constructor stub
     }
     
     @Override
@@ -118,7 +117,7 @@ public class AddServlet extends HttpServlet {
 			good = false;
 		}
 		try {
-			Validator.companyIdValidator(companyId);
+			Validator.idValidator(companyId);
 		}
 		catch(IdException e) {
 			request.setAttribute(globalError, Validator.ILLEGAL_ID);

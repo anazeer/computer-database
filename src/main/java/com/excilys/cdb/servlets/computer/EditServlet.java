@@ -120,6 +120,7 @@ public class EditServlet extends HttpServlet {
 		String name = request.getParameter(nameParam);
 		String id = request.getParameter(idParam);
 		String companyId = request.getParameter(companyIdParam);
+		companyId = companyId.trim().isEmpty() ? "0" : companyId.trim();
 		String introduced = request.getParameter(introParam);
 		introduced = introduced.trim().isEmpty() ? null : introduced.trim();
 		String discontinued = request.getParameter(discontinuedParam);
@@ -207,6 +208,4 @@ public class EditServlet extends HttpServlet {
 			getServletContext().getRequestDispatcher("/WEB-INF/editComputer.jsp").forward(request, response);
 		}
 	}
-	
-
 }

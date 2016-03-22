@@ -17,9 +17,6 @@ public class DeleteServlet extends HttpServlet {
 	
 	// ID from the POST form
 	private final String selection = "selection";
-	
-	// ID for the dashboard delete success message
-	private final String deleteSuccess = "deleted";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -44,7 +41,6 @@ public class DeleteServlet extends HttpServlet {
 		for(String s : ids) {
 			computerService.delete(Long.parseLong(s));
 		}
-		request.setAttribute(deleteSuccess, true);
 		getServletContext().getRequestDispatcher("/computer").forward(request, response);
 	}
 

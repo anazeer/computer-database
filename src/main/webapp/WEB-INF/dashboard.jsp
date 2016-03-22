@@ -30,9 +30,9 @@
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="#" method="GET" class="form-inline">
+                    <form id="searchForm" action="computer" method="GET" class="form-inline">
 
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${search}" />
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
                     </form>
@@ -105,13 +105,13 @@
         <div class="container text-center">
             <!-- Links to other pages with pagination -->
             <ul class="pagination">
-            	<mylib:pagination countpage="${pagination.lastPage}" count="${pagination.limit}" currentpage="${pagination.currentPage}"/>
+            	<mylib:pagination countpage="${pagination.lastPage}" limit="${pagination.limit}" currentpage="${pagination.currentPage}" search="${search}" />
         	</ul>
             <!-- Page limit buttons -->
             <div class="btn-group btn-group-sm pull-right" role="group" >
-                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=10'">10</button>
-                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=20'">20</button>
-                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=50'">50</button>
+                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=10&search=${search}'">10</button>
+                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=20&search=${search}'">20</button>
+                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=50&search=${search}'">50</button>
             </div>
       </div>
     </footer>

@@ -53,7 +53,7 @@ public class ComputerDAOTest {
 	public void testFindFromOffset() {
 		List<Computer> list = computerDAO.findPage(0, 10);
 		assertNotNull(list);
-		assertEquals(list.size(), 10);
+		assertTrue(list.size() <= 10);
 	}
 	
 	@Test
@@ -64,8 +64,30 @@ public class ComputerDAOTest {
 	}
 	
 	@Test
+	public void testFindFilter() {
+		String filter = "apple";
+		List<Computer> list = computerDAO.findAll(filter);
+		for(Computer c : list) {
+			boolean contains = 
+					   c.getName().toLowerCase().contains(filter) 
+					|| (c.getIntroduced() != null && c.getIntroduced().toString().toLowerCase().contains(filter))
+					|| (c.getDiscontinued() != null && c.getDiscontinued().toString().toLowerCase().contains(filter))
+					|| (c.getCompany() != null && DAOFactory.getCompanyDAO().findById(c.getCompany().getId()).getName().toLowerCase().contains(filter));
+			assertTrue(contains);
+		}
+	}
+	
+	@Test
+	public void testCountFilter() {
+		String filter = "a";
+		List<Computer> list = computerDAO.findAll(filter);
+		assertTrue(list.size() <= computerDAO.count(filter));
+	}
+	
+	@Test
 	public void testCountEntries() {
-		assertTrue(computerDAO.count() > 500);
+		List<Computer> list = computerDAO.findAll();
+		assertEquals(list.size(), computerDAO.count());
 	}
 	
 	@Test

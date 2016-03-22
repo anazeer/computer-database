@@ -6,25 +6,41 @@
 	description="The link text"%>
 <%@ attribute name="classLink" required="false" type="java.lang.String"
 	description="The class application"%>
-<%@ attribute name="size" required="false" type="java.lang.String"
-	description="The page size"%>
+<%@ attribute name="limit" required="false" type="java.lang.String"
+	description="The page limit"%>
 <%@ attribute name="page" required="false" type="java.lang.String"
 	description="The page number"%>
 <%@ attribute name="id" required="false" type="java.lang.String"
 	description="The computer id"%>
+<%@ attribute name="search" required="false" type="java.lang.String"
+	description="The search text"%>
+	
+<c:set var="pageText" scope="page"
+	value="page=${page}" />
+<c:set var="limitText" scope="page"
+	value="limit=${limit}" />
+<c:set var="searchText" scope="page"
+	value="search=${search}" />
 
+<c:set var="pageInfo" scope="page"
+	value="${not empty page ? pageText : ''}" />
+<c:set var="limitInfo" scope="page"
+	value="${not empty limit ? limitText : ''}" />
+<c:set var="searchInfo" scope="page"
+	value="${not empty search ? searchText : ''}" />
+	
 <c:choose>
 	<c:when test="${target != '#'}">
 		<c:choose>
-			<c:when test="${not empty page}">
-				<a href="${target}?page=${page}&limit=${size}" class="${classLink}"><c:out
+			<c:when test="${not empty id}">
+				<a href="${target}?id=${id}" class="${classLink}"><c:out
 						value="${text}" /></a>
 			</c:when>
 			<c:otherwise>
 				<c:choose>
-					<c:when test="${not empty id}">
-						<a href="${target}?id=${id}" class="${classLink}"><c:out
-								value="${text}" /></a>
+					<c:when test="${not empty page}">
+						<a href="${target}?${pageInfo}&${limitInfo}&${searchInfo}"
+							class="${classLink}"><c:out value="${text}" /></a>
 					</c:when>
 					<c:otherwise>
 						<a href="${target}" class="${classLink}"><c:out

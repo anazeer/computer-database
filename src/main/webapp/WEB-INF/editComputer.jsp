@@ -53,9 +53,11 @@
                                 <label for="companyId">Company</label>
                                  <!-- Browse companies -->
                                 <select class="form-control" id="companyId" name="companyId">
-                                    <option value="computer.companyId"><c:out value="${computer.companyName}"/></option>
+                                    <option value="0"><c:out value="--"/></option>
                                     <c:forEach items="${companies}" var="company">
-                                    	<option value="${company.id}"><c:out value="${company.name}"/></option>
+                                    	<option value="${company.id}" ${company.id == computer.companyId ? 'selected="selected"' : ''}>
+                                    		<c:out value="${company.name}"/>
+                                    	</option>
                                 	</c:forEach>
                                 </select>
                                 <span id="computerError" style="color:red;">${vglobal}</span>

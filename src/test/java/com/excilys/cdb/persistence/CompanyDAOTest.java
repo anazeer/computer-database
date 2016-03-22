@@ -3,6 +3,7 @@ package com.excilys.cdb.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -47,18 +48,41 @@ public class CompanyDAOTest {
 	public void testFindFromOffset() {
 		List<Company> list = companyDAO.findPage(0, 10);
 		assertNotNull(list);
-		assertEquals(list.size(), 10);
+		assertTrue(list.size() <= 10);
+	}
+	
+	@Test
+	public void testFindFilter() {
+		String filter = "in";
+		List<Company> list = companyDAO.findAll(filter);
+		for(Company c : list) {
+			assertTrue(c.getName().toLowerCase().contains(filter));
+		}
+	}
+	
+	@Test
+	public void testPageFilter() {
+		String filter = "In";
+		List<Company> list = companyDAO.findPage(0, 10, filter);
+		assertTrue(list.size() <= 10);
+	}
+	
+	@Test
+	public void testCountFilter() {
+		String filter = "a";
+		List<Company> list = companyDAO.findAll(filter);
+		assertEquals(list.size(), companyDAO.count(filter));
 	}
 	
 	@Test
 	public void testCountEntries() {
-		assertEquals(companyDAO.count(), 42);
+		assertEquals(companyDAO.count(), companyDAO.count(""));
 	}
 	
 	@Test
 	public void testFindAll() throws Exception {
 		List<Company> list = companyDAO.findAll();
 		assertNotNull(list);
-		assertEquals(list.size(), 42);
+		assertEquals(list.size(), companyDAO.count());
 	}
 }

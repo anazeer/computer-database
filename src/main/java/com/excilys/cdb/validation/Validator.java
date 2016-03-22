@@ -10,9 +10,6 @@ import java.util.regex.Pattern;
 import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.exception.IdException;
 import com.excilys.cdb.exception.NameException;
-import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.service.ServiceFactory;
 
 /**
  * User inputs validation

@@ -1,16 +1,17 @@
 package com.excilys.cdb.persistence.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.cdb.persistence.mapper.MapperFactory;
 import org.apache.log4j.Logger;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.mapper.CompanyMapper;
+import com.excilys.cdb.persistence.mapper.MapperFactory;
 
 /**
  * DAO implementation for companies
@@ -62,6 +63,26 @@ public final class CompanyDAO implements DAO<Company> {
 	}
 	
 	@Override
+	public List<Company> findAll(String filter) {
+		List<Company> listCompany = null;
+		String query = "SELECT * FROM company WHERE name LIKE ?";
+		try(PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, "%" + filter + "%");
+			ResultSet result = stmt.executeQuery();
+			listCompany = new ArrayList<>();
+			while(result.next())
+				listCompany.add(companyMapper.getFromResultSet(result));
+			result.close();
+			stmt.close();
+			log.info("Companies retrieved (" + listCompany.size() + ", filter = " + filter + ")");
+		}
+		catch (SQLException e) {
+			log.error(e.getMessage());
+		}
+		return listCompany;
+	}
+	
+	@Override
 	public List<Company> findPage(int offset, int limit) {
 		List<Company> listCompany = null;
 		try(Statement stmt = conn.createStatement()) {
@@ -81,6 +102,26 @@ public final class CompanyDAO implements DAO<Company> {
 	}
 	
 	@Override
+	public List<Company> findPage(int offset, int limit, String filter) {
+		List<Company> listCompany = null;
+		String query = "SELECT * FROM company WHERE name LIKE ? LIMIT " + offset + ", " + limit;
+		try(PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, "%" + filter + "%");
+			ResultSet result = stmt.executeQuery();
+			listCompany = new ArrayList<>();
+			while(result.next())
+				listCompany.add(companyMapper.getFromResultSet(result));
+			result.close();
+			stmt.close();
+			log.info("Companies retrieved (" + listCompany.size() + ", filter = " + filter + ")");
+		}
+		catch (SQLException e) {
+			log.error(e.getMessage());
+		}
+		return listCompany;
+	}
+	
+	@Override
 	public int count() {
 		int count = 0;
 		try(Statement stmt = conn.createStatement()) {
@@ -92,6 +133,26 @@ public final class CompanyDAO implements DAO<Company> {
 			result.close();
 			stmt.close();
 			log.info("Companies counted (" + count + ")");
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+	
+	@Override
+	public int count(String filter) {
+		int count = 0;
+		String query = "SELECT COUNT(*) as entries FROM company WHERE name LIKE ?";
+		try(PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, "%" + filter + "%");
+			ResultSet result = stmt.executeQuery();
+			if(result.next()) {
+				count = result.getInt("entries");
+			}
+			result.close();
+			stmt.close();
+			log.info("Companies counted (" + count + ", filter = " + filter + ")");
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

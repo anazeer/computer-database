@@ -63,6 +63,34 @@ public final class ComputerDAO implements DAO<Computer> {
 		}
 		return listComputer;
 	}
+	
+	@Override
+	public List<Computer> findAll(String filter) {
+		List<Computer> listComputer = null;
+		String query = 
+				"SELECT * FROM computer "
+				+ "INNER JOIN company "
+				+ "ON computer.company_id = company.id "
+				+ "WHERE computer.name LIKE ? "
+				+ "OR company.name LIKE ?";
+		try(PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, "%" + filter + "%");
+			stmt.setString(2, "%" + filter + "%");
+			ResultSet result = stmt.executeQuery();
+			listComputer = new ArrayList<>();
+			while(result.next())
+				listComputer.add(computerMapper.getFromResultSet(result));
+			result.close();
+			stmt.close();
+			log.info("Computers retrieved (" + listComputer.size() + ", filter = " + filter + ")");
+		}
+		catch (SQLException e) {
+			log.error(e.getMessage());
+		}
+		return listComputer;
+	}
+	
+
 
 	@Override
 	public List<Computer> findPage(int offset, int limit) {
@@ -76,6 +104,32 @@ public final class ComputerDAO implements DAO<Computer> {
 			result.close();
 			stmt.close();
 			log.info("Computers page (" + listComputer.size() + ")");
+		}
+		catch (SQLException e) {
+			log.error(e.getMessage());
+		}
+		return listComputer;
+	}
+	
+	@Override
+	public List<Computer> findPage(int offset, int limit, String filter) {
+		List<Computer> listComputer = null;
+		String query = 
+				"SELECT * FROM computer "
+				+ "INNER JOIN company "
+				+ "ON computer.company_id = company.id "
+				+ "WHERE computer.name LIKE ? "
+				+ "OR company.name LIKE ? LIMIT " + offset + ", " + limit;
+		try(PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, "%" + filter + "%");
+			stmt.setString(2, "%" + filter + "%");
+			ResultSet result = stmt.executeQuery();
+			listComputer = new ArrayList<>();
+			while(result.next())
+				listComputer.add(computerMapper.getFromResultSet(result));
+			result.close();
+			stmt.close();
+			log.info("Computers page (" + listComputer.size() + ", filter = " + filter + ")");
 		}
 		catch (SQLException e) {
 			log.error(e.getMessage());
@@ -114,6 +168,32 @@ public final class ComputerDAO implements DAO<Computer> {
 			result.close();
 			stmt.close();
 			log.info("Computer counted (" + count + ")");
+		}
+		catch (SQLException e) {
+			log.error(e.getMessage());
+		}
+		return count;
+	}
+	
+	@Override
+	public int count(String filter) {
+		int count = 0;
+		String query = 
+			"SELECT COUNT(*) as entries FROM computer  "
+			+ "INNER JOIN company "
+			+ "ON computer.company_id = company.id "
+			+ "WHERE computer.name LIKE ? "
+			+ "OR company.name LIKE ?";
+		try(PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, "%" + filter + "%");
+			stmt.setString(2, "%" + filter + "%");
+			ResultSet result = stmt.executeQuery();
+			if(result.next()) {
+				count = result.getInt("entries");
+			}
+			result.close();
+			stmt.close();
+			log.info("Computer counted (" + count + ", filter = " + filter + ")");
 		}
 		catch (SQLException e) {
 			log.error(e.getMessage());

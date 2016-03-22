@@ -42,6 +42,11 @@ public abstract class Pagination<T> {
      * The list containing the result of the pagination
      */
     private List<DTO> listFromPage;
+    
+    /**
+     * The filter for the list result
+     */
+    private String filter;
 
     /**
      * The service that uses the pagination
@@ -60,6 +65,7 @@ public abstract class Pagination<T> {
      */
 	Pagination(int count, int limit) {
 		this.count = count;
+		filter = "";
 		setLimit(limit);
 	}
 
@@ -105,6 +111,15 @@ public abstract class Pagination<T> {
 			this.currentPage = currentPage;
 			changed = true;
 		}
+	}
+	
+	/**
+	 * Set a new filter for the list result
+	 * @param search the new filter for the research
+	 */
+	public void setFilter(String filter) {
+		this.filter = filter;
+		changed = true;
 	}
 
     /**
@@ -156,12 +171,25 @@ public abstract class Pagination<T> {
 		int offset = (getCurrentPage() - 1) * getLimit();
 		int limit = getLimit();
         List<DTO> listDTO = new ArrayList<>();
-        List<T> serviceList = service.listPage(offset, limit);
+        List<T> serviceList;
+        if(filter.trim().isEmpty()) {
+        	serviceList = service.listPage(offset, limit);
+        }
+        else {
+        	serviceList = service.listPage(offset, limit, filter);
+        }
         for(T model : serviceList) {
             listDTO.add(mapper.getFromModel(model));
         }
 		listFromPage = listDTO;
 		changed = false;
 		return listFromPage;
+	}
+	
+	/**
+	 * Invalidate the cache to get a fresh list from the database
+	 */
+	public void invalidateCache() {
+		changed = true;
 	}
 }

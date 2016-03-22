@@ -14,15 +14,28 @@ import java.util.List;
  */
     interface DAO<T> {
 
+    /**
+     * The user connection
+     */
     Connection conn = ConnectionSingleton.getInstance();
 
-	String unimplementedException = "Call to non implemented method";
+    /**
+     * Non implemented method error message
+     */
+	final String unimplementedException = "Call to non implemented method";
 	
 	/**
 	 * 
 	 * @return the list containing all the objects from the rows of the table
 	 */
 	List<T> findAll();
+	
+	/**
+	 * 
+	 * @param filter filter for the research
+	 * @return the list containing the filtered rows of the table
+	 */
+	List<T> findAll(String filter);
 	
 	/**
 	 * 
@@ -38,12 +51,27 @@ import java.util.List;
 	int count();
 	
 	/**
+	 * @param filter the research filter
+	 * @return the number of rows in the table satisfying the filter
+	 */
+	int count(String filter);
+	
+	/**
 	 *
 	 * @param offset the number of rows we first ignore
 	 * @param limit the maximum number of elements
 	 * @return the list containing at most limit elements from offset
 	 */
 	List<T> findPage(int offset, int limit);
+	
+	/**
+	 * 
+	 * @param offset the number of rows we first ignore
+	 * @param limit the maximum number of elements
+	 * @param filter the filter for the research
+	 * @return the list containing at most limit elements from offset
+	 */
+	List<T> findPage(int offset, int limit, String filter);
 	
 	/**
 	 * 

@@ -32,12 +32,27 @@ public class CompanyService implements Service<Company> {
 	}
 	
 	@Override
+	public List<Company> listAll(String filter) {
+		return companyDAO.findAll(filter);
+	}
+	
+	@Override
 	public List<Company> listPage(int offset, int limit) {
 		return companyDAO.findPage(offset, limit);
 	}
 	
 	@Override
+	public List<Company> listPage(int offset, int limit, String filter) {
+		return companyDAO.findPage(offset, limit, filter);
+	}
+	
+	@Override
 	public int count() {
 		return companyDAO.count();
+	}
+	
+	@Override
+	public int count(String filter) {
+		return companyDAO.count(filter);
 	}
 }

@@ -20,25 +20,20 @@ public class ComputerServlet extends HttpServlet {
 	private ComputerPagination pagination;
 	private static int limit;
 	private static int count;
-	
-	// ID for the delete success message
-	private final String deleteMsg = "deleted";
 
     // ID for the pagination object
     private final String pageId = "pagination";
 
     // If for the count of computers
     private final String countId = "countComputer";
-	
-	// The delete success message
-	private final String deleteMsgText = "Computers successfully deleted !";
-	
+    
+    // Id for the search form
+    private final String searchId = "search";
 
     /**
      * Default constructor. 
      */
     public ComputerServlet() {
-        // TODO Auto-generated constructor stub
     }
     
     @Override
@@ -57,12 +52,23 @@ public class ComputerServlet extends HttpServlet {
 		// We first get the page information from the URL (method GET)
 		String page = request.getParameter("page");
 		String noElt = request.getParameter("limit");
+		String search = request.getParameter(searchId);
+		
+        // Update elements if some were added, deleted, or filtered
+		if(search == null || search.trim().isEmpty()) {
+			count = computerService.count();
+			pagination.setCount(count);
+			pagination.setFilter("");
+		}
+		else {
+			count = computerService.count(search);
+			pagination.setCount(count);
+			pagination.setFilter(search);
+			pagination.getListFromPage();
+		}
+        
 		int currentPage = pagination.getCurrentPage();
 		int currentElements = pagination.getLimit();
-
-        // Update the number of elements if some were added or deleted
-        count = computerService.count();
-        pagination.setCount(count);
 		
 		// We check the information and put them to default values if they're incorrect
 		if(page == null) {
@@ -104,9 +110,7 @@ public class ComputerServlet extends HttpServlet {
 		// We set the outputs in attributes for the JSP
 		request.setAttribute(pageId, pagination);
 		request.setAttribute(countId, count);
-		
-		// If we come from the delete servlet, we print the delete successful message
-		request.setAttribute(deleteMsg, deleteMsgText);
+		request.setAttribute(searchId, search);
 		
 		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
 	}

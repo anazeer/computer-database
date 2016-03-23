@@ -48,45 +48,16 @@ public final class CompanyDAO implements DAO<Company> {
 
 	@Override
 	public List<Company> findAll() {
-		List<Company> listCompany = null;
 		String query = "SELECT * FROM company";
-		try(Connection conn = DAOFactory.getConnection();
-			Statement stmt = conn.createStatement()) {
-			ResultSet result = stmt.executeQuery(query);
-			listCompany = new ArrayList<>();
-			while(result.next())
-				listCompany.add(companyMapper.getFromResultSet(result));
-			result.close();
-			stmt.close();
-			conn.close();
-			log.info("Companies retrieved (" + listCompany.size() + ")");
-		}
-		catch (SQLException e) {
-			log.error(e.getMessage());
-		}
-		return listCompany;
+        return executeQuery(query);
 	}
 	
 	@Override
 	public List<Company> findAll(String filter) {
-		List<Company> listCompany = null;
+        if(filter.isEmpty())
+            return findAll();
 		String query = "SELECT * FROM company WHERE name LIKE ?";
-		try(Connection conn = DAOFactory.getConnection();
-			PreparedStatement stmt = conn.prepareStatement(query)) {
-			stmt.setString(1, "%" + filter + "%");
-			ResultSet result = stmt.executeQuery();
-			listCompany = new ArrayList<>();
-			while(result.next())
-				listCompany.add(companyMapper.getFromResultSet(result));
-			result.close();
-			stmt.close();
-			conn.close();
-			log.info("Companies retrieved (" + listCompany.size() + ", filter = " + filter + ")");
-		}
-		catch (SQLException e) {
-			log.error(e.getMessage());
-		}
-		return listCompany;
+        return executeQuery(query, filter);
 	}
 	
 	@Override
@@ -95,104 +66,38 @@ public final class CompanyDAO implements DAO<Company> {
 	}
 	
 	public List<Company> findPage(int offset, int limit, Order order) {
-		List<Company> listCompany = null;
-		String orderQuery = null;
-		switch(order) {
-			case ASC : orderQuery = " ORDER BY company.name ASC "; break;
-			case DSC : orderQuery = " ORDER BY company.name DESC "; break;
-			case NOP : orderQuery = " "; break;
-		}
+		String orderQuery = getOrderQuery(order);
 		String query = "SELECT * FROM company" + orderQuery + "LIMIT " + offset + ", " + limit;
-		try(Connection conn = DAOFactory.getConnection();
-			Statement stmt = conn.createStatement()) {
-			ResultSet result = stmt.executeQuery(query);
-			listCompany = new ArrayList<>();
-			while(result.next())
-				listCompany.add(companyMapper.getFromResultSet(result));
-			result.close();
-			stmt.close();
-			conn.close();
-			log.info("Computers page (" + listCompany.size() + ")");
-		}
-		catch (SQLException e) {
-			log.error(e.getMessage());
-		}
-		return listCompany;
+        return executeQuery(query);
 	}
 	
 	@Override
 	public List<Company> findPage(int offset, int limit, String filter) {
+        if(filter.isEmpty())
+            return findPage(offset, limit);
 		return findPage(offset, limit, filter, Order.NOP);
 	}
 	
 	public List<Company> findPage(int offset, int limit, String filter, Order order) {
-		List<Company> listCompany = null;
-		String orderQuery = null;
-		switch(order) {
-			case ASC : orderQuery = " ORDER BY company.name ASC "; break;
-			case DSC : orderQuery = " ORDER BY company.name DESC "; break;
-			case NOP : orderQuery = " "; break;
-		}
+        if(filter.isEmpty())
+            return findPage(offset, limit, order);
+		String orderQuery = getOrderQuery(order);
 		String query = "SELECT * FROM company WHERE name LIKE ?" + orderQuery + "LIMIT " + offset + ", " + limit;
-		try(Connection conn = DAOFactory.getConnection();
-			PreparedStatement stmt = conn.prepareStatement(query)) {
-			stmt.setString(1, "%" + filter + "%");
-			ResultSet result = stmt.executeQuery();
-			listCompany = new ArrayList<>();
-			while(result.next())
-				listCompany.add(companyMapper.getFromResultSet(result));
-			result.close();
-			stmt.close();
-			conn.close();
-			log.info("Companies retrieved (" + listCompany.size() + ", filter = " + filter + ")");
-		}
-		catch (SQLException e) {
-			log.error(e.getMessage());
-		}
-		return listCompany;
+        return executeQuery(query, filter);
 	}
 	
 	@Override
 	public int count() {
-		int count = 0;
 		String query = "SELECT COUNT(*) as entries FROM company";
-		try(Connection conn = DAOFactory.getConnection();
-			Statement stmt = conn.createStatement()) {
-			ResultSet result = stmt.executeQuery(query);
-			if(result.next()) {
-				count = result.getInt("entries");
-			}
-			result.close();
-			stmt.close();
-			conn.close();
-			log.info("Companies counted (" + count + ")");
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return count;
+		return executeCountQuery(query);
 	}
 	
 	@Override
 	public int count(String filter) {
-		int count = 0;
+        if(filter.isEmpty())
+            return count();
 		String query = "SELECT COUNT(*) as entries FROM company WHERE name LIKE ?";
-		try(Connection conn = DAOFactory.getConnection();
-			PreparedStatement stmt = conn.prepareStatement(query)) {
-			stmt.setString(1, "%" + filter + "%");
-			ResultSet result = stmt.executeQuery();
-			if(result.next()) {
-				count = result.getInt("entries");
-			}
-			result.close();
-			stmt.close();
-			conn.close();
-			log.info("Companies counted (" + count + ", filter = " + filter + ")");
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return count;
+        return executeCountQuery(query, filter);
 	}
 
 	@Override
@@ -218,23 +123,6 @@ public final class CompanyDAO implements DAO<Company> {
 		return company;
 	}
 	
-	@Override
-	public boolean delete(Long id) throws NoSuchMethodError {
-		String query = "DELETE FROM company WHERE id = " + id;
-		try(Connection conn = DAOFactory.getConnection();
-			Statement stmt = conn.createStatement()) {
-			stmt.executeUpdate(query);
-			stmt.close();
-			conn.close();
-			log.info("Computer deleted (id = " + id + ")");
-			return true;
-		}
-		catch (SQLException e) {
-			log.error(e.getMessage());
-			return false;
-		}
-	}
-	
 	public void delete(Long id, Connection conn) throws SQLException {
 		String query = "DELETE FROM company WHERE id = " + id;
 		try(Statement stmt = conn.createStatement()) {
@@ -246,5 +134,65 @@ public final class CompanyDAO implements DAO<Company> {
 			log.error(e.getMessage());
 			throw new SQLException(e);
 		}
+	}
+
+    private List<Company> executeQuery(String query) {
+        return executeQuery(query, "");
+    }
+
+    private List<Company> executeQuery(String query, String filter) {
+        List<Company> listCompany = null;
+        try(Connection conn = DAOFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            if(!filter.isEmpty()) {
+                stmt.setString(1, "%" + filter + "%");
+            }
+            ResultSet result = stmt.executeQuery();
+            listCompany = new ArrayList<>();
+            while(result.next())
+                listCompany.add(companyMapper.getFromResultSet(result));
+            result.close();
+            stmt.close();
+            conn.close();
+            log.info("Companies retrieved ({}), filter = {}, orderBy = ", listCompany.size(), filter);
+        }
+        catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        return listCompany;
+    }
+
+    private int executeCountQuery(String query) {
+        return executeCountQuery(query, "");
+    }
+
+    private int executeCountQuery(String query, String filter) {
+        int count = 0;
+        try(Connection conn = DAOFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            if(!filter.isEmpty()) {
+                stmt.setString(1, "%" + filter + "%");
+            }
+            ResultSet result = stmt.executeQuery();
+            if(result.next()) {
+                count = result.getInt("entries");
+            }
+            result.close();
+            stmt.close();
+            conn.close();
+            log.info("Companies counted (), filter = {}", count, filter);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+	private String getOrderQuery(Order order) {
+        switch(order) {
+            case ASC : return " ORDER BY company.name ASC ";
+            case DSC : return " ORDER BY company.name DESC ";
+            default : return " ";
+        }
 	}
 }

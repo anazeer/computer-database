@@ -63,6 +63,7 @@
                                     </a>
                             </span>
                         </th>
+                        <!-- Computer name column clickable for ordering -->
                         <th>
                         	<c:set var="newOrder" scope="page" value="${not empty order ? (order eq 'dsc' ? 'asc' : 'dsc') : 'asc'}"/>
                         	<mylib:link text="Computer name" target="computer" limit="${pagination.limit}"
@@ -73,15 +74,15 @@
                         	</c:choose>
                         </th>
                         <th>
-                            Introduced date <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                            Introduced date <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                            Discontinued date <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                            Company <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                         </th>
 
                     </tr>

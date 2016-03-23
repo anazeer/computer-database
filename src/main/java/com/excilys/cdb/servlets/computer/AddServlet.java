@@ -41,13 +41,16 @@ public class AddServlet extends HttpServlet {
     private final String nameError= "vcomputerName";
     private final String introError = "vintroduced";
     private final String discontinuedError = "vdiscontinued";
-    private final String globalError = "vglobal";
+    private final String globalError = "vfailure";
 
     // ID for the addComputer JSP for companies listing
     private final String companyList = "companies";
 
     // ID for the addComputer JSP boolean for an adding success
     private final String success = "success";
+    
+    // ID for the addComputer JSP boolean for an adding failure
+    private final String failure = "failure";
 
     // ID for the addComputer JSP for an adding success message
     private final String addSuccess = "vsuccess";
@@ -122,6 +125,7 @@ public class AddServlet extends HttpServlet {
 		}
 		catch(IdException e) {
 			request.setAttribute(globalError, Validator.ILLEGAL_ID);
+			request.setAttribute(failure, true);
 			good = false;
 		}
         // If the inputs are not good, we set some error messages
@@ -148,6 +152,7 @@ public class AddServlet extends HttpServlet {
 			}
 			catch (SQLException e) {
 				request.setAttribute(globalError, Validator.COMP_ERROR);
+				request.setAttribute(failure, true);
 				good = false;
 			}
 		}

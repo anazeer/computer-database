@@ -85,11 +85,11 @@ import java.util.List;
 	}
 	
 	/**
-	 * Deletes the object referenced by the same id as obj
-	 * @param obj the object with the correct id we want to delete
+	 * Deletes the object referenced by id
+	 * @param id the reference we want to delete
 	 * @return true if the object has been successfully deleted from the table
 	 */
-	default boolean delete(T obj) throws NoSuchMethodError {
+	default boolean delete(Long id) throws NoSuchMethodError {
 		throw new NoSuchMethodError(unimplementedException);
 	}
 }

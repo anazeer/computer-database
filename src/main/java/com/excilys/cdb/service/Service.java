@@ -46,4 +46,11 @@ public interface Service<T> {
 	 * @return the total number of rows in the table
 	 */
 	int count(String filter);
+	
+	/**
+	 * Delete the row referenced by id
+	 * @param id the row reference
+	 * @return
+	 */
+	boolean delete(Long id);
 }

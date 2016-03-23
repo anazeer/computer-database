@@ -27,8 +27,20 @@
                     <div class="label label-default pull-right">
                         id: <c:out value="${computer.id}"/>
                     </div>
-                    <!-- Print the success alert -->
-                    <c:if test="${success}"><div class="alert alert-success" id="computerSuccess" role="alert">${vsuccess}</div></c:if>
+					<!-- Print the success alert -->
+					<c:if test="${success}">
+						<div class="alert alert-dismissible alert-success">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
+							${vsuccess}
+						</div>
+					</c:if>
+					<!-- Print the failure alert -->
+					<c:if test="${failure}">
+						<div class="alert alert-dismissible alert-danger">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
+							${vglobal}
+						</div>
+					</c:if>
                     <h1>Edit Computer</h1>
 					<!-- Computer editing form -->
                     <form action="computerEdit?id=${computer.id}" method="POST">
@@ -60,7 +72,6 @@
                                     	</option>
                                 	</c:forEach>
                                 </select>
-                                <span id="computerError" style="color:red;">${vglobal}</span>
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">

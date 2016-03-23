@@ -87,7 +87,8 @@ public class ComputerService implements Service<Computer> {
 		computerDAO.delete(computer);
 	}
 	
-	public void delete(Long id) {
-		computerDAO.delete(id);
+	@Override
+	public boolean delete(Long id) {
+		return computerDAO.delete(id);
 	}
 }

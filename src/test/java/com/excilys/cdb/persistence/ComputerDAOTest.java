@@ -169,6 +169,16 @@ public class ComputerDAOTest {
         }
 	}
 	
+	@Test
+	public void testUpdate2() {
+		Computer computer = computerDAO.findById(55L);
+		try {
+			assertTrue(computerDAO.update(computer));
+		}
+		catch (SQLException e) {
+		}
+	}
+	
 	@Ignore
 	@Test
 	public void testDelete() {

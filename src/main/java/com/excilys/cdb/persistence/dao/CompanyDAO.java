@@ -196,4 +196,34 @@ public final class CompanyDAO implements DAO<Company> {
 		}
 		return company;
 	}
+	
+	@Override
+	public boolean delete(Long id) throws NoSuchMethodError {
+		String query = "DELETE FROM company WHERE id = " + id;
+		try(Connection conn = DAOFactory.getConnection();
+			Statement stmt = conn.createStatement()) {
+			stmt.executeUpdate(query);
+			stmt.close();
+			conn.close();
+			log.info("Computer deleted (id = " + id + ")");
+			return true;
+		}
+		catch (SQLException e) {
+			log.error(e.getMessage());
+			return false;
+		}
+	}
+	
+	public void delete(Long id, Connection conn) throws SQLException {
+		String query = "DELETE FROM company WHERE id = " + id;
+		try(Statement stmt = conn.createStatement()) {
+			stmt.executeUpdate(query);
+			stmt.close();
+			log.info("Computer deleted (id = " + id + ")");
+		}
+		catch (SQLException e) {
+			log.error(e.getMessage());
+			throw new SQLException(e);
+		}
+	}
 }

@@ -46,6 +46,9 @@ public class EditServlet extends HttpServlet {
 
     // ID for the editComputer JSP boolean for an editing success
     private final String success = "success";
+    
+    // ID for the addComputer JSP boolean for an editing failure
+    private final String failure = "failure";
 
     // ID for the editComputer JSP for an editing success message
     private final String editSuccess = "vsuccess";
@@ -158,6 +161,7 @@ public class EditServlet extends HttpServlet {
 		}
 		catch(IdException e) {
 			request.setAttribute(globalError, Validator.ILLEGAL_ID);
+			request.setAttribute(failure, true);
 			good = false;
 		}
 		
@@ -189,7 +193,9 @@ public class EditServlet extends HttpServlet {
 				good = false;
 			}
 			catch (SQLException e) {
+				System.out.println("lafzgezgrzdht,jg");
 				request.setAttribute(globalError, Validator.COMP_ERROR);
+				request.setAttribute(failure, true);
 				good = false;
 			}
 		}

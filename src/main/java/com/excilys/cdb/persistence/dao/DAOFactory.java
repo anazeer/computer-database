@@ -59,7 +59,7 @@ public class DAOFactory {
 
 			// Initialize the connection pool
 			connectionPool = new BoneCP(config);    
-			log.info("Connection pool successfully initialized ({} partition of each {} max connection ", countPartition, maxConnection);
+			log.info("Connection pool successfully initialized ({} partitions of each {} max connections)", countPartition, maxConnection);
 		}
 		catch(ClassNotFoundException | IOException | SQLException e) {
             log.error(e.getMessage());
@@ -72,7 +72,7 @@ public class DAOFactory {
 	 * @return an available connection from the connection pool
 	 * @throws SQLException 
 	 */
-	protected static Connection getConnection() throws SQLException {
+	public static Connection getConnection() throws SQLException {
 		return connectionPool.getConnection();
 	}
 

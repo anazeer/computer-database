@@ -267,19 +267,23 @@ public final class ComputerDAO implements DAO<Computer> {
 	public boolean update(Computer obj) throws SQLException {
 		String query = "UPDATE computer SET "
 				+ "name = ?, "
-				+ "introduced = " + obj.getIntroduced() + ", "
-				+ "discontinued = " + obj.getDiscontinued() + ", "
+				+ "introduced = ?, "
+				+ "discontinued = ?, "
 				+ "company_id = ? "
 				+ "WHERE id = " + obj.getId();
 		try(Connection conn = DAOFactory.getConnection();
 			PreparedStatement stmt = conn.prepareStatement(query)) {
+			Date introducedDate = obj.getIntroduced() == null ? null : Date.valueOf(obj.getIntroduced().atTime(0, 0, 0).toLocalDate());
+			Date discontinuedDate = obj.getDiscontinued() == null ? null : Date.valueOf(obj.getDiscontinued().atTime(0, 0, 0).toLocalDate());
 			stmt.setString(1, obj.getName());
+			stmt.setDate(2, introducedDate);
+			stmt.setDate(3, discontinuedDate);
 			Long company_id = obj.getCompany() == null ? null : obj.getCompany().getId();
 			if(company_id == null) {
-				stmt.setNull(2, Types.NULL);
+				stmt.setNull(4, Types.NULL);
 			}
 			else {
-				stmt.setLong(2, company_id);
+				stmt.setLong(4, company_id);
 			}
 			stmt.executeUpdate();
 			stmt.close();
@@ -289,11 +293,28 @@ public final class ComputerDAO implements DAO<Computer> {
 		}
 		catch (SQLException e) {
 			log.error(e.getMessage());
+			System.out.println(e.getMessage());
 			throw new SQLException(e);
 		}
 	}
-
+	
 	@Override
+	public boolean delete(Long id) {
+		String query = "DELETE FROM computer WHERE id = " + id;
+		try(Connection conn = DAOFactory.getConnection();
+			Statement stmt = conn.createStatement()) {
+			stmt.executeUpdate(query);
+			stmt.close();
+			conn.close();
+			log.info("Computer deleted (id = " + id + ")");
+			return true;
+		}
+		catch (SQLException e) {
+			log.error(e.getMessage());
+		}
+		return false;
+	}
+
 	public boolean delete(Computer obj) {
 		String query = "DELETE FROM computer WHERE id = " + obj.getId();
 		try(Connection conn = DAOFactory.getConnection();
@@ -309,20 +330,16 @@ public final class ComputerDAO implements DAO<Computer> {
 		}
 		return false;
 	}
-	
-	public boolean delete(Long id) {
-		String query = "DELETE FROM computer WHERE id = " + id;
-		try(Connection conn = DAOFactory.getConnection();
-			Statement stmt = conn.createStatement()) {
+
+	public void deleteByCompanyId(Long id, Connection conn) throws SQLException {
+		String query = "DELETE FROM computer WHERE company_id = " + id;
+		try(Statement stmt = conn.createStatement()) {
 			stmt.executeUpdate(query);
 			stmt.close();
-			conn.close();
-			log.info("Computer deleted (id = " + id + ")");
-			return true;
+			log.info("Computer deleted (company id = " + id + ")");
 		}
 		catch (SQLException e) {
-			log.error(e.getMessage());
+			throw new SQLException(e);
 		}
-		return false;
 	}
 }

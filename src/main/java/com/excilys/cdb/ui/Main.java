@@ -37,7 +37,7 @@ public class Main {
 	
 	// Number of options for each menu
 	private static final int countGeneralInstr = 3;
-	private static final int countCompanyInstr = 2;
+	private static final int countCompanyInstr = 3;
 	private static final int countComputerInstr = 6;
 	
 	// Read inputs
@@ -61,7 +61,8 @@ public class Main {
 		System.out.println("\nCompany");
 		System.out.println("Choose your operation:");
 		System.out.println("1. List companies");
-		System.out.println("2. Return to menu");
+		System.out.println("2. Delete company");
+		System.out.println("3. Return to menu");
 	}
 	
 	/**
@@ -315,7 +316,13 @@ public class Main {
 						System.out.println("---------------------");
                         navigatePage(page);
 						break;
-					case 2 : step = 0;
+					case 2 : 
+						Long id = readId();
+						boolean bool = companyService.delete(id);
+						if(bool) {
+							System.out.println("Company successfully deleted");
+						}
+					case 3 : step = 0;
                         break;
 				}
 			}

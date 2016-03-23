@@ -7,13 +7,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Connection singleton class to keep only one instance of Connection
  * @author excilys
  *
  */
+@Deprecated
 public final class ConnectionSingleton {
 
     private static Connection instance;
@@ -21,7 +24,7 @@ public final class ConnectionSingleton {
     private static String user;
     private static String pwd;
     private static final String PROPERTIES = "dbconf.properties";
-    private static Logger log = Logger.getLogger(ConnectionSingleton.class);
+    private static Logger log = LoggerFactory.getLogger(ConnectionSingleton.class);
 
     private ConnectionSingleton() {}
 

@@ -4,20 +4,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;
 import com.excilys.cdb.service.dto.ComputerDTO;
 import com.excilys.cdb.service.dto.DTO;
-import org.apache.log4j.Logger;
 
 /**
  * Mapper implementation for computers
  */
 public class ComputerMapper implements Mapper<Computer> {
 
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
     private static ComputerMapper instance;
     private CompanyDAO companyDAO;
 

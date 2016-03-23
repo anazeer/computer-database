@@ -1,8 +1,6 @@
 package com.excilys.cdb.persistence.dao;
 
-import com.excilys.cdb.persistence.ConnectionSingleton;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -13,11 +11,6 @@ import java.util.List;
  * @param <T>
  */
     interface DAO<T> {
-
-    /**
-     * The user connection
-     */
-    Connection conn = ConnectionSingleton.getInstance();
 
     /**
      * Non implemented method error message

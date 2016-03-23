@@ -54,7 +54,7 @@
 	<li><mylib:link target="computer" text="${countpage}" page="${countpage}" limit="${limit}" search="${search}"/></li>
 </c:if>
 
-<c:if test="${currentpage lt countpage}">
+<c:if test="${currentpage - countpage lt 0}">
 	<li><a href="computer?page=${currentpage + 1}&limit=${limit}&search=${search}"
 		aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 	</a></li>

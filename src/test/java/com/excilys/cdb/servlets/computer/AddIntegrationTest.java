@@ -5,7 +5,6 @@ import static org.junit.Assert.fail;
 
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -93,9 +92,6 @@ public class AddIntegrationTest {
 		driver.findElement(By.id("introduced")).sendKeys("1111-11-11");
 		driver.findElement(By.cssSelector("input.btn.btn-primary")).click();
 		String errorText = driver.findElement(By.id("computerError")).getText();
-		Logger log = Logger.getLogger(getClass());
-		log.error(errorText);
-		log.error(Validator.COMP_ERROR);
 		assertEquals(Validator.COMP_ERROR, errorText);
 		assertEquals(baseUrl + "computerAdd", driver.getCurrentUrl());
 	}

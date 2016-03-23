@@ -3,10 +3,12 @@ package com.excilys.cdb.persistence.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.service.dto.CompanyDTO;
 import com.excilys.cdb.service.dto.DTO;
-import org.apache.log4j.Logger;
 
 /**
  * Mapper implementation for companies
@@ -16,7 +18,7 @@ import org.apache.log4j.Logger;
 public class CompanyMapper implements Mapper<Company> {
 
     private static CompanyMapper instance;
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
     /**
      * CompanyMapper new instance for Company type object mapping

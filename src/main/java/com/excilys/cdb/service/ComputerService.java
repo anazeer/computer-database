@@ -46,11 +46,18 @@ public class ComputerService implements Service<Computer> {
 	}
 	
 	@Override
+	public List<Computer> listPage(int offset, int limit, Order order) {
+		return computerDAO.findPage(offset, limit, order);
+	}
+	
+	@Override
 	public List<Computer> listPage(int offset, int limit, String filter) {
-		for(Computer c : computerDAO.findAll(filter)) {
-			System.out.println(c);
-		}
 		return computerDAO.findPage(offset, limit, filter);
+	}
+	
+	@Override
+	public List<Computer> listPage(int offset, int limit, String filter, Order order) {
+		return computerDAO.findPage(offset, limit, filter, order);
 	}
 	
 	@Override

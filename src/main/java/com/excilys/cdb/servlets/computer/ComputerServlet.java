@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.pagination.ComputerPagination;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.Order;
 
 /**
  * Servlet implementation class AddServlet
@@ -29,6 +30,9 @@ public class ComputerServlet extends HttpServlet {
     
     // Id for the search form
     private final String searchId = "search";
+    
+    // Id for the order parameter
+    private final String orderId = "order";
 
     /**
      * Default constructor. 
@@ -53,19 +57,36 @@ public class ComputerServlet extends HttpServlet {
 		String page = request.getParameter("page");
 		String noElt = request.getParameter("limit");
 		String search = request.getParameter(searchId);
+		String order = request.getParameter(orderId);
+		
+        pagination = new ComputerPagination(count, limit);
 		
         // Update elements if some were added, deleted, or filtered
 		if(search == null || search.trim().isEmpty()) {
 			count = computerService.count();
-			pagination.setCount(count);
 			pagination.setFilter("");
 		}
 		else {
 			count = computerService.count(search);
-			pagination.setCount(count);
 			pagination.setFilter(search);
-			pagination.getListFromPage();
 		}
+		
+		// Set the order
+		if(order != null && !order.trim().isEmpty()) {
+			Order ord;
+			if(order.equals("asc")) {
+				ord = Order.ASC;
+			}
+			else if(order.equals("dsc")) {
+				ord = Order.DSC;
+			}
+			else {
+				ord = null;
+			}
+			pagination.setOrder(ord);
+		}
+
+		pagination.setCount(count);
         
 		int currentPage = pagination.getCurrentPage();
 		int currentElements = pagination.getLimit();
@@ -111,6 +132,7 @@ public class ComputerServlet extends HttpServlet {
 		request.setAttribute(pageId, pagination);
 		request.setAttribute(countId, count);
 		request.setAttribute(searchId, search);
+		request.setAttribute(orderId, order);
 		
 		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
 	}

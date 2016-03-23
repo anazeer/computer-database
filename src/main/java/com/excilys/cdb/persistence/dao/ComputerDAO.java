@@ -13,10 +13,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.persistence.mapper.MapperFactory;
-
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.mapper.ComputerMapper;
+import com.excilys.cdb.persistence.mapper.MapperFactory;
+import com.excilys.cdb.service.Order;
 
 /**
  * DAO implementation for computers
@@ -101,12 +101,20 @@ public final class ComputerDAO implements DAO<Computer> {
 		return listComputer;
 	}
 	
-
-
 	@Override
 	public List<Computer> findPage(int offset, int limit) {
+		return findPage(offset, limit, Order.NOP);
+	}
+	
+	public List<Computer> findPage(int offset, int limit, Order order) {
 		List<Computer> listComputer = null;
-		String query = "SELECT * FROM computer LIMIT " + offset + ", " + limit;
+		String orderQuery = null;
+		switch(order) {
+			case ASC : orderQuery = " ORDER BY computer.name ASC "; break;
+			case DSC : orderQuery = " ORDER BY computer.name DESC "; break;
+			case NOP : orderQuery = " "; break;
+		}
+		String query = "SELECT * FROM computer" + orderQuery + "LIMIT " + offset + ", " + limit;
 		try(Connection conn = DAOFactory.getConnection();
 			Statement stmt = conn.createStatement()) {
 			ResultSet result = stmt.executeQuery(query);
@@ -126,7 +134,17 @@ public final class ComputerDAO implements DAO<Computer> {
 	
 	@Override
 	public List<Computer> findPage(int offset, int limit, String filter) {
+		return findPage(offset, limit, filter, Order.NOP);
+	}
+	
+	public List<Computer> findPage(int offset, int limit, String filter, Order order) {
 		List<Computer> listComputer = null;
+		String orderQuery = new String();
+		switch(order) {
+			case ASC : orderQuery = " ORDER BY computer.name ASC "; break;
+			case DSC : orderQuery = " ORDER BY computer.name DESC "; break;
+			case NOP : orderQuery = " "; break;
+		}
 		String query = 
 				"SELECT * FROM computer "
 				+ "INNER JOIN company "
@@ -134,7 +152,8 @@ public final class ComputerDAO implements DAO<Computer> {
 				+ "WHERE computer.name LIKE ? "
 				+ "OR company.name LIKE ? "
 				+ "OR computer.introduced LIKE ? "
-				+ "OR computer.discontinued LIKE ? "
+				+ "OR computer.discontinued LIKE ?"
+				+ orderQuery
 				+ "LIMIT " + offset + ", " + limit;
 		try(Connection conn = DAOFactory.getConnection();
 			PreparedStatement stmt = conn.prepareStatement(query)) {

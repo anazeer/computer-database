@@ -26,6 +26,14 @@ public interface Service<T> {
 	List<T> listPage(int offset, int limit);
 	
 	/**
+     * @param offset the number of rows we first ignore
+     * @param limit the maximum number of elements
+     * @param order the result order
+     * @return the list containing at most limit elements from offset
+	 */
+	List<T> listPage(int offset, int limit, Order order);
+	
+	/**
 	 * 
      * @param offset the number of rows we first ignore
      * @param limit the maximum number of elements
@@ -33,6 +41,16 @@ public interface Service<T> {
 	 * @return the list containing at most limit elements from offset
 	 */
 	List<T> listPage(int offset, int limit, String filter);
+	
+	/**
+	 * 
+     * @param offset the number of rows we first ignore
+     * @param limit the maximum number of elements
+	 * @param filter the filter for searching
+     * @param order the result order
+	 * @return the list containing at most limit elements from offset
+	 */
+	List<T> listPage(int offset, int limit, String filter, Order order);
 	
 	/**
 	 * Count the number of rows in the table

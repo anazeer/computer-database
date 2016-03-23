@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.mapper.CompanyMapper;
 import com.excilys.cdb.persistence.mapper.MapperFactory;
+import com.excilys.cdb.service.Order;
 
 /**
  * DAO implementation for companies
@@ -90,8 +91,18 @@ public final class CompanyDAO implements DAO<Company> {
 	
 	@Override
 	public List<Company> findPage(int offset, int limit) {
+		return findPage(offset, limit, Order.NOP);
+	}
+	
+	public List<Company> findPage(int offset, int limit, Order order) {
 		List<Company> listCompany = null;
-		String query = "SELECT * FROM company LIMIT " + offset + ", " + limit;
+		String orderQuery = null;
+		switch(order) {
+			case ASC : orderQuery = " ORDER BY company.name ASC "; break;
+			case DSC : orderQuery = " ORDER BY company.name DESC "; break;
+			case NOP : orderQuery = " "; break;
+		}
+		String query = "SELECT * FROM company" + orderQuery + "LIMIT " + offset + ", " + limit;
 		try(Connection conn = DAOFactory.getConnection();
 			Statement stmt = conn.createStatement()) {
 			ResultSet result = stmt.executeQuery(query);
@@ -111,8 +122,18 @@ public final class CompanyDAO implements DAO<Company> {
 	
 	@Override
 	public List<Company> findPage(int offset, int limit, String filter) {
+		return findPage(offset, limit, filter, Order.NOP);
+	}
+	
+	public List<Company> findPage(int offset, int limit, String filter, Order order) {
 		List<Company> listCompany = null;
-		String query = "SELECT * FROM company WHERE name LIKE ? LIMIT " + offset + ", " + limit;
+		String orderQuery = null;
+		switch(order) {
+			case ASC : orderQuery = " ORDER BY company.name ASC "; break;
+			case DSC : orderQuery = " ORDER BY company.name DESC "; break;
+			case NOP : orderQuery = " "; break;
+		}
+		String query = "SELECT * FROM company WHERE name LIKE ?" + orderQuery + "LIMIT " + offset + ", " + limit;
 		try(Connection conn = DAOFactory.getConnection();
 			PreparedStatement stmt = conn.prepareStatement(query)) {
 			stmt.setString(1, "%" + filter + "%");

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.cdb.persistence.mapper.Mapper;
+import com.excilys.cdb.service.Order;
 import com.excilys.cdb.service.Service;
 import com.excilys.cdb.service.dto.DTO;
 
@@ -47,6 +48,11 @@ public abstract class Pagination<T> {
      * The filter for the list result
      */
     private String filter;
+    
+    /**
+     * The order filter
+     */
+    private Order order;
 
     /**
      * The service that uses the pagination
@@ -121,6 +127,15 @@ public abstract class Pagination<T> {
 		this.filter = filter;
 		changed = true;
 	}
+	
+	/**
+	 * Set a new order for the list result
+	 * @param order the new filter for the order
+	 */
+	public void setOrder(Order order) {
+		this.order = order;
+		changed = true;
+	}
 
     /**
      * Change the limit of the pagination. It must be a positive integer
@@ -172,11 +187,14 @@ public abstract class Pagination<T> {
 		int limit = getLimit();
         List<DTO> listDTO = new ArrayList<>();
         List<T> serviceList;
+        if(order == null) {
+        	order = Order.NOP;
+        }
         if(filter.trim().isEmpty()) {
-        	serviceList = service.listPage(offset, limit);
+        	serviceList = service.listPage(offset, limit, order);
         }
         else {
-        	serviceList = service.listPage(offset, limit, filter);
+        	serviceList = service.listPage(offset, limit, filter, order);
         }
         for(T model : serviceList) {
             listDTO.add(mapper.getFromModel(model));

@@ -64,18 +64,24 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                        	<c:set var="newOrder" scope="page" value="${not empty order ? (order eq 'dsc' ? 'asc' : 'dsc') : 'asc'}"/>
+                        	<mylib:link text="Computer name" target="computer" limit="${pagination.limit}"
+                        		page="${pagination.currentPage}" search="${search}" order="${newOrder}" />
+                        	<c:choose>
+	                        	<c:when test="${newOrder eq 'dsc' }"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></c:when>
+	                        	<c:otherwise><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></c:otherwise>
+                        	</c:choose>
                         </th>
                         <th>
-                            Introduced date
+                            Introduced date <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                            Discontinued date <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                            Company <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
                         </th>
 
                     </tr>

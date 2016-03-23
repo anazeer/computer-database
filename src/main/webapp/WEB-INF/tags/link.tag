@@ -14,13 +14,17 @@
 	description="The computer id"%>
 <%@ attribute name="search" required="false" type="java.lang.String"
 	description="The search text"%>
+<%@ attribute name="order" required="false" type="java.lang.String"
+	description="The order of the elements, asc or dsc"%>
 	
 <c:set var="pageText" scope="page"
 	value="page=${page}" />
 <c:set var="limitText" scope="page"
-	value="limit=${limit}" />
+	value="&limit=${limit}" />
 <c:set var="searchText" scope="page"
-	value="search=${search}" />
+	value="&search=${search}" />
+<c:set var="orderText" scope="page"
+	value="&order=${order}" />
 
 <c:set var="pageInfo" scope="page"
 	value="${not empty page ? pageText : ''}" />
@@ -28,6 +32,8 @@
 	value="${not empty limit ? limitText : ''}" />
 <c:set var="searchInfo" scope="page"
 	value="${not empty search ? searchText : ''}" />
+<c:set var="orderInfo" scope="page"
+	value="${not empty order ? orderText : ''}" />
 	
 <c:choose>
 	<c:when test="${target != '#'}">
@@ -39,7 +45,7 @@
 			<c:otherwise>
 				<c:choose>
 					<c:when test="${not empty page}">
-						<a href="${target}?${pageInfo}&${limitInfo}&${searchInfo}"
+						<a href="${target}?${pageInfo}${limitInfo}${searchInfo}${orderInfo}"
 							class="${classLink}"><c:out value="${text}" /></a>
 					</c:when>
 					<c:otherwise>

@@ -15,9 +15,9 @@ import java.util.Scanner;
 
 import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.pagination.CompanyPagination;
-import com.excilys.cdb.pagination.ComputerPagination;
-import com.excilys.cdb.pagination.Pagination;
+import com.excilys.cdb.pagination.CompanyPage;
+import com.excilys.cdb.pagination.ComputerPage;
+import com.excilys.cdb.pagination.Page;
 import com.excilys.cdb.persistence.mapper.MapperFactory;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
@@ -210,10 +210,10 @@ public class Main {
 		return c;
 	}
 
-    private static void navigatePage(Pagination<?> page) {
+    private static void navigatePage(Page<?> page) {
         boolean end = false;
         while(!end) {
-            showPage(page.getListFromPage());
+            showPage(page.getElements());
             switch(readPage()) {
                 case 'n' : page.next(); break;
                 case 'p' : page.previous(); break;
@@ -310,7 +310,7 @@ public class Main {
 			else if(step == 1) {
 				switch(entry) {
 					case 1 : 
-						CompanyPagination page = new CompanyPagination(companyService.count(), 10);
+						CompanyPage page = new CompanyPage(companyService.count(), 10);
 						System.out.println("---------------------");
 						System.out.println("- List of companies -");
 						System.out.println("---------------------");
@@ -331,7 +331,7 @@ public class Main {
                 ComputerDTO computerDTO;
 				switch(entry) {
 					case 1 :
-						ComputerPagination page = new ComputerPagination(computerService.count(), 10);
+						ComputerPage page = new ComputerPage(computerService.count(), 10);
 						System.out.println("---------------------");
 						System.out.println("- List of computers -");
 						System.out.println("---------------------");

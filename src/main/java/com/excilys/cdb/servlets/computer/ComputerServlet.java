@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.pagination.ComputerPagination;
+import com.excilys.cdb.pagination.ComputerPage;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.Order;
 
@@ -18,7 +18,7 @@ public class ComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private ComputerService computerService;
-	private ComputerPagination pagination;
+	private ComputerPage pagination;
 	private static int limit;
 	private static int count;
 
@@ -46,7 +46,7 @@ public class ComputerServlet extends HttpServlet {
     	limit = 10;
     	computerService = ComputerService.getInstance();
         count = computerService.count();
-        pagination = new ComputerPagination(count, limit);
+        pagination = new ComputerPage(count, limit);
     }
 
 	/**
@@ -59,7 +59,7 @@ public class ComputerServlet extends HttpServlet {
 		String search = request.getParameter(searchId);
 		String order = request.getParameter(orderId);
 		
-        pagination = new ComputerPagination(count, limit);
+        pagination = new ComputerPage(count, limit);
 		
         // Update elements if some were added, deleted, or filtered
 		if(search == null || search.trim().isEmpty()) {
@@ -104,7 +104,7 @@ public class ComputerServlet extends HttpServlet {
 			pagination.setOrder(ord);
 		}
 
-		pagination.setCount(count);
+		pagination.setTotalCount(count);
         
 		int currentPage = pagination.getCurrentPage();
 		int currentElements = pagination.getLimit();

@@ -18,17 +18,13 @@ public class Computer {
 	public Computer() {
 	}
 
-    private Computer(ComputerBuilder computerBuilder) {
-        this.id = computerBuilder.id;
-        this.name = computerBuilder.name;
-        this.introduced = computerBuilder.introduced;
-        this.discontinued = computerBuilder.discontinued;
-        this.company = computerBuilder.company;
+    private Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
+        this.id = id;
+        this.name = name;
+        this.introduced = introduced;
+        this.discontinued = discontinued;
+        this.company = company;
     }
-
-	public Computer(String name) {
-		setName(name);
-	}
 
 	public Long getId() {
 		return id;
@@ -42,13 +38,7 @@ public class Computer {
 		return name;
 	}
 
-    /**
-     * The name is required and should not be empty
-     * @param name the computer name
-     */
 	public void setName(String name) {
-		if(name.trim().isEmpty())
-			throw new IllegalArgumentException("Name should'nt be empty");
 		this.name = name;
 	}
 
@@ -141,7 +131,7 @@ public class Computer {
     /**
      * Computer builder
      */
-    public static class ComputerBuilder {
+    public static class Builder {
         private Long id;
         private String name;
         private LocalDate introduced;
@@ -152,35 +142,35 @@ public class Computer {
          * Computer builder to build a custom computer
          * @param name the computer name
          */
-        public ComputerBuilder(String name) {
+        public Builder(String name) {
             this.name = name;
         }
 
-        public ComputerBuilder id(Long id) {
+        public Builder id(Long id) {
             this.id = id;
             return this;
         }
 
-        public ComputerBuilder introduced(LocalDate introduced) {
+        public Builder introduced(LocalDate introduced) {
             this.introduced = introduced;
             return this;
         }
 
-        public ComputerBuilder discontinued(LocalDate discontinued) {
+        public Builder discontinued(LocalDate discontinued) {
             this.discontinued = discontinued;
             return this;
         }
 
-        public ComputerBuilder company(Company company) {
+        public Builder company(Company company) {
             this.company = company;
             return this;
         }
 
         public Computer build() {
-            Computer computer = new Computer(this);
-            if(computer.getName().trim().isEmpty())
-                throw new IllegalStateException("Name should'nt be empty");
-            return computer;
+            if (name.trim().isEmpty()) {
+                throw new IllegalStateException("Name shouldn't be empty");
+            }
+            return new Computer(id, name, introduced, discontinued, company);
         }
     }
 }

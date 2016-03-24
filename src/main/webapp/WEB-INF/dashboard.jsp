@@ -25,7 +25,7 @@
         	<!-- Print the success alert -->
             <c:if test="${deleteSuccess}"><div class="alert alert-success" id="computerSuccess" role="alert">${deleteMsg}</div></c:if>
             <h1 id="homeTitle">
-                <!-- Print computers count -->
+                <!-- Print computers totalCount -->
                 <c:out value="${countComputer}"/> Computer<c:if test="${countComputer gt 1}"><c:out value="s"/></c:if> found
             </h1>
             <div id="actions" class="form-horizontal">
@@ -111,7 +111,7 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-               	<c:forEach var="computer" items="${pagination.listFromPage}">
+               	<c:forEach var="computer" items="${pagination.elements}">
                     <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="${computer.id}">

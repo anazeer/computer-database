@@ -178,7 +178,7 @@ public class EditServlet extends HttpServlet {
         // If the validation went good, we try to edit the computer (some more checking are done in the lower layout)
 		if(good) {
 			dto = new ComputerDTO
-				.ComputerDTOBuilder(name)
+				.Builder(name)
 				.id(computer.getId())
 				.introduced(introduced)
 				.discontinued(discontinued)

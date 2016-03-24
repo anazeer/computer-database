@@ -137,7 +137,7 @@ public class AddServlet extends HttpServlet {
         // If the validation went good, we try to persist the computer (some more checking are done in the lower layout)
 		if(good) {
 			ComputerDTO dto = new ComputerDTO
-					.ComputerDTOBuilder(name)
+					.Builder(name)
 					.introduced(introduced)
 					.discontinued(discontinued)
 					.companyId(Long.parseLong(companyId))

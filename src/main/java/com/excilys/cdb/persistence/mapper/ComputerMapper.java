@@ -1,5 +1,6 @@
 package com.excilys.cdb.persistence.mapper;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -35,7 +36,7 @@ public class ComputerMapper implements Mapper<Computer> {
      * @return the computer mapper implementation instance
      */
     public static ComputerMapper getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ComputerMapper();
         }
         return instance;
@@ -44,14 +45,19 @@ public class ComputerMapper implements Mapper<Computer> {
 	@Override
 	public Computer getFromResultSet(ResultSet result) {
 		try {
-			Computer computer = new Computer(result.getString("name"));
-			LocalDate introducedDate = result.getDate("introduced") == null ? null : result.getDate("introduced").toLocalDate();
-			LocalDate discontinuedDate = result.getDate("discontinued") == null ? null : result.getDate("discontinued").toLocalDate();
-			computer.setId(result.getLong("id"));
-			computer.setIntroduced(introducedDate);
-			computer.setDiscontinued(discontinuedDate);
-			computer.setCompany(companyDAO.findById(result.getLong("company_id")));
-			return computer;
+            String name = result.getString("name");
+            Long id = result.getLong("id");
+            Date introducedDate = result.getDate("introduced");
+			LocalDate introduced = introducedDate == null ? null : introducedDate.toLocalDate();
+            Date discontinuedDate = result.getDate("discontinued");
+			LocalDate discontinued = discontinuedDate == null ? null : discontinuedDate.toLocalDate();
+            Company company = companyDAO.findById(result.getLong("company_id"));
+            return new Computer.Builder(name)
+                    .id(id)
+                    .introduced(introduced)
+                    .discontinued(discontinued)
+                    .company(company)
+                    .build();
 		} catch (SQLException e) {
             log.error(e.getMessage());
 		}
@@ -61,18 +67,15 @@ public class ComputerMapper implements Mapper<Computer> {
     @Override
     public Computer getFromDTO(DTO dto) {
         ComputerDTO computerDTO = (ComputerDTO) dto;
-        LocalDate introduced = null;
-        LocalDate discontinued = null;
+        String name = computerDTO.getName();
+        Long id = computerDTO.getId();
+        String introducedString = computerDTO.getIntroduced();
+        LocalDate introduced = introducedString == null ? null : LocalDate.parse(introducedString);
+        String discontinuedString = computerDTO.getDiscontinued();
+        LocalDate discontinued = discontinuedString == null ? null : LocalDate.parse(computerDTO.getDiscontinued());
         Company company = companyDAO.findById(computerDTO.getCompanyId());
-        if(computerDTO.getIntroduced() != null) {
-            introduced = LocalDate.parse(computerDTO.getIntroduced());
-        }
-        if(computerDTO.getDiscontinued() != null) {
-            discontinued = LocalDate.parse(computerDTO.getDiscontinued());
-        }
-       return new Computer.ComputerBuilder(
-                computerDTO.getName())
-                .id(computerDTO.getId())
+        return new Computer.Builder(name)
+                .id(id)
                 .introduced(introduced)
                 .discontinued(discontinued)
                 .company(company)
@@ -81,21 +84,21 @@ public class ComputerMapper implements Mapper<Computer> {
 
     @Override
     public DTO getFromModel(Computer model) {
-        String introduced = null;
-        String discontinued = null;
+        String name =  model.getName();
+        Long id = model.getId();
+        LocalDate introducedDate = model.getIntroduced();
+        String introduced = introducedDate == null ? null : introducedDate.toString();
+        LocalDate discontinuedDate = model.getDiscontinued();
+        String discontinued = discontinuedDate == null ? null : discontinuedDate.toString();
+        Company company = model.getCompany();
         Long companyId = null;
         String companyName = null;
-        if(model.getIntroduced() != null)
-             introduced = model.getIntroduced().toString();
-        if(model.getDiscontinued() != null)
-            discontinued = model.getDiscontinued().toString();
-        if(model.getCompany() != null) {
-            companyId = model.getCompany().getId();
-            companyName = model.getCompany().getName();
+        if (company != null) {
+            companyId = company.getId();
+            companyName = company.getName();
         }
-        return new ComputerDTO.ComputerDTOBuilder(
-                model.getName())
-                .id(model.getId())
+        return new ComputerDTO.Builder(name)
+                .id(id)
                 .introduced(introduced)
                 .discontinued(discontinued)
                 .companyId(companyId)

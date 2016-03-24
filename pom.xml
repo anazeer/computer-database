@@ -6,17 +6,37 @@
 
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.0.3-RELEASE</version>
+	<version>0.4.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>computer-database</name>
 	<url>http://maven.apache.org</url>
 	<properties>
+        <!-- Dependencies version -->
+		<javaVersion>1.8</javaVersion>
+        <servletVersion>3.1.0</servletVersion>
+        <mysqlVersion>5.1.38</mysqlVersion>
+        <jstlVersion>1.2</jstlVersion>
+        <junitVersion>4.4</junitVersion>
+        <slf4jApiVersion>1.7.5</slf4jApiVersion>
+        <slf4jSimpleVersion>1.7.5</slf4jSimpleVersion>
+        <bonecpVersion>0.8.0.RELEASE</bonecpVersion>
+        <mockitoVersion>1.10.19</mockitoVersion>
+        <checkstyleVersion>2.17</checkstyleVersion>
+        <seleniumVersion>2.53.0</seleniumVersion>
+        <httpclientVersion>4.3.5</httpclientVersion>
+
+        <!-- Source encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Application name -->
+        <appName>computer-database</appName>
+
 	</properties>
 
 	<!-- Maven configuration -->
 
 	<build>
+        <finalName>${appName}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -39,7 +59,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.17</version>
+				<version>${checkstyleVersion}</version>
 				<configuration>
 					<configLocation>src/main/resources/checkstyle.xml</configLocation>
 					<suppressionsLocation>src/main/resources/suppressions.xml</suppressionsLocation>
@@ -58,7 +78,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
+			<version>${servletVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -67,7 +87,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.38</version>
+			<version>${mysqlVersion}</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -76,7 +96,7 @@
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<version>${jstlVersion}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -85,7 +105,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.4</version>
+			<version>${junitVersion}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -94,15 +114,15 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
+			<version>${slf4jApiVersion}</version>
 		</dependency>
 
-		<!-- sl4j dependance -->
+		<!-- sl4j dependence -->
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.5</version>
+			<version>${slf4jSimpleVersion}</version>
 		</dependency>
 
 		<!-- BoneCP API -->
@@ -110,7 +130,7 @@
 		<dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
-			<version>0.8.0.RELEASE</version>
+			<version>${bonecpVersion}</version>
 		</dependency>
 
 		<!-- Mockito API -->
@@ -118,7 +138,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
-			<version>1.10.19</version>
+			<version>${mockitoVersion}</version>
 		</dependency>
 
 		<!-- Maven checkstyle API -->
@@ -126,7 +146,7 @@
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-checkstyle-plugin</artifactId>
-			<version>2.17</version>
+			<version>${checkstyleVersion}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -135,7 +155,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.53.0</version>
+			<version>${seleniumVersion}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -144,7 +164,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.3.5</version>
+			<version>${httpclientVersion}</version>
 			<scope>test</scope>
 		</dependency>
 

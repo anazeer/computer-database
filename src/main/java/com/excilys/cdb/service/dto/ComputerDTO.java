@@ -15,13 +15,13 @@ public class ComputerDTO implements DTO {
     public ComputerDTO() {
     }
 
-    private ComputerDTO(ComputerDTOBuilder computerDTOBuilder) {
-        this.id = computerDTOBuilder.id;
-        this.name = computerDTOBuilder.name;
-        this.introduced = computerDTOBuilder.introduced;
-        this.discontinued = computerDTOBuilder.discontinued;
-        this.companyId = computerDTOBuilder.companyId;
-        this.companyName = computerDTOBuilder.companyName;
+    private ComputerDTO(Long id, String name, String introduced, String discontinued, Long companyId, String companyName) {
+        this.id = id;
+        this.name = name;
+        this.introduced = introduced;
+        this.discontinued = discontinued;
+        this.companyId = companyId;
+        this.companyName = companyName;
     }
 
 	public ComputerDTO(String name) {
@@ -41,8 +41,6 @@ public class ComputerDTO implements DTO {
 	}
 
 	public void setName(String name) {
-		if(name.trim().isEmpty())
-			throw new IllegalArgumentException("Name should'nt be empty");
 		this.name = name;
 	}
 
@@ -138,7 +136,7 @@ public class ComputerDTO implements DTO {
 		return name + " (id: " + id + ")";
 	}
 
-    public static class ComputerDTOBuilder {
+    public static class Builder {
         private Long id;
         private String name;
         private String introduced;
@@ -146,40 +144,39 @@ public class ComputerDTO implements DTO {
         private Long companyId;
         private String companyName;
 
-        public ComputerDTOBuilder(String name) {
+        public Builder(String name) {
             this.name = name;
         }
 
-        public ComputerDTOBuilder id(Long id) {
+        public Builder id(Long id) {
             this.id = id;
             return this;
         }
 
-        public ComputerDTOBuilder introduced(String introduced) {
+        public Builder introduced(String introduced) {
             this.introduced = introduced;
             return this;
         }
 
-        public ComputerDTOBuilder discontinued(String discontinued) {
+        public Builder discontinued(String discontinued) {
             this.discontinued = discontinued;
             return this;
         }
 
-        public ComputerDTOBuilder companyId(Long companyId) {
+        public Builder companyId(Long companyId) {
             this.companyId = companyId;
             return this;
         }
 
-        public ComputerDTOBuilder companyName(String companyName) {
+        public Builder companyName(String companyName) {
             this.companyName = companyName;
             return this;
         }
 
         public ComputerDTO build() {
-            ComputerDTO computer = new ComputerDTO(this);
-            if (computer.getName().trim().isEmpty())
-                throw new IllegalStateException("Name should'nt be empty");
-            return computer;
+            if (name.trim().isEmpty())
+                throw new IllegalStateException("Name shouldn't be empty");
+            return new ComputerDTO(id, name, introduced, discontinued, companyId, companyName);
         }
     }
 }

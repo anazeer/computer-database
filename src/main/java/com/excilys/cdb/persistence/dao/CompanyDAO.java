@@ -190,8 +190,8 @@ public final class CompanyDAO implements DAO<Company> {
 
 	private String getOrderQuery(Order order) {
         switch(order) {
-            case ASC : return " ORDER BY company.name ASC ";
-            case DSC : return " ORDER BY company.name DESC ";
+            case NAME_ASC : return " ORDER BY company.name ASC ";
+            case NAME_DSC : return " ORDER BY company.name DESC ";
             default : return " ";
         }
 	}

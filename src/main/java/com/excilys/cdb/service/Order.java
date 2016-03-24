@@ -1,7 +1,13 @@
 package com.excilys.cdb.service;
 
 public enum Order {
-	ASC,
-	DSC,
+	NAME_ASC,
+	NAME_DSC,
+	INTRODUCED_ASC,
+	INTRODUCED_DSC,
+	DISCONTINUED_ASC,
+	DISCONTINUED_DSC,
+	COMPANY_ASC,
+	COMPANY_DSC,
 	NOP;
 }

@@ -65,24 +65,46 @@
                         </th>
                         <!-- Computer name column clickable for ordering -->
                         <th>
-                        	<c:set var="newOrder" scope="page" value="${not empty order ? (order eq 'dsc' ? 'asc' : 'dsc') : 'asc'}"/>
+                        	<c:set var="newOrder" scope="page" 
+                        		value="${not empty order ? (order eq 'name_dsc' ? 'name_asc' : 'name_dsc') : 'name_asc'}"/>
                         	<mylib:link text="Computer name" target="computer" limit="${pagination.limit}"
                         		page="${pagination.currentPage}" search="${search}" order="${newOrder}" />
                         	<c:choose>
-	                        	<c:when test="${newOrder eq 'dsc' }"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></c:when>
+	                        	<c:when test="${newOrder eq 'name_dsc' }"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></c:when>
 	                        	<c:otherwise><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></c:otherwise>
                         	</c:choose>
                         </th>
                         <th>
-                            Introduced date <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                        	<c:set var="newOrder" scope="page" 
+                        		value="${not empty order ? (order eq 'introduced_dsc' ? 'introduced_asc' : 'introduced_dsc') : 'introduced_asc'}"/>
+                        	<mylib:link text="Introduced date" target="computer" limit="${pagination.limit}"
+                        		page="${pagination.currentPage}" search="${search}" order="${newOrder}" />
+                        	<c:choose>
+	                        	<c:when test="${newOrder eq 'introduced_dsc' }"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></c:when>
+	                        	<c:otherwise><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></c:otherwise>
+                        	</c:choose>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                        	<c:set var="newOrder" scope="page" 
+                        		value="${not empty order ? (order eq 'discontinued_dsc' ? 'discontinued_asc' : 'discontinued_dsc') : 'discontinued_asc'}"/>
+                        	<mylib:link text="Discontinued date" target="computer" limit="${pagination.limit}"
+                        		page="${pagination.currentPage}" search="${search}" order="${newOrder}" />
+                        	<c:choose>
+	                        	<c:when test="${newOrder eq 'discontinued_dsc' }"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></c:when>
+	                        	<c:otherwise><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></c:otherwise>
+                        	</c:choose>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                        	<c:set var="newOrder" scope="page" 
+                        		value="${not empty order ? (order eq 'company_dsc' ? 'company_asc' : 'company_dsc') : 'company_asc'}"/>
+                        	<mylib:link text="Company" target="computer" limit="${pagination.limit}"
+                        		page="${pagination.currentPage}" search="${search}" order="${newOrder}" />
+                        	<c:choose>
+	                        	<c:when test="${newOrder eq 'company_dsc' }"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></c:when>
+	                        	<c:otherwise><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></c:otherwise>
+                        	</c:choose>
                         </th>
 
                     </tr>

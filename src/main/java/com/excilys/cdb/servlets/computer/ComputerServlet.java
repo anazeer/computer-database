@@ -74,11 +74,29 @@ public class ComputerServlet extends HttpServlet {
 		// Set the order
 		if(order != null && !order.trim().isEmpty()) {
 			Order ord;
-			if(order.equals("asc")) {
-				ord = Order.ASC;
+			if(order.equals("name_asc")) {
+				ord = Order.NAME_ASC;
 			}
-			else if(order.equals("dsc")) {
-				ord = Order.DSC;
+			else if(order.equals("name_dsc")) {
+				ord = Order.NAME_DSC;
+			}
+			else if(order.equals("introduced_asc")) {
+				ord = Order.INTRODUCED_ASC;
+			}
+			else if(order.equals("introduced_dsc")) {
+				ord = Order.INTRODUCED_DSC;
+			}
+			else if(order.equals("discontinued_asc")) {
+				ord = Order.DISCONTINUED_ASC;
+			}
+			else if(order.equals("discontinued_dsc")) {
+				ord = Order.DISCONTINUED_DSC;
+			}
+			else if(order.equals("company_asc")) {
+				ord = Order.COMPANY_ASC;
+			}
+			else if(order.equals("company_dsc")) {
+				ord = Order.COMPANY_DSC;
 			}
 			else {
 				ord = null;

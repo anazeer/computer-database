@@ -293,8 +293,14 @@ public final class ComputerDAO implements DAO<Computer> {
 
     private String getOrderQuery(Order order) {
         switch(order) {
-            case ASC : return " ORDER BY computer.name ASC ";
-            case DSC : return " ORDER BY computer.name DESC ";
+            case NAME_ASC : return " ORDER BY computer.name ASC ";
+            case NAME_DSC : return " ORDER BY computer.name DESC ";
+            case INTRODUCED_ASC : return " ORDER BY computer.introduced ASC ";
+            case INTRODUCED_DSC : return " ORDER BY computer.introduced DESC ";
+            case DISCONTINUED_ASC : return " ORDER BY computer.discontinued ASC ";
+            case DISCONTINUED_DSC : return " ORDER BY computer.discontinued DESC ";
+            case COMPANY_ASC : return " ORDER BY computer.company_id ASC ";
+            case COMPANY_DSC : return " ORDER BY computer.company_id DESC ";
             default : return " ";
         }
     }

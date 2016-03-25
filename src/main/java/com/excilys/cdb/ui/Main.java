@@ -310,7 +310,7 @@ public class Main {
 			else if(step == 1) {
 				switch(entry) {
 					case 1 : 
-						CompanyPage page = new CompanyPage(companyService.count(), 10);
+						CompanyPage page = new CompanyPage(companyService.count(null), 10);
 						System.out.println("---------------------");
 						System.out.println("- List of companies -");
 						System.out.println("---------------------");
@@ -331,7 +331,7 @@ public class Main {
                 ComputerDTO computerDTO;
 				switch(entry) {
 					case 1 :
-						ComputerPage page = new ComputerPage(computerService.count(), 10);
+						ComputerPage page = new ComputerPage(computerService.count(null), 10);
 						System.out.println("---------------------");
 						System.out.println("- List of computers -");
 						System.out.println("---------------------");

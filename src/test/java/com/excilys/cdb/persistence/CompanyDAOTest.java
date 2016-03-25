@@ -8,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import com.excilys.cdb.persistence.dao.DAOFactory;
+import com.excilys.cdb.service.Query;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -46,7 +48,8 @@ public class CompanyDAOTest {
 	
 	@Test
 	public void testFindFromOffset() {
-		List<Company> list = companyDAO.findPage(0, 10);
+		Query query = new Query.Builder().offset(0).limit(10).build();
+		List<Company> list = companyDAO.find(query);
 		assertNotNull(list);
 		assertTrue(list.size() <= 10);
 	}
@@ -54,7 +57,8 @@ public class CompanyDAOTest {
 	@Test
 	public void testFindFilter() {
 		String filter = "in";
-		List<Company> list = companyDAO.findAll(filter);
+		Query query = new Query.Builder().filter(filter).build();
+		List<Company> list = companyDAO.find(query);
 		for(Company c : list) {
 			assertTrue(c.getName().toLowerCase().contains(filter));
 		}
@@ -63,26 +67,29 @@ public class CompanyDAOTest {
 	@Test
 	public void testPageFilter() {
 		String filter = "In";
-		List<Company> list = companyDAO.findPage(0, 10, filter);
+		Query query = new Query.Builder().offset(0).limit(10).filter(filter).build();
+		List<Company> list = companyDAO.find(query);
 		assertTrue(list.size() <= 10);
 	}
 	
 	@Test
 	public void testCountFilter() {
 		String filter = "a";
-		List<Company> list = companyDAO.findAll(filter);
-		assertEquals(list.size(), companyDAO.count(filter));
+		Query query = new Query.Builder().filter(filter).build();
+		List<Company> list = companyDAO.find(query);
+		assertEquals(list.size(), companyDAO.count(query));
 	}
 	
 	@Test
 	public void testCountEntries() {
-		assertEquals(companyDAO.count(), companyDAO.count(""));
+		Query query = new Query.Builder().filter("  ").build();
+		assertEquals(companyDAO.count(null), companyDAO.count(query));
 	}
 	
 	@Test
 	public void testFindAll() throws Exception {
-		List<Company> list = companyDAO.findAll();
+		List<Company> list = companyDAO.find(null);
 		assertNotNull(list);
-		assertEquals(list.size(), companyDAO.count());
+		assertEquals(list.size(), companyDAO.count(null));
 	}
 }

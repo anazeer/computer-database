@@ -2,68 +2,28 @@ package com.excilys.cdb.service;
 
 import java.util.List;
 
-
+/**
+ * Generic service for accessing services 
+ * @author excilys
+ *
+ * @param <T>
+ */
 public interface Service<T> {
-
-	/**
-	 *
-	 * @return the list containing all the objects from the rows of the table
-	 */
-	List<T> listAll();
 	
 	/**
 	 * 
-	 * @param filter the filter for searching
-	 * @return the list containing all the objects from the rows of the table
+	 * Get all the objects satisfying the query constraints
+	 * @param query the object containing the query constraints 
+	 * @return the list containing the result
 	 */
-	List<T> listAll(String filter);
-
-	/**
-     * @param offset the number of rows we first ignore
-     * @param limit the maximum number of elements
-     * @return the list containing at most limit elements from offset
-	 */
-	List<T> listPage(int offset, int limit);
-	
-	/**
-     * @param offset the number of rows we first ignore
-     * @param limit the maximum number of elements
-     * @param order the result order
-     * @return the list containing at most limit elements from offset
-	 */
-	List<T> listPage(int offset, int limit, Order order);
+	List<T> list(Query query);
 	
 	/**
 	 * 
-     * @param offset the number of rows we first ignore
-     * @param limit the maximum number of elements
-	 * @param filter the filter for searching
-	 * @return the list containing at most limit elements from offset
+	 * @param query the object containing the query constraints
+	 * @return the number of elements satisfying the query constraints
 	 */
-	List<T> listPage(int offset, int limit, String filter);
-	
-	/**
-	 * 
-     * @param offset the number of rows we first ignore
-     * @param limit the maximum number of elements
-	 * @param filter the filter for searching
-     * @param order the result order
-	 * @return the list containing at most limit elements from offset
-	 */
-	List<T> listPage(int offset, int limit, String filter, Order order);
-	
-	/**
-	 * Count the number of rows in the table
-	 * @return the total number of rows in the table
-	 */
-	int count();
-	
-	/**
-	 * Count the number of rows in the table
-	 * @param filter the research filter
-	 * @return the total number of rows in the table
-	 */
-	int count(String filter);
+	int count(Query query);
 	
 	/**
 	 * Delete the row referenced by id

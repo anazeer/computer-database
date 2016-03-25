@@ -110,7 +110,7 @@ public class EditServlet extends HttpServlet {
 		else {
             ComputerDTO dto = (ComputerDTO) MapperFactory.getComputerMapper().getFromModel(computer);
             request.setAttribute(compJSP, dto);
-            request.setAttribute(companyList, companyService.listAll());
+            request.setAttribute(companyList, companyService.list(null));
             getServletContext().getRequestDispatcher("/WEB-INF/editComputer.jsp").forward(request, response);
 		}
 	}
@@ -173,7 +173,7 @@ public class EditServlet extends HttpServlet {
 		request.setAttribute(nameError, ename);
 		request.setAttribute(introError, eintro);
 		request.setAttribute(discontinuedError, ediscontinued);
-		request.setAttribute(companyList, companyService.listAll());
+		request.setAttribute(companyList, companyService.list(null));
 
         // If the validation went good, we try to edit the computer (some more checking are done in the lower layout)
 		if(good) {

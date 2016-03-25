@@ -4,6 +4,8 @@ package com.excilys.cdb.persistence.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.excilys.cdb.service.Query;
+
 /**
  * Generic DAO for CRUD implementation
  * @author excilys
@@ -19,16 +21,17 @@ import java.util.List;
 	
 	/**
 	 * 
-	 * @return the list containing all the objects from the rows of the table
+	 * @param query the object containing the query constraints
+	 * @return the number of rows in the table satisfying the query constraints
 	 */
-	List<T> findAll();
+	int count(Query query);
 	
 	/**
-	 * 
-	 * @param filter filter for the research
-	 * @return the list containing the filtered rows of the table
+	 * Get all the objects from the database satisfying the query constraints
+	 * @param query the object containing the query constraints 
+	 * @return the list containing the result
 	 */
-	List<T> findAll(String filter);
+	List<T> find(Query query);
 	
 	/**
 	 * 
@@ -36,36 +39,7 @@ import java.util.List;
 	 * @return the object representing the table's row referenced by id
 	 */
 	T findById(Long id);
-	
-	/**
-	 * 
-	 * @return the total number of rows in the table
-	 */
-	int count();
-	
-	/**
-	 * @param filter the research filter
-	 * @return the number of rows in the table satisfying the filter
-	 */
-	int count(String filter);
-	
-	/**
-	 *
-	 * @param offset the number of rows we first ignore
-	 * @param limit the maximum number of elements
-	 * @return the list containing at most limit elements from offset
-	 */
-	List<T> findPage(int offset, int limit);
-	
-	/**
-	 * 
-	 * @param offset the number of rows we first ignore
-	 * @param limit the maximum number of elements
-	 * @param filter the filter for the research
-	 * @return the list containing at most limit elements from offset
-	 */
-	List<T> findPage(int offset, int limit, String filter);
-	
+		
 	/**
 	 * 
 	 * @param obj the object we want to persist

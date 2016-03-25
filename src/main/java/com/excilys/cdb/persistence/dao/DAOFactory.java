@@ -48,12 +48,12 @@ public class DAOFactory {
 
 			// Set the pool configuration
 			BoneCPConfig config = new BoneCPConfig();
-			int maxConnection = 5;
-			int countPartition = 2;
+			int maxConnection = 20;
+			int countPartition = 5;
 			config.setJdbcUrl(url);
 			config.setUsername(user);
 			config.setPassword(pwd);
-			config.setMinConnectionsPerPartition(5);
+			config.setMinConnectionsPerPartition(10);
 			config.setMaxConnectionsPerPartition(maxConnection);
 			config.setPartitionCount(countPartition);
 

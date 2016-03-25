@@ -77,7 +77,7 @@ public class AddServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setAttribute("companies", companyService.listAll());
+		request.setAttribute("companies", companyService.list(null));
 		getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
 	}
 
@@ -132,7 +132,7 @@ public class AddServlet extends HttpServlet {
 		request.setAttribute(nameError, ename);
 		request.setAttribute(introError, eintro);
 		request.setAttribute(discontinuedError, ediscontinued);
-		request.setAttribute(companyList, companyService.listAll());
+		request.setAttribute(companyList, companyService.list(null));
 
         // If the validation went good, we try to persist the computer (some more checking are done in the lower layout)
 		if(good) {

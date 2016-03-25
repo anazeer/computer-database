@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.excilys.cdb.persistence.mapper.Mapper;
 import com.excilys.cdb.service.Order;
+import com.excilys.cdb.service.Query;
+import com.excilys.cdb.service.Query.Builder;
 import com.excilys.cdb.service.Service;
 import com.excilys.cdb.service.dto.DTO;
 
@@ -172,19 +174,17 @@ public abstract class Page<T> {
 		int offset = (getCurrentPage() - 1) * limit;
         List<DTO> listDTO = new ArrayList<>();
         List<T> serviceList;
+        Builder builder = new Query.Builder();
         if(order == null) {
         	order = Order.NOP;
         }
-        if(filter.trim().isEmpty()) {
-        	serviceList = service.listPage(offset, limit, order);
-        }
-        else {
-        	serviceList = service.listPage(offset, limit, filter, order);
-        }
+        builder = builder.offset(offset).limit(limit).filter(filter).order(order);
+    	serviceList = service.list(builder.build());
         for(T model : serviceList) {
             listDTO.add(mapper.getFromModel(model));
         }
 		elements = listDTO;
+		System.out.println("NUUUUUUULLLLL " + elements);
 		return elements;
 	}
 }

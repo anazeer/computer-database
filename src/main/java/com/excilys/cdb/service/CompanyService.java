@@ -26,50 +26,20 @@ public class CompanyService implements Service<Company> {
 	}
 	
 	public static CompanyService getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new CompanyService();
 		}
 		return instance;
 	}
 	
 	@Override
-	public List<Company> listAll() {
-		return companyDAO.findAll();
+	public List<Company> list(Query query) {
+		return companyDAO.find(query);
 	}
 	
 	@Override
-	public List<Company> listAll(String filter) {
-		return companyDAO.findAll(filter);
-	}
-	
-	@Override
-	public List<Company> listPage(int offset, int limit) {
-		return companyDAO.findPage(offset, limit);
-	}
-	
-	@Override
-	public List<Company> listPage(int offset, int limit, Order order) {
-		return companyDAO.findPage(offset, limit, order);
-	}
-
-	@Override
-	public List<Company> listPage(int offset, int limit, String filter, Order order) {
-		return companyDAO.findPage(offset, limit, filter, order);
-	}
-	
-	@Override
-	public List<Company> listPage(int offset, int limit, String filter) {
-		return companyDAO.findPage(offset, limit, filter);
-	}
-	
-	@Override
-	public int count() {
-		return companyDAO.count();
-	}
-	
-	@Override
-	public int count(String filter) {
-		return companyDAO.count(filter);
+	public int count(Query query) {
+		return companyDAO.count(query);
 	}
 	
 	@Override
@@ -84,14 +54,14 @@ public class CompanyService implements Service<Company> {
 			conn.close();
 			return true;
 		}
-		catch(SQLException e) {
+		catch (SQLException e) {
 			try {
-				if(conn != null) {
+				if (conn != null) {
 					conn.rollback();
 					log.warn("Operation failed, rollback done");
 				}
 			}
-			catch(SQLException e1) {
+			catch( SQLException e1) {
 				log.error("Operation failed, rollback failed");
 				log.error(e1.getMessage());
 				return false;

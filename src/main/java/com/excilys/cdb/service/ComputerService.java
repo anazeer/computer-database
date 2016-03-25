@@ -31,43 +31,13 @@ public class ComputerService implements Service<Computer> {
 	}
 	
 	@Override
-	public List<Computer> listAll() {
-		return computerDAO.findAll();
+	public List<Computer> list(Query query) {
+		return computerDAO.find(query);
 	}
 	
 	@Override
-	public List<Computer> listAll(String filter) {
-		return computerDAO.findAll(filter);
-	}
-	
-	@Override
-	public List<Computer> listPage(int offset, int limit) {
-		return computerDAO.findPage(offset, limit);
-	}
-	
-	@Override
-	public List<Computer> listPage(int offset, int limit, Order order) {
-		return computerDAO.findPage(offset, limit, order);
-	}
-	
-	@Override
-	public List<Computer> listPage(int offset, int limit, String filter) {
-		return computerDAO.findPage(offset, limit, filter);
-	}
-	
-	@Override
-	public List<Computer> listPage(int offset, int limit, String filter, Order order) {
-		return computerDAO.findPage(offset, limit, filter, order);
-	}
-	
-	@Override
-	public int count() {
-		return computerDAO.count();
-	}
-	
-	@Override
-	public int count(String filter) {
-		return computerDAO.count(filter);
+	public int count(Query query) {
+		return computerDAO.count(query);
 	}
 	
 	public Computer getComputer(Long id) {

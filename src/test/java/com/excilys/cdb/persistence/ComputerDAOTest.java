@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.excilys.cdb.persistence.dao.DAOFactory;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,6 +16,8 @@ import org.junit.Test;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
+import com.excilys.cdb.persistence.dao.DAOFactory;
+import com.excilys.cdb.service.Query;
 
 /**
  * ComputerDAO test class. We assume that the database is not empty and contains more than 500 elements
@@ -51,14 +52,15 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void testFindFromOffset() {
-		List<Computer> list = computerDAO.findPage(0, 10);
+		Query query = new Query.Builder().offset(0).limit(10).build();
+		List<Computer> list = computerDAO.find(query);
 		assertNotNull(list);
 		assertTrue(list.size() <= 10);
 	}
 	
 	@Test
 	public void testFindAll() throws Exception {
-		List<Computer> list = computerDAO.findAll();
+		List<Computer> list = computerDAO.find(null);
 		assertNotNull(list);
 		assert(list.size() > 0);
 	}
@@ -66,7 +68,8 @@ public class ComputerDAOTest {
 	@Test
 	public void testFindFilter() {
 		String filter = "apple";
-		List<Computer> list = computerDAO.findAll(filter);
+		Query query = new Query.Builder().filter(filter).build();
+		List<Computer> list = computerDAO.find(query);
 		for(Computer c : list) {
 			boolean contains = 
 					   c.getName().toLowerCase().contains(filter) 
@@ -80,14 +83,15 @@ public class ComputerDAOTest {
 	@Test
 	public void testCountFilter() {
 		String filter = "a";
-		List<Computer> list = computerDAO.findAll(filter);
-		assertTrue(list.size() <= computerDAO.count(filter));
+		Query query = new Query.Builder().filter(filter).build();
+		List<Computer> list = computerDAO.find(query);
+		assertTrue(list.size() <= computerDAO.count(query));
 	}
 	
 	@Test
 	public void testCountEntries() {
-		List<Computer> list = computerDAO.findAll();
-		assertEquals(list.size(), computerDAO.count());
+		List<Computer> list = computerDAO.find(null);
+		assertEquals(list.size(), computerDAO.count(null));
 	}
 	
 	@Test

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.cdb.pagination.ComputerPage;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.Order;
+import com.excilys.cdb.service.Query;
 
 /**
  * Servlet implementation class AddServlet
@@ -45,7 +46,7 @@ public class ComputerServlet extends HttpServlet {
     	super.init();
     	limit = 10;
     	computerService = ComputerService.getInstance();
-        count = computerService.count();
+        count = computerService.count(null);
         pagination = new ComputerPage(count, limit);
     }
 
@@ -63,11 +64,11 @@ public class ComputerServlet extends HttpServlet {
 		
         // Update elements if some were added, deleted, or filtered
 		if(search == null || search.trim().isEmpty()) {
-			count = computerService.count();
+			count = computerService.count(null);
 			pagination.setFilter("");
 		}
 		else {
-			count = computerService.count(search);
+			count = computerService.count(new Query.Builder().filter(search).build());
 			pagination.setFilter(search);
 		}
 		

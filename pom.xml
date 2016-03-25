@@ -43,10 +43,10 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<testSource>1.8</testSource>
-					<testTarget>1.8</testTarget>
+					<source>${javaVersion}</source>
+					<target>${javaVersion}</target>
+					<testSource>${javaVersion}</testSource>
+					<testTarget>${javaVersion}</testTarget>
 				</configuration>
 			</plugin>
 		</plugins>

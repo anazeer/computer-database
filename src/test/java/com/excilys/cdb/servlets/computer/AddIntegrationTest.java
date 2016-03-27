@@ -147,7 +147,7 @@ public class AddIntegrationTest {
 		driver.get(baseUrl + "computer");
 		driver.findElement(By.id("addComputer")).click();
 		driver.findElement(By.linkText("Cancel")).click();
-		assertEquals(baseUrl + "computer?page=&limit=", driver.getCurrentUrl());
+		assertEquals(baseUrl + "computer", driver.getCurrentUrl());
 	}
 
 	@After

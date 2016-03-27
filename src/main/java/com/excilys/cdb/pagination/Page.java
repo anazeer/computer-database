@@ -184,7 +184,6 @@ public abstract class Page<T> {
             listDTO.add(mapper.getFromModel(model));
         }
 		elements = listDTO;
-		System.out.println("NUUUUUUULLLLL " + elements);
 		return elements;
 	}
 }

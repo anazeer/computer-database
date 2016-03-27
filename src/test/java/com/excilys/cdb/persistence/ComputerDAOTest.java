@@ -5,10 +5,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import com.excilys.cdb.exception.DAOException;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -70,12 +71,13 @@ public class ComputerDAOTest {
 		String filter = "apple";
 		Query query = new Query.Builder().filter(filter).build();
 		List<Computer> list = computerDAO.find(query);
-		for(Computer c : list) {
-			boolean contains = 
+		for (Computer c : list) {
+            Company company = c.getCompany();
+			boolean contains =
 					   c.getName().toLowerCase().contains(filter) 
 					|| (c.getIntroduced() != null && c.getIntroduced().toString().toLowerCase().contains(filter))
 					|| (c.getDiscontinued() != null && c.getDiscontinued().toString().toLowerCase().contains(filter))
-					|| (c.getCompany() != null && DAOFactory.getCompanyDAO().findById(c.getCompany().getId()).getName().toLowerCase().contains(filter));
+					|| (company != null && company.getName().toLowerCase().contains(filter));
 			assertTrue(contains);
 		}
 	}
@@ -105,7 +107,7 @@ public class ComputerDAOTest {
 		assertNull(computer.getCompany().getId());
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testBadCreate() {
 		Computer computer = new Computer.Builder("    ").build();
 		computer.setIntroduced(LocalDate.now());
@@ -115,14 +117,13 @@ public class ComputerDAOTest {
 			computer = computerDAO.create(computer);
 			assertNotNull(msgId, computer.getId());
 			assertNull(computer.getCompany().getId());
-		}
-		catch(SQLException e) {
+		} catch(DAOException e) {
 		}
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = DateTimeParseException.class)
 	public void testBadDateCreate() {
-		Computer computer = new Computer.Builder("    ").build();
+		Computer computer = new Computer.Builder("Computer z").build();
 		computer.setIntroduced(LocalDate.parse("1111/11/11"));
 		computer.setDiscontinued(LocalDate.now().plusDays(1));
 		computer.setCompany(new Company());
@@ -130,8 +131,7 @@ public class ComputerDAOTest {
 			computer = computerDAO.create(computer);
 			assertNotNull(msgId, computer.getId());
 			assertNull(computer.getCompany().getId());
-		}
-		catch(SQLException e) {
+		} catch(DAOException e) {
 		}
 	}
 	
@@ -168,8 +168,7 @@ public class ComputerDAOTest {
 			assertTrue(bool);
 			Computer computerUpdated = computerDAO.findById(50L);
 			assertEquals(newName, computerUpdated.getName());
-		}
-        catch(SQLException e) {
+		} catch(DAOException e) {
         }
 	}
 	
@@ -178,8 +177,7 @@ public class ComputerDAOTest {
 		Computer computer = computerDAO.findById(55L);
 		try {
 			assertTrue(computerDAO.update(computer));
-		}
-		catch (SQLException e) {
+		} catch (DAOException e) {
 		}
 	}
 	
@@ -191,5 +189,4 @@ public class ComputerDAOTest {
 		computer = computerDAO.findById(603L);
 		assertNull(computer);
 	}
-	
 }

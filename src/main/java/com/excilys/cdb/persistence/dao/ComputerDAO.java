@@ -10,11 +10,10 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
+import com.excilys.cdb.exception.DAOException;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.mapper.ComputerMapper;
 import com.excilys.cdb.persistence.mapper.MapperFactory;
 import com.excilys.cdb.service.Order;
 import com.excilys.cdb.service.Query;
@@ -24,18 +23,16 @@ import com.excilys.cdb.service.Query;
  *
  * @author excilys
  */
-public final class ComputerDAO implements DAO<Computer> {
+public final class ComputerDAO extends AbstractDAO<Computer> {
 
-	private Logger log;
-	private static ComputerDAO instance;
-	private ComputerMapper computerMapper;
+    private static ComputerDAO instance;
 
 	/**
 	 * ComputerDAO new instance for Computer type object persistence
 	 */
 	private ComputerDAO() {
 		log = LoggerFactory.getLogger(getClass());
-		computerMapper = MapperFactory.getComputerMapper();
+		mapper = MapperFactory.getComputerMapper();
 	}
 
 	/**
@@ -56,7 +53,7 @@ public final class ComputerDAO implements DAO<Computer> {
 				ResultSet result = stmt.executeQuery()) {
 			listComputer = new ArrayList<>();
 			while (result.next()) {
-				listComputer.add(computerMapper.getFromResultSet(result));
+				listComputer.add(mapper.getFromResultSet(result));
 			}
 			log.info("Computers retrieved ({}), filter = {}, order = {}",
 					listComputer.size(), query != null ? query.getFilter() : "", query != null ? query.getOrder() : "");
@@ -69,17 +66,16 @@ public final class ComputerDAO implements DAO<Computer> {
 	@Override
 	public Computer findById(Long id) {
 		Computer computer = null;
-		String query = "SELECT * FROM computer WHERE computer.id = " + id;
+		String queryText = "SELECT * FROM computer WHERE id = " + id;
 		try (Connection conn = DAOFactory.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(query);
-				ResultSet result = stmt.executeQuery(query)) {
+				PreparedStatement stmt = conn.prepareStatement(queryText);
+				ResultSet result = stmt.executeQuery(queryText)) {
 			if (result.next()) {
-				computer = computerMapper.getFromResultSet(result);
+				computer = mapper.getFromResultSet(result);
 			}
 			log.info("Computer retrieved (id = {})", id);
 		} catch (SQLException e) {
 			log.error(e.getMessage());
-			e.printStackTrace();
 		}
 		return computer;
 	}
@@ -97,13 +93,12 @@ public final class ComputerDAO implements DAO<Computer> {
 					count, query != null ? query.getFilter() : "", query != null ? query.getOrder() : "");
 		} catch (SQLException e) {
 			log.error(e.getMessage());
-			e.printStackTrace();
 		}
 		return count;
 	}
 
 	@Override
-	public Computer create(Computer obj) throws SQLException {
+	public Computer create(Computer obj) throws DAOException {
 		String queryText = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 		try (Connection conn = DAOFactory.getConnection();
 				PreparedStatement stmt = createUpdatePreparedStatement(conn, obj, queryText)) {
@@ -114,11 +109,14 @@ public final class ComputerDAO implements DAO<Computer> {
 			result.close();
 			log.info("Computer created (id = {})", obj.getId());
 		}
+		catch (SQLException e) {
+			throw new DAOException(e);
+		}
 		return obj;
 	}
 
 	@Override
-	public boolean update(Computer obj) throws SQLException {
+	public boolean update(Computer obj) throws DAOException {
 		String queryText = "UPDATE computer SET "
 				+ "name = ?, "
 				+ "introduced = ?, "
@@ -130,7 +128,9 @@ public final class ComputerDAO implements DAO<Computer> {
 			stmt.executeUpdate();
 			log.info("Computer updated (id = {})", obj.getId());
 			return true;
-		}
+		} catch (SQLException e) {
+            throw new DAOException(e);
+        }
 	}
 
 	@Override
@@ -151,25 +151,18 @@ public final class ComputerDAO implements DAO<Computer> {
 		return delete(obj.getId());
 	}
 
-	public void deleteByCompanyId(Long id, Connection conn) throws SQLException {
+	public void deleteByCompanyId(Long id) throws DAOException {
 		String query = "DELETE FROM computer WHERE company_id = " + id;
-		try (Statement stmt = conn.createStatement()) {
+		try (Statement stmt = DAOFactory.getCurrentTransaction().createStatement()) {
 			stmt.executeUpdate(query);
-			stmt.close();
 			log.info("Computer deleted (company id = {})", id);
 		} catch (SQLException e) {
-			throw new SQLException(e);
+			throw new DAOException(e);
 		}
 	}
 
-	/**
-	 * 
-	 * @param conn the connection
-	 * @param query the object containing the query constraints 
-	 * @return a prepared statement with the filter set
-	 * @throws SQLException
-	 */
-	private PreparedStatement createPreparedStatement(Connection conn, Query query) throws SQLException {
+    @Override
+	protected PreparedStatement createPreparedStatement(Connection conn, Query query) throws SQLException {
 		String limitText = getLimitText(query);
 		String filterText = getFilterText(query);
 		String orderText = getOrderText(query);
@@ -220,40 +213,24 @@ public final class ComputerDAO implements DAO<Computer> {
 		String queryText = "SELECT COUNT(*) as entries FROM computer" + filterText;
 		PreparedStatement stmt = conn.prepareStatement(queryText);
 		if (!filterText.isEmpty()) {
-			stmt.setString(1, "%" + query.getFilter() + "%");
+            stmt.setString(1, "%" + query.getFilter() + "%");
+            stmt.setString(2, "%" + query.getFilter() + "%");
+            stmt.setString(3, "%" + query.getFilter() + "%");
+            stmt.setString(4, "%" + query.getFilter() + "%");
 		}
 		return stmt;
 	}
 
-	/**
-	 * Construct the query text for limit and offset
-	 * @param query the object containing the query constraints 
-	 * @return a query text with the limit and offset if positives, the empty string otherwise
-	 */
-	private String getLimitText(Query query) {
-		String result = "";
-		if (query == null) {
-			return result;
-		}
-		int offset = query.getOffset();
-		int limit = query.getLimit();
-		if (offset >= 0 && limit > 0) {
-			result = " LIMIT " + offset + ", " + limit + " ";
-		}
-		return result;
-	}
-
-	/**
-	 * Construct the query text for order
-	 * @param query the object containing the query constraints 
-	 * @return a query text with the order for computer name, the empty string otherwise
-	 */
-	private String getOrderText(Query query) {
+    @Override
+	protected String getOrderText(Query query) {
 		String result = "";
 		if (query == null) {
 			return result;
 		}
 		Order order = query.getOrder();
+        if (order == null) {
+            return result;
+        }
 		switch(order) {
 			case NAME_ASC : result = " ORDER BY computer.name ASC "; break;
 			case NAME_DSC : result = " ORDER BY computer.name DESC "; break;
@@ -268,19 +245,20 @@ public final class ComputerDAO implements DAO<Computer> {
 		return result;
 	}
 
-	/**
-	 * Construct the query text for filter
-	 * @param query the object containing the query constraints 
-	 * @return a query text with the filter if not empty, the empty string otherwise
-	 */
-	private String getFilterText(Query query) {
+    @Override
+	protected String getFilterText(Query query) {
 		String result = "";
 		if (query == null) {
 			return result;
 		}
 		String filter = query.getFilter();
 		if (filter != null && !filter.trim().isEmpty()) {
-			result = " WHERE name LIKE ? ";
+			result = " INNER JOIN company "
+                    + "ON computer.company_id = company.id "
+                    + "WHERE computer.name LIKE ? "
+                    + "OR company.name LIKE ?"
+                    + "OR computer.introduced LIKE ? "
+                    + "OR computer.discontinued LIKE ? ";
 		}
 		return result;
 	}

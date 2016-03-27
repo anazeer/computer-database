@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.exception.IdException;
 import com.excilys.cdb.exception.NameException;
@@ -150,7 +151,7 @@ public class AddServlet extends HttpServlet {
 				request.setAttribute(discontinuedError, e.getMessage());
 				good = false;
 			}
-			catch (SQLException e) {
+			catch (DAOException e) {
 				request.setAttribute(globalError, Validator.COMP_ERROR);
 				request.setAttribute(failure, true);
 				good = false;

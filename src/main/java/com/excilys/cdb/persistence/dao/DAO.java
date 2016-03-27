@@ -4,6 +4,7 @@ package com.excilys.cdb.persistence.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.service.Query;
 
 /**
@@ -17,7 +18,7 @@ import com.excilys.cdb.service.Query;
     /**
      * Non implemented method error message
      */
-	final String unimplementedException = "Call to non implemented method";
+	String unimplementedException = "Call to non implemented method";
 	
 	/**
 	 * 
@@ -45,7 +46,7 @@ import com.excilys.cdb.service.Query;
 	 * @param obj the object we want to persist
 	 * @return the object completed by its fresh id if the object has been successfully inserted in the table
 	 */
-	default T create(T obj) throws NoSuchMethodError, SQLException {
+	default T create(T obj) throws NoSuchMethodError, DAOException {
 		throw new NoSuchMethodError(unimplementedException);
 	}
 	
@@ -54,7 +55,7 @@ import com.excilys.cdb.service.Query;
 	 * @param obj the object containing the updated fields
 	 * @return true if the object has been successfully updated in the table
 	 */
-	default boolean update(T obj) throws NoSuchMethodError, SQLException {
+	default boolean update(T obj) throws NoSuchMethodError, DAOException {
 		throw new NoSuchMethodError(unimplementedException);
 	}
 	
@@ -63,7 +64,7 @@ import com.excilys.cdb.service.Query;
 	 * @param id the reference we want to delete
 	 * @return true if the object has been successfully deleted from the table
 	 */
-	default boolean delete(Long id) throws NoSuchMethodError {
+	default boolean delete(Long id) throws NoSuchMethodError, DAOException {
 		throw new NoSuchMethodError(unimplementedException);
 	}
 }

@@ -34,14 +34,14 @@
 					<c:if test="${success}">
 						<div class="alert alert-dismissible alert-success">
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
-							${vsuccess}
+							<label id="computerSuccess">${vsuccess}</label>
 						</div>
 					</c:if>
 					<!-- Print the failure alert -->
 					<c:if test="${failure}">
 						<div class="alert alert-dismissible alert-danger">
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
-							${vfailure}
+							<label id="computerError">${vfailure}</label>
 						</div>
 					</c:if>
 					<h1>Add Computer</h1>

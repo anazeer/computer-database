@@ -8,11 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
+import com.excilys.cdb.exception.DAOException;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.mapper.CompanyMapper;
 import com.excilys.cdb.persistence.mapper.MapperFactory;
 import com.excilys.cdb.service.Order;
 import com.excilys.cdb.service.Query;
@@ -22,18 +21,16 @@ import com.excilys.cdb.service.Query;
  * @author excilys
  *
  */
-public final class CompanyDAO implements DAO<Company> {
+public final class CompanyDAO extends AbstractDAO<Company> {
 
-	private Logger log;
-	private static CompanyDAO instance;
-	private CompanyMapper companyMapper;
+    private static CompanyDAO instance;
 
 	/**
 	 * CompanyDAO new instance for Company type object persistence
 	 */
 	private CompanyDAO() {
 		log = LoggerFactory.getLogger(getClass());
-		companyMapper = MapperFactory.getCompanyMapper();
+		mapper = MapperFactory.getCompanyMapper();
 	}
 
 	/**
@@ -55,7 +52,7 @@ public final class CompanyDAO implements DAO<Company> {
 				ResultSet result = stmt.executeQuery()) {
 			listCompany = new ArrayList<>();
 			while (result.next()) {
-				listCompany.add(companyMapper.getFromResultSet(result));
+				listCompany.add(mapper.getFromResultSet(result));
 			}
 			log.info("Companies retrieved ({}), filter = {}, orderBy = ", 
 					listCompany.size(), query != null ? query.getFilter() : "", query != null ? query.getOrder() : "");
@@ -86,12 +83,12 @@ public final class CompanyDAO implements DAO<Company> {
 	@Override
 	public Company findById(Long id) {
 		Company company = null;
-		String queryText = "SELECT * FROM company WHERE company.id = " + id;
+		String queryText = "SELECT * FROM company WHERE id = " + id;
 		try (Connection conn = DAOFactory.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet result = stmt.executeQuery(queryText)) {
 			if (result.next()) {
-				company = companyMapper.getFromResultSet(result);
+				company = mapper.getFromResultSet(result);
 			}
 		}
 		catch (SQLException e) {
@@ -103,22 +100,20 @@ public final class CompanyDAO implements DAO<Company> {
 		return company;
 	}
 
-	public void delete(Long id, Connection conn) throws SQLException {
+    @Override
+	public boolean delete(Long id) throws DAOException {
 		String query = "DELETE FROM company WHERE id = " + id;
-		try(Statement stmt = conn.createStatement()) {
+		try (Statement stmt = DAOFactory.getCurrentTransaction().createStatement()) {
 			stmt.executeUpdate(query);
-			log.info("Computer deleted (id = " + id + ")");
-		}
+			log.info("Company deleted (id = " + id + ")");
+            return true;
+		} catch (SQLException e) {
+            throw new DAOException(e);
+        }
 	}
 
-	/**
-	 * 
-	 * @param conn the connection
-	 * @param query the object containing the query constraints 
-	 * @return a prepared statement with the filter set
-	 * @throws SQLException
-	 */
-	private PreparedStatement createPreparedStatement(Connection conn, Query query) throws SQLException {
+	@Override
+	protected PreparedStatement createPreparedStatement(Connection conn, Query query) throws SQLException {
 		String limitText = getLimitText(query);
 		String filterText = getFilterText(query);
 		String orderText = getOrderText(query);
@@ -147,35 +142,16 @@ public final class CompanyDAO implements DAO<Company> {
 		return stmt;
 	}
 
-	/**
-	 * Construct the query text for limit and offset
-	 * @param query the object containing the query constraints 
-	 * @return a query text with the limit and offset if positives, the empty string otherwise
-	 */
-	private String getLimitText(Query query) {
-		String result = "";
-		if (query == null) {
-			return result;
-		}
-		int offset = query.getOffset();
-		int limit = query.getLimit();
-		if (offset >= 0 && limit > 0) {
-			result = " LIMIT " + offset + ", " + limit + " ";
-		}
-		return result;
-	}
-
-	/**
-	 * Construct the query text for order
-	 * @param query the object containing the query constraints 
-	 * @return a query text with the order for company name, the empty string otherwise
-	 */
-	private String getOrderText(Query query) {
+    @Override
+	protected String getOrderText(Query query) {
 		String result = "";
 		if (query == null) {
 			return result;
 		}
 		Order order = query.getOrder();
+        if (order == null) {
+            return result;
+        }
 		switch (order) {
 		case NAME_ASC : result = " ORDER BY company.name ASC "; break;
 		case NAME_DSC : result = " ORDER BY company.name DESC "; break;
@@ -184,12 +160,8 @@ public final class CompanyDAO implements DAO<Company> {
 		return result;
 	}
 
-	/**
-	 * Construct the query text for filter
-	 * @param query the object containing the query constraints 
-	 * @return a query text with the filter if not empty, the empty string otherwise
-	 */
-	private String getFilterText(Query query) {
+    @Override
+    protected String getFilterText(Query query) {
 		String result = "";
 		if (query == null) {
 			return result;

@@ -6,6 +6,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import static org.junit.Assert.assertTrue;
 
 public class DashboardIntegrationTest {
 	private WebDriver driver;
@@ -31,13 +32,13 @@ public class DashboardIntegrationTest {
 		driver.findElement(By.linkText("1")).click();
 		assertEquals(baseUrl + "computer?page=1&limit=10", driver.getCurrentUrl());
 		driver.findElement(By.linkText("»")).click();
-		assertEquals(baseUrl + "computer?page=2&limit=10", driver.getCurrentUrl());
+		assertTrue(driver.getCurrentUrl().contains((baseUrl + "computer?page=2&limit=10")));
 		driver.findElement(By.linkText("»")).click();
-		assertEquals(baseUrl + "computer?page=3&limit=10", driver.getCurrentUrl());
+		assertTrue(driver.getCurrentUrl().contains((baseUrl + "computer?page=3&limit=10")));
 		driver.findElement(By.linkText("«")).click();
-		assertEquals(baseUrl + "computer?page=2&limit=10", driver.getCurrentUrl());
+		assertTrue(driver.getCurrentUrl().contains((baseUrl + "computer?page=2&limit=10")));
 		driver.findElement(By.linkText("«")).click();
-		assertEquals(baseUrl + "computer?page=1&limit=10", driver.getCurrentUrl());
+		assertTrue(driver.getCurrentUrl().contains((baseUrl + "computer?page=1&limit=10")));
 		driver.findElement(By.linkText("1")).click();
 		assertEquals(baseUrl + "computer?page=1&limit=10", driver.getCurrentUrl());
 	}
@@ -73,5 +74,4 @@ public class DashboardIntegrationTest {
 			fail(verificationErrorString);
 		}
 	}
-
 }

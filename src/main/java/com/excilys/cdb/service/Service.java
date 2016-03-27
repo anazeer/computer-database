@@ -28,7 +28,6 @@ public interface Service<T> {
 	/**
 	 * Delete the row referenced by id
 	 * @param id the row reference
-	 * @return
 	 */
-	boolean delete(Long id);
+	void delete(Long id);
 }

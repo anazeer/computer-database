@@ -13,6 +13,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.CompanyPage;
@@ -318,10 +319,8 @@ public class Main {
 						break;
 					case 2 : 
 						Long id = readId();
-						boolean bool = companyService.delete(id);
-						if(bool) {
-							System.out.println("Company successfully deleted");
-						}
+						companyService.delete(id);
+						System.out.println("Company successfully deleted");
 					case 3 : step = 0;
                         break;
 				}
@@ -354,7 +353,7 @@ public class Main {
                             computerService.create(computer);
                             break;
                         }
-                        catch(SQLException e) {
+                        catch(DAOException e) {
                             System.err.println("Error on computer creation");
                             break;
                         }
@@ -371,7 +370,7 @@ public class Main {
 	                        computerService.update(computer);                     
 	                        break;
                         }
-                        catch(SQLException e) {
+                        catch(DAOException e) {
                             System.err.println("Error on computer creation");
                             break;
                         }

@@ -17,7 +17,6 @@ public class CompanyService implements Service<Company> {
 
 	private CompanyDAO companyDAO;
 	private static CompanyService instance;
-	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private CompanyService() {
 		super();

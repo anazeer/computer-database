@@ -52,7 +52,7 @@ public class DAOFactory {
 			// Set the pool configuration
 			BoneCPConfig config = new BoneCPConfig();
 			int minConnection = 10;
-			int maxConnection = 20;
+			int maxConnection = 30;
 			int countPartition = 5;
 			config.setJdbcUrl(url);
 			config.setUsername(user);
@@ -139,7 +139,7 @@ public class DAOFactory {
     }
 
     /**
-     * Rollback the current transaction and
+     * Rollback the current transaction and close it
      */
     public static void rollbackTransaction() {
         try (Connection conn = transaction.get()) {

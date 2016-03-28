@@ -26,13 +26,13 @@
             <c:if test="${deleteSuccess}"><div class="alert alert-success" id="computerSuccess" role="alert">${deleteMsg}</div></c:if>
             <h1 id="homeTitle">
                 <!-- Print computers totalCount -->
-                <c:out value="${countComputer}"/> Computer<c:if test="${countComputer gt 1}"><c:out value="s"/></c:if> found
+                <c:out value="${page.totalCount}"/> Computer<c:if test="${page.totalCount gt 1}"><c:out value="s"/></c:if> found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="computer" method="GET" class="form-inline">
 
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${search}" />
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${page.filter}" />
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
                     </form>
@@ -66,9 +66,9 @@
                         <!-- Computer name column clickable for ordering -->
                         <th>
                         	<c:set var="newOrder" scope="page" 
-                        		value="${not empty order ? (order eq 'name_dsc' ? 'name_asc' : 'name_dsc') : 'name_asc'}"/>
-                        	<mylib:link text="Computer name" target="computer" limit="${pagination.limit}"
-                        		page="${pagination.currentPage}" search="${search}" order="${newOrder}" />
+                        		value="${not empty page.order ? (page.order eq 'name_dsc' ? 'name_asc' : 'name_dsc') : 'name_asc'}"/>
+                        	<mylib:link text="Computer name" target="computer" limit="${page.limit}"
+                        		page="${page.currentPage}" search="${page.filter}" order="${newOrder}" />
                         	<c:choose>
 	                        	<c:when test="${newOrder eq 'name_dsc' }"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></c:when>
 	                        	<c:otherwise><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></c:otherwise>
@@ -76,9 +76,9 @@
                         </th>
                         <th>
                         	<c:set var="newOrder" scope="page" 
-                        		value="${not empty order ? (order eq 'introduced_dsc' ? 'introduced_asc' : 'introduced_dsc') : 'introduced_asc'}"/>
-                        	<mylib:link text="Introduced date" target="computer" limit="${pagination.limit}"
-                        		page="${pagination.currentPage}" search="${search}" order="${newOrder}" />
+                        		value="${not empty page.order ? (page.order eq 'introduced_dsc' ? 'introduced_asc' : 'introduced_dsc') : 'introduced_asc'}"/>
+                        	<mylib:link text="Introduced date" target="computer" limit="${page.limit}"
+                        		page="${page.currentPage}" search="${page.filter}" order="${newOrder}" />
                         	<c:choose>
 	                        	<c:when test="${newOrder eq 'introduced_dsc' }"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></c:when>
 	                        	<c:otherwise><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></c:otherwise>
@@ -87,9 +87,9 @@
                         <!-- Table header for Discontinued Date -->
                         <th>
                         	<c:set var="newOrder" scope="page" 
-                        		value="${not empty order ? (order eq 'discontinued_dsc' ? 'discontinued_asc' : 'discontinued_dsc') : 'discontinued_asc'}"/>
-                        	<mylib:link text="Discontinued date" target="computer" limit="${pagination.limit}"
-                        		page="${pagination.currentPage}" search="${search}" order="${newOrder}" />
+                        		value="${not empty page.order ? (page.order eq 'discontinued_dsc' ? 'discontinued_asc' : 'discontinued_dsc') : 'discontinued_asc'}"/>
+                        	<mylib:link text="Discontinued date" target="computer" limit="${page.limit}"
+                        		page="${page.currentPage}" search="${page.filter}" order="${newOrder}" />
                         	<c:choose>
 	                        	<c:when test="${newOrder eq 'discontinued_dsc' }"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></c:when>
 	                        	<c:otherwise><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></c:otherwise>
@@ -98,9 +98,9 @@
                         <!-- Table header for Company -->
                         <th>
                         	<c:set var="newOrder" scope="page" 
-                        		value="${not empty order ? (order eq 'company_dsc' ? 'company_asc' : 'company_dsc') : 'company_asc'}"/>
-                        	<mylib:link text="Company" target="computer" limit="${pagination.limit}"
-                        		page="${pagination.currentPage}" search="${search}" order="${newOrder}" />
+                        		value="${not empty page.order ? (page.order eq 'company_dsc' ? 'company_asc' : 'company_dsc') : 'company_asc'}"/>
+                        	<mylib:link text="Company" target="computer" limit="${page.limit}"
+                        		page="${page.currentPage}" search="${page.filter}" order="${newOrder}" />
                         	<c:choose>
 	                        	<c:when test="${newOrder eq 'company_dsc' }"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></c:when>
 	                        	<c:otherwise><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></c:otherwise>
@@ -111,7 +111,7 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-               	<c:forEach var="computer" items="${pagination.elements}">
+               	<c:forEach var="computer" items="${page.elements}">
                     <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="${computer.id}">
@@ -132,15 +132,15 @@
 
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
-            <!-- Links to other pages with pagination -->
+            <!-- Links to other pages with page -->
             <ul class="pagination">
-            	<mylib:pagination countpage="${pagination.lastPage}" limit="${pagination.limit}" currentpage="${pagination.currentPage}" search="${search}" />
+            	<mylib:pagination countpage="${page.lastPage}" limit="${page.limit}" currentpage="${page.currentPage}" search="${page.filter}" order="${page.order}" />
         	</ul>
             <!-- Page limit buttons -->
             <div class="btn-group btn-group-sm pull-right" role="group" >
-                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=10&search=${search}'">10</button>
-                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=20&search=${search}'">20</button>
-                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=50&search=${search}'">50</button>
+                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=10&search=${page.filter}&order=${page.order}'">10</button>
+                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=20&search=${page.filter}&order=${page.order}'">20</button>
+                <button type="button" class="btn btn-default" onclick="javascript:window.location='computer?page=1&limit=50&search=${page.filter}&order=${page.order}'">50</button>
             </div>
       </div>
     </footer>

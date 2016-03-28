@@ -13,8 +13,6 @@ import com.excilys.cdb.persistence.dao.DAOFactory;
  * Service implementation for computers
  */
 public class ComputerService implements Service<Computer> {
-	
-	// TODO : cache implementation
 
 	private ComputerDAO computerDAO;
 	private static ComputerService instance;

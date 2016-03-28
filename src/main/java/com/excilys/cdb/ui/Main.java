@@ -1,6 +1,5 @@
 package com.excilys.cdb.ui;
 
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -16,9 +15,9 @@ import java.util.Scanner;
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.pagination.AbstractPage;
 import com.excilys.cdb.pagination.CompanyPage;
 import com.excilys.cdb.pagination.ComputerPage;
-import com.excilys.cdb.pagination.Page;
 import com.excilys.cdb.persistence.mapper.MapperFactory;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
@@ -211,7 +210,7 @@ public class Main {
 		return c;
 	}
 
-    private static void navigatePage(Page<?> page) {
+    private static void navigatePage(AbstractPage<?> page) {
         boolean end = false;
         while(!end) {
             showPage(page.getElements());
@@ -311,7 +310,7 @@ public class Main {
 			else if(step == 1) {
 				switch(entry) {
 					case 1 : 
-						CompanyPage page = new CompanyPage(companyService.count(null), 10);
+						CompanyPage page = new CompanyPage(null, 10);
 						System.out.println("---------------------");
 						System.out.println("- List of companies -");
 						System.out.println("---------------------");
@@ -330,7 +329,7 @@ public class Main {
                 ComputerDTO computerDTO;
 				switch(entry) {
 					case 1 :
-						ComputerPage page = new ComputerPage(computerService.count(null), 10);
+						ComputerPage page = new ComputerPage(null, 10);
 						System.out.println("---------------------");
 						System.out.println("- List of computers -");
 						System.out.println("---------------------");

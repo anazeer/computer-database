@@ -3,20 +3,21 @@ package com.excilys.cdb.pagination;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.mapper.MapperFactory;
+import com.excilys.cdb.service.Query;
 import com.excilys.cdb.service.ServiceFactory;
 
 /**
  * Page implementation for computers
  */
-public final class ComputerPage extends Page<Computer> {
+public final class ComputerPage extends AbstractPage<Computer> {
 
     /**
      *
-     * @param count the total number of elements
-     * @param limit the maximum number of elements per page
+     * @param query the page query
+     * @param currentPage the current page
      */
-	public ComputerPage(int count, int limit) {
-		super(count, limit);
+	public ComputerPage(Query query, int currentPage) {
+		super(query, currentPage);
 		service = ServiceFactory.getComputerService();
         mapper = MapperFactory.getComputerMapper();
 	}

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.pagination.AbstractPage;
+import com.excilys.cdb.pagination.ComputerPage;
 import com.excilys.cdb.pagination.PageRequestMapper;
 
 /**
@@ -30,12 +30,19 @@ public class ComputerServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Get the page from the request
-		AbstractPage resultPage = PageRequestMapper.get(request);
+		ComputerPage resultPage = PageRequestMapper.get(request);
 
 		// Set the page attribute
 		request.setAttribute(PAGE_ID, resultPage);
 
 		// Forward to the dashboard
 		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
+	}
+	
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
 	}
 }

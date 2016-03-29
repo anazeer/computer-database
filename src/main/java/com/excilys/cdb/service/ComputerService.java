@@ -1,6 +1,5 @@
 package com.excilys.cdb.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.excilys.cdb.exception.DAOException;
@@ -43,19 +42,11 @@ public class ComputerService implements Service<Computer> {
 		return computerDAO.findById(id);
 	}
 	
-	public void create(Computer computer) throws DAOException, DateException {
-		if (computer.getIntroduced() != null && computer.getDiscontinued() != null
-                && computer.getIntroduced().isAfter(computer.getDiscontinued())) {
-			throw new DateException("discontinued date should be after introduced date");
-		}
+	public void create(Computer computer) throws DAOException {
 		computerDAO.create(computer);
 	}
 	
-	public void update(Computer computer) throws DAOException, DateException {
-		if (computer.getIntroduced() != null && computer.getDiscontinued() != null
-                && computer.getIntroduced().isAfter(computer.getDiscontinued())) {
-			throw new DateException("discontinued date should be after introduced date");
-		}
+	public void update(Computer computer) throws DAOException {
 		computerDAO.update(computer);
 	}
 	

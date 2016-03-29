@@ -38,10 +38,9 @@ public class DeleteServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String[] ids = request.getParameter(selection).split(",");
 		ComputerService computerService = ServiceFactory.getComputerService();
-		for(String s : ids) {
+		for (String s : ids) {
 			computerService.delete(Long.parseLong(s));
 		}
 		getServletContext().getRequestDispatcher("/computer").forward(request, response);
 	}
-
 }

@@ -28,7 +28,7 @@ public class PageRequestMapper {
      * @param request the page request
      * @return the page depending on the request parameters
      */
-    public static AbstractPage get(HttpServletRequest request) {
+    public static ComputerPage get(HttpServletRequest request) {
 
         // We first get the page information from the URL (method GET)
         String pageRequest = request.getParameter(PAGE_NUMBER_ID);

@@ -174,8 +174,6 @@ public class ComputerDTO implements DTO {
         }
 
         public ComputerDTO build() {
-            if (name.trim().isEmpty())
-                throw new IllegalStateException("Name shouldn't be empty");
             return new ComputerDTO(id, name, introduced, discontinued, companyId, companyName);
         }
     }

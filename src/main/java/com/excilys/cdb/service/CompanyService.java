@@ -3,8 +3,6 @@ package com.excilys.cdb.service;
 import java.util.List;
 
 import com.excilys.cdb.exception.DAOException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.dao.CompanyDAO;

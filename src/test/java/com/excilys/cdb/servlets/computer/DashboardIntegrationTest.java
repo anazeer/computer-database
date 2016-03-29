@@ -6,7 +6,6 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import static org.junit.Assert.assertTrue;
 
 public class DashboardIntegrationTest {
 	private WebDriver driver;

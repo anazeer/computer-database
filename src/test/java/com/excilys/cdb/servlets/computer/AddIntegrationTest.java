@@ -92,7 +92,7 @@ public class AddIntegrationTest {
 		driver.findElement(By.id("introduced")).sendKeys("1111-11-11");
 		driver.findElement(By.cssSelector("input.btn.btn-primary")).click();
 		String errorText = driver.findElement(By.id("computerError")).getText();
-		assertEquals(Validator.COMP_ERROR, errorText);
+		assertEquals(Validator.CREATE_ERROR, errorText);
 		assertEquals(baseUrl + "computerAdd", driver.getCurrentUrl());
 	}
 

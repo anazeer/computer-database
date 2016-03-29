@@ -148,7 +148,6 @@
     <script src="resources/js/jquery.min.js"></script>
     <script src="resources/js/bootstrap.min.js"></script>
     <script src="resources/js/dashboard.js"></script>
-    <script src="resources/js/jquery.validate.js"></script>
 
     </body>
 </html>

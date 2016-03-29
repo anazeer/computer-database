@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.excilys.cdb.exception.DAOException;
-import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.AbstractPage;
 import com.excilys.cdb.pagination.CompanyPage;
@@ -356,10 +355,6 @@ public class Main {
                             System.err.println("Error on computer creation");
                             break;
                         }
-                        catch (DateException e) {
-                            System.err.println("The introduced date should be earlier than the discontinued date");
-                            e.printStackTrace();
-                        }
 					case 4 :
                         computerDTO = constructComputer();
                         Long updateId = readId();
@@ -372,10 +367,6 @@ public class Main {
                         catch(DAOException e) {
                             System.err.println("Error on computer creation");
                             break;
-                        }
-                        catch (DateException e) {
-                            System.err.println("The introduced date should be earlier than the discontinued date");
-                            e.printStackTrace();
                         }
 					case 5 : Long delId = readId(); computerService.delete(delId); break;
 					case 6 : step = 0; break;

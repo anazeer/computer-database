@@ -166,7 +166,9 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 		String limitText = getLimitText(query);
 		String filterText = getFilterText(query);
 		String orderText = getOrderText(query);
-		String queryText = "SELECT * FROM computer" + filterText + orderText + limitText;
+		String joinText = !filterText.isEmpty() || !orderText.isEmpty() ? 
+				" INNER JOIN company ON computer.company_id = company.id " : "";
+		String queryText = "SELECT * FROM computer" + joinText + filterText + orderText + limitText;
 		PreparedStatement stmt = conn.prepareStatement(queryText);
 		if (!filterText.isEmpty()) {
 			stmt.setString(1, "%" + query.getFilter() + "%");
@@ -210,7 +212,9 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 	 */
 	private PreparedStatement createCountPreparedStatement(Connection conn, Query query) throws SQLException {
 		String filterText = getFilterText(query);
-		String queryText = "SELECT COUNT(*) as entries FROM computer" + filterText;
+		String joinText = !filterText.isEmpty() ? 
+				" INNER JOIN company ON computer.company_id = company.id " : "";
+		String queryText = "SELECT COUNT(*) as entries FROM computer" + joinText + filterText;
 		PreparedStatement stmt = conn.prepareStatement(queryText);
 		if (!filterText.isEmpty()) {
             stmt.setString(1, "%" + query.getFilter() + "%");
@@ -238,8 +242,8 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 			case INTRODUCED_DSC : result = " ORDER BY computer.introduced DESC "; break;
 			case DISCONTINUED_ASC : result = " ORDER BY computer.discontinued ASC "; break;
 			case DISCONTINUED_DSC : result = " ORDER BY computer.discontinued DESC "; break;
-			case COMPANY_ASC : result = " ORDER BY computer.company_id ASC "; break;
-			case COMPANY_DSC : result = " ORDER BY computer.company_id DESC "; break;
+			case COMPANY_ASC : result = " ORDER BY company.name ASC "; break;
+			case COMPANY_DSC : result = " ORDER BY company.name DESC "; break;
 			default : result = "";
 		}
 		return result;
@@ -253,9 +257,7 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 		}
 		String filter = query.getFilter();
 		if (filter != null && !filter.trim().isEmpty()) {
-			result = " INNER JOIN company "
-                    + "ON computer.company_id = company.id "
-                    + "WHERE computer.name LIKE ? "
+			result =  " WHERE computer.name LIKE ? "
                     + "OR company.name LIKE ?"
                     + "OR computer.introduced LIKE ? "
                     + "OR computer.discontinued LIKE ? ";

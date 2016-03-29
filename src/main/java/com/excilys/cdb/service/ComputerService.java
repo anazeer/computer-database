@@ -3,7 +3,6 @@ package com.excilys.cdb.service;
 import java.util.List;
 
 import com.excilys.cdb.exception.DAOException;
-import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;

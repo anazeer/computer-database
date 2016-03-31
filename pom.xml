@@ -25,6 +25,7 @@
         <checkstyleVersion>2.17</checkstyleVersion>
         <seleniumVersion>2.53.0</seleniumVersion>
         <httpclientVersion>4.3.5</httpclientVersion>
+        
 
         <!-- Source encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,6 +49,19 @@
 					<target>${javaVersion}</target>
 					<testSource>${javaVersion}</testSource>
 					<testTarget>${javaVersion}</testTarget>
+				</configuration>
+			</plugin>
+
+			<!-- Ignore selenium test -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
+				<configuration>
+					<excludes>
+						<exclude>**/AddIntegrationTest.java</exclude>
+						<exclude>**/DashboardIntegrationTest.java</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>

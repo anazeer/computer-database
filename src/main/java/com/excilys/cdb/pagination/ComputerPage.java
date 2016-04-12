@@ -17,8 +17,7 @@ public final class ComputerPage extends AbstractPage<Computer> {
      * @param currentPage the current page
      */
 	public ComputerPage(Query query, int currentPage) {
-		super(query, currentPage);
-		service = ServiceFactory.getComputerService();
+		super(ServiceFactory.getComputerService(), query, currentPage);
         mapper = MapperFactory.getComputerMapper();
 	}
 }

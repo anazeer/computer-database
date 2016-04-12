@@ -72,7 +72,7 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 			if (result.next()) {
 				count = result.getInt("entries");
 			}
-			log.info("Companies counted (), filter = {}", count, query != null ? query.getFilter() : "");
+			log.info("Companies counted {}, filter = {}", count, query != null ? query.getFilter() : "");
 		}
 		catch (SQLException e) {
 			log.error(e.getMessage());
@@ -118,6 +118,7 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 		String filterText = getFilterText(query);
 		String orderText = getOrderText(query);
 		String queryText = "SELECT * FROM company" + filterText + orderText + limitText;
+		log.error(queryText);
 		PreparedStatement stmt = conn.prepareStatement(queryText);
 		if (!filterText.isEmpty()) {
 			stmt.setString(1, "%" + query.getFilter() + "%");

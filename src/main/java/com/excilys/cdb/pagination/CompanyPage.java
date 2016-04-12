@@ -10,15 +10,14 @@ import com.excilys.cdb.service.ServiceFactory;
  * Page implementation for companies
  */
 public final class CompanyPage extends AbstractPage<Company> {
-
+	
 	/**
 	 *
 	 * @param query the page query
 	 * @param currentPage the current page
 	 */
 	public CompanyPage(Query query, int currentPage) {
-		super(query, currentPage);
-		service = ServiceFactory.getCompanyService();
+		super(ServiceFactory.getCompanyService(), query, currentPage);
         mapper = MapperFactory.getCompanyMapper();
 	}
 }

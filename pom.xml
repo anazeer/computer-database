@@ -6,39 +6,40 @@
 
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.4.1-SNAPSHOT</version>
+	<version>0.5.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>computer-database</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-        <!-- Dependencies version -->
-		<javaVersion>1.8</javaVersion>
-        <servletVersion>3.1.0</servletVersion>
-        <mysqlVersion>5.1.38</mysqlVersion>
-        <jstlVersion>1.2</jstlVersion>
-        <junitVersion>4.4</junitVersion>
-        <slf4jApiVersion>1.7.5</slf4jApiVersion>
-        <slf4jSimpleVersion>1.7.5</slf4jSimpleVersion>
-		<logbackVersion>1.1.6</logbackVersion>
-        <bonecpVersion>0.8.0.RELEASE</bonecpVersion>
-        <mockitoVersion>1.10.19</mockitoVersion>
-        <checkstyleVersion>2.17</checkstyleVersion>
-        <seleniumVersion>2.53.0</seleniumVersion>
-        <httpclientVersion>4.3.5</httpclientVersion>
-        
 
-        <!-- Source encoding -->
+		<!-- Dependencies version -->
+		<javaVersion>1.8</javaVersion>
+		<servletVersion>3.1.0</servletVersion>
+		<mysqlVersion>5.1.38</mysqlVersion>
+		<jstlVersion>1.2</jstlVersion>
+		<junitVersion>4.4</junitVersion>
+		<slf4jApiVersion>1.7.5</slf4jApiVersion>
+		<slf4jSimpleVersion>1.7.5</slf4jSimpleVersion>
+		<logbackVersion>1.1.6</logbackVersion>
+		<bonecpVersion>0.8.0.RELEASE</bonecpVersion>
+		<mockitoVersion>1.10.19</mockitoVersion>
+		<checkstyleVersion>2.17</checkstyleVersion>
+		<seleniumVersion>2.53.0</seleniumVersion>
+		<httpclientVersion>4.3.5</httpclientVersion>
+		<springVersion>4.2.5.RELEASE</springVersion>
+
+		<!-- Source encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- Application name -->
-        <appName>computer-database</appName>
+		<!-- Application name -->
+		<appName>computer-database</appName>
 
 	</properties>
 
 	<!-- Maven configuration -->
 
 	<build>
-        <finalName>${appName}</finalName>
+		<finalName>${appName}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -132,15 +133,11 @@
 			<version>${slf4jApiVersion}</version>
 		</dependency>
 
-		<!-- slf4j simple, used by the web driver
+		<!-- slf4j simple, used by the web driver <dependency> <groupId>org.slf4j</groupId> 
+			<artifactId>slf4j-simple</artifactId> <version>${slf4jSimpleVersion}</version> 
+			</dependency> -->
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>${slf4jSimpleVersion}</version>
-		</dependency> -->
-
-        <!-- Logback API -->
+		<!-- Logback API -->
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -190,6 +187,23 @@
 			<version>${httpclientVersion}</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- Spring framework -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+		
+		<!-- Spring core -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+
 
 	</dependencies>
 

@@ -3,7 +3,6 @@ package com.excilys.cdb.pagination;
 import com.excilys.cdb.persistence.mapper.Mapper;
 import com.excilys.cdb.service.Query;
 import com.excilys.cdb.service.Service;
-import com.excilys.cdb.service.ServiceFactory;
 import com.excilys.cdb.service.dto.DTO;
 
 import java.util.ArrayList;
@@ -55,19 +54,20 @@ public abstract class AbstractPage<T> {
      */
     private Query query;
 
-    protected Service<T> service;
+    private Service<T> service;
     protected Mapper<T> mapper;
 
     public AbstractPage() {
     }
 
-    protected AbstractPage(Query query, int currentPage) {
-        this.totalCount = ServiceFactory.getComputerService().count(query);
+    protected AbstractPage(Service<T> service, Query query, int currentPage) {
+    	this.service = service;
         this.query = query;
+        this.currentPage = currentPage;
         this.limit = query.getLimit();
+        this.totalCount = service.count(query);
         lastPage = (int) Math.ceil(totalCount / limit);
         lastPage += totalCount % limit == 0 ? 0 : 1;
-        this.currentPage = currentPage;
         this.filter = query.getFilter();
         if (query.getOrder() != null) {
             this.order = query.getOrder().name().toLowerCase();

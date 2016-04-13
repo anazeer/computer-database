@@ -1,7 +1,8 @@
-package com.excilys.cdb.pagination;
+package com.excilys.cdb.pagination.mapper;
 
-import com.excilys.cdb.service.Order;
-import com.excilys.cdb.service.Query;
+import com.excilys.cdb.pagination.util.PageRequest;
+import com.excilys.cdb.service.util.Order;
+import com.excilys.cdb.service.util.Query;
 import com.excilys.cdb.validation.Parser;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class PageRequestMapper {
      * @param request the page request
      * @return the page depending on the request parameters
      */
-    public static ComputerPage get(HttpServletRequest request) {
+    public static PageRequest get(HttpServletRequest request) {
 
         // We first get the page information from the URL (method GET)
         String pageRequest = request.getParameter(PAGE_NUMBER_ID);
@@ -50,7 +51,6 @@ public class PageRequestMapper {
 
         // Construct and return the result page
         Query query = new Query.Builder().limit(limit).filter(search).order(order).build();
-        return new ComputerPage(query, page);
+        return new PageRequest(query, page);
     }
-
 }

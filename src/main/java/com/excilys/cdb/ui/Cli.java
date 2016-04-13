@@ -12,23 +12,31 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
+import com.excilys.cdb.dto.implementation.ComputerDTO;
 import com.excilys.cdb.exception.DAOException;
+import com.excilys.cdb.mapper.implementation.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.AbstractPage;
-import com.excilys.cdb.pagination.CompanyPage;
-import com.excilys.cdb.pagination.ComputerPage;
-import com.excilys.cdb.persistence.mapper.MapperFactory;
-import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.service.Query;
-import com.excilys.cdb.service.dto.ComputerDTO;
+import com.excilys.cdb.pagination.util.PageRequest;
+import com.excilys.cdb.service.IService;
+import com.excilys.cdb.service.implementation.CompanyService;
+import com.excilys.cdb.service.implementation.ComputerService;
 
+@Controller
 public class Cli {
 	
 	// Services
-	private ComputerService computerService = ComputerService.getInstance();
-	private CompanyService companyService = CompanyService.getInstance();
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private ComputerService computerService;
+	
+	// Mappers
+	@Autowired
+	private ComputerMapper computerMapper;
 	
 	// List containing valid inputs for each menu
 	private List<Integer> generalInstr = new ArrayList<>();
@@ -43,9 +51,6 @@ public class Cli {
 	
 	// Read inputs
 	private Scanner scan;
-	
-	public Cli() {
-	}
 	
 	/**
 	 * Show main menu
@@ -93,6 +98,24 @@ public class Cli {
 		System.out.print("\nNext page : n. ");
 		System.out.print("Previous page : p. ");
 		System.out.println("End : q.");
+	}
+	
+	/**
+	 * Initialize the list containing the valid options
+	 */
+	private void initLists() {
+		for(int i = 1; i <= countGeneralInstr; i++) {
+			generalInstr.add(i);
+		}
+		for(int i = 1; i <= countCompanyInstr; i++) {
+			companyInstr.add(i);
+		}
+		for(int i = 1; i <= countComputerInstr; i++) {
+			computerInstr.add(i);
+		}
+		pageInstr.add('n');
+		pageInstr.add('p');
+		pageInstr.add('q');
 	}
 	
 	
@@ -214,35 +237,21 @@ public class Cli {
 		return c;
 	}
 
-    private void navigatePage(AbstractPage<?> page) {
+    private void navigatePage(IService<?> service) {
+    	int currentPage = 1;
         boolean end = false;
         while(!end) {
+        	PageRequest pageRequest = new PageRequest(null, currentPage);
+    		AbstractPage<?> page = service.getPage(pageRequest);
             showPage(page.getElements());
             switch(readPage()) {
                 case 'n' : page.next(); break;
                 case 'p' : page.previous(); break;
                 case 'q' : end = true; break;
             }
+            currentPage = page.getCurrentPage();
         }
     }
-	
-	/**
-	 * Initialize the list containing the valid options
-	 */
-	private void initLists() {
-		for(int i = 1; i <= countGeneralInstr; i++) {
-			generalInstr.add(i);
-		}
-		for(int i = 1; i <= countCompanyInstr; i++) {
-			companyInstr.add(i);
-		}
-		for(int i = 1; i <= countComputerInstr; i++) {
-			computerInstr.add(i);
-		}
-		pageInstr.add('n');
-		pageInstr.add('p');
-		pageInstr.add('q');
-	}
 	
 	/**
 	 * Construct a new computer in line command
@@ -315,11 +324,10 @@ public class Cli {
 			else if(step == 1) {
 				switch(entry) {
 					case 1 : 
-						CompanyPage page = new CompanyPage(new Query.Builder().limit(10).build(), 1);
 						System.out.println("---------------------");
 						System.out.println("- List of companies -");
 						System.out.println("---------------------");
-                        navigatePage(page);
+                        navigatePage(companyService);
 						break;
 					case 2 : 
 						Long id = readId();
@@ -334,11 +342,10 @@ public class Cli {
                 ComputerDTO computerDTO;
 				switch(entry) {
 					case 1 :
-						ComputerPage page = new ComputerPage(new Query.Builder().limit(10).build(), 1);
 						System.out.println("---------------------");
 						System.out.println("- List of computers -");
 						System.out.println("---------------------");
-                        navigatePage(page);
+                        navigatePage(computerService);
 						break;
 					case 2 :
 						Long id = readId();
@@ -353,7 +360,7 @@ public class Cli {
 					case 3 :
                         computerDTO = constructComputer();
                         try {
-                            computer = MapperFactory.getComputerMapper().getFromDTO(computerDTO);
+                            computer = computerMapper.getFromDTO(computerDTO);
                             computerService.create(computer);
                             break;
                         }
@@ -362,11 +369,11 @@ public class Cli {
                             break;
                         }
 					case 4 :
-                        computerDTO = constructComputer();
                         Long updateId = readId();
+                        computerDTO = constructComputer();
                         computerDTO.setId(updateId);
                         try {
-	                        computer = MapperFactory.getComputerMapper().getFromDTO(computerDTO);
+	                        computer = computerMapper.getFromDTO(computerDTO);
 	                        computerService.update(computer);                     
 	                        break;
                         }

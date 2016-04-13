@@ -1,0 +1,43 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+
+	<!-- Context scanning -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.excilys.cdb.service.implementation" />
+	<context:component-scan base-package="com.excilys.cdb.ui" />
+	<context:component-scan base-package="com.excilys.cdb.pagination.implementation" />
+	<context:component-scan base-package="com.excilys.cdb.persistence.dao.implementation" />
+	<context:component-scan base-package="com.excilys.cdb.mapper.implementation" />
+
+	<!-- Use the JDBC properties file for the data source -->
+	<context:property-placeholder location="classpath:dbconf.properties" />
+
+	<!-- Data source initialization -->
+	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource">
+		<property name="driverClass" value="${db.driver}" />
+		<property name="jdbcUrl" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		<property name="minConnectionsPerPartition" value="${db.minConnection}" />
+		<property name="maxConnectionsPerPartition" value="${db.maxConnection}" />
+		<property name="partitionCount" value="${db.partitionCount}" />
+	</bean>
+	
+	<!-- Inject services -->
+	<bean id="companyService" class="com.excilys.cdb.service.implementation.CompanyService" />
+	<bean id="computerService" class="com.excilys.cdb.service.implementation.ComputerService" />
+	
+	<!-- Inject mappers -->
+	<bean id="companyMapper" class="com.excilys.cdb.mapper.implementation.CompanyMapper"/>
+	<bean id="computerMapper" class="com.excilys.cdb.mapper.implementation.ComputerMapper"/>
+	
+	<!-- Inject DAOs -->
+	<bean id="daoFactory" class="com.excilys.cdb.persistence.dao.DAOFactory"/>
+	<bean id="companyDAO" class="com.excilys.cdb.persistence.dao.implementation.CompanyDAO"/>
+	<bean id="computerDAO" class="com.excilys.cdb.persistence.dao.implementation.ComputerDAO"/>
+	
+</beans>

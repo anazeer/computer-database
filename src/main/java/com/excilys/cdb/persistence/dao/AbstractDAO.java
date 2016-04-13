@@ -1,20 +1,15 @@
 package com.excilys.cdb.persistence.dao;
 
-import com.excilys.cdb.persistence.mapper.Mapper;
-import com.excilys.cdb.service.Query;
-import org.slf4j.Logger;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import com.excilys.cdb.service.util.Query;
+
 /**
  * Abstract implementation of DAO
  */
-abstract class AbstractDAO<T> implements DAO<T> {
-
-    protected Logger log;
-    protected Mapper<T> mapper;
+public abstract class AbstractDAO<T> implements IDAO<T> {
 
     /**
      *

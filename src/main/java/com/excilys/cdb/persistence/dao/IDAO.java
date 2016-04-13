@@ -4,15 +4,13 @@ package com.excilys.cdb.persistence.dao;
 import java.util.List;
 
 import com.excilys.cdb.exception.DAOException;
-import com.excilys.cdb.service.Query;
+import com.excilys.cdb.service.util.Query;
 
 /**
  * Generic DAO for CRUD implementation
- * @author excilys
- *
  * @param <T>
  */
-    interface DAO<T> {
+    interface IDAO<T> {
 
     /**
      * Non implemented method error message

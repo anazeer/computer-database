@@ -1,9 +1,11 @@
-package com.excilys.cdb.service.dto;
+package com.excilys.cdb.dto.implementation;
+
+import com.excilys.cdb.dto.IDTO;
 
 /**
  * DTO implementation for companies
  */
-public class CompanyDTO implements DTO {
+public class CompanyDTO implements IDTO {
 	
 	private Long id;
 	private String name;

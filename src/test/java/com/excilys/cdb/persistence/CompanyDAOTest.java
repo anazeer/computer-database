@@ -8,13 +8,13 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import com.excilys.cdb.persistence.dao.DAOFactory;
-import com.excilys.cdb.service.Query;
+import com.excilys.cdb.persistence.dao.implementation.CompanyDAO;
+import com.excilys.cdb.service.util.Query;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.dao.CompanyDAO;
 
 /**
  * CompanyDAO test class. We assume that the database is not empty and contains 42 elements

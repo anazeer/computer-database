@@ -16,9 +16,9 @@ import org.junit.Test;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;
-import com.excilys.cdb.service.Query;
+import com.excilys.cdb.persistence.dao.implementation.ComputerDAO;
+import com.excilys.cdb.service.util.Query;
 
 /**
  * ComputerDAO test class. We assume that the database is not empty and contains more than 500 elements

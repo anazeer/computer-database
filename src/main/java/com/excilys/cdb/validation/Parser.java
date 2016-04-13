@@ -1,11 +1,11 @@
 package com.excilys.cdb.validation;
 
-import com.excilys.cdb.service.Order;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.excilys.cdb.service.util.Order;
 
 /**
  * Parser for page parameters

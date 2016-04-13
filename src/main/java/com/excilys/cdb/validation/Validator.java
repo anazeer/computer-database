@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.excilys.cdb.dto.implementation.ComputerDTO;
 import com.excilys.cdb.exception.DateException;
 import com.excilys.cdb.exception.IdException;
 import com.excilys.cdb.exception.NameException;
-import com.excilys.cdb.service.dto.ComputerDTO;
 
 /**
  * User inputs validation

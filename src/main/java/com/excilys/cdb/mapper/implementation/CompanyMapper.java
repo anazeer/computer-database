@@ -1,4 +1,4 @@
-package com.excilys.cdb.persistence.mapper;
+package com.excilys.cdb.mapper.implementation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,36 +6,20 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.cdb.dto.IDTO;
+import com.excilys.cdb.dto.implementation.CompanyDTO;
+import com.excilys.cdb.mapper.IMapper;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.service.dto.CompanyDTO;
-import com.excilys.cdb.service.dto.DTO;
 
 /**
  * Mapper implementation for companies
- * @author excilys
- *
  */
-public class CompanyMapper implements Mapper<Company> {
+public class CompanyMapper implements IMapper<Company> {
 
-    private static CompanyMapper instance;
 	private Logger log = LoggerFactory.getLogger(getClass());
 
-    /**
-     * CompanyMapper new instance for Company type object mapping
-     */
 	private CompanyMapper() {
 	}
-
-    /**
-     *
-     * @ the computer mapper implementation instance
-     */
-    public static CompanyMapper getInstance() {
-        if(instance == null) {
-            instance = new CompanyMapper();
-        }
-        return instance;
-    }
 
 	@Override
 	public Company getFromResultSet(ResultSet result) {
@@ -51,7 +35,7 @@ public class CompanyMapper implements Mapper<Company> {
 	}
 
     @Override
-    public Company getFromDTO(DTO dto) {
+    public Company getFromDTO(IDTO dto) {
         CompanyDTO companyDTO = (CompanyDTO) dto;
         Company company = new Company();
         company.setId(companyDTO.getId());
@@ -60,7 +44,7 @@ public class CompanyMapper implements Mapper<Company> {
     }
 
     @Override
-    public DTO getFromModel(Company model) {
+    public IDTO getFromModel(Company model) {
         CompanyDTO dto = new CompanyDTO();
         dto.setId(model.getId());
         dto.setName(model.getName());

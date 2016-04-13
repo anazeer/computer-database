@@ -1,4 +1,4 @@
-package com.excilys.cdb.persistence.dao;
+package com.excilys.cdb.persistence.dao.implementation;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -10,50 +10,44 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.cdb.exception.DAOException;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import com.excilys.cdb.exception.DAOException;
+import com.excilys.cdb.mapper.implementation.ComputerMapper;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.mapper.MapperFactory;
-import com.excilys.cdb.service.Order;
-import com.excilys.cdb.service.Query;
+import com.excilys.cdb.persistence.dao.AbstractDAO;
+import com.excilys.cdb.persistence.dao.DAOFactory;
+import com.excilys.cdb.service.util.Order;
+import com.excilys.cdb.service.util.Query;
 
 /**
  * DAO implementation for computers
- *
- * @author excilys
  */
+@Repository
 public final class ComputerDAO extends AbstractDAO<Computer> {
+    
+    @Autowired
+    private DAOFactory daoFactory;
+    @Autowired
+    private ComputerMapper computerMapper;
+    
+    private Logger log = LoggerFactory.getLogger(getClass());
 
-    private static ComputerDAO instance;
-
-	/**
-	 * ComputerDAO new instance for Computer type object persistence
-	 */
 	private ComputerDAO() {
-		log = LoggerFactory.getLogger(getClass());
-		mapper = MapperFactory.getComputerMapper();
-	}
-
-	/**
-	 * @return the computer DAO implementation instance
-	 */
-	public static ComputerDAO getInstance() {
-		if (instance == null) {
-			instance = new ComputerDAO();
-		}
-		return instance;
 	}
 
 	@Override
 	public List<Computer> find(Query query) {
 		List<Computer> listComputer = null;
-		try (Connection conn = DAOFactory.getConnection();
+		try (Connection conn = daoFactory.getConnection();
 				PreparedStatement stmt = createPreparedStatement(conn, query);
 				ResultSet result = stmt.executeQuery()) {
 			listComputer = new ArrayList<>();
 			while (result.next()) {
-				listComputer.add(mapper.getFromResultSet(result));
+				listComputer.add(computerMapper.getFromResultSet(result));
 			}
 			log.info("Computers retrieved ({}), filter = {}, order = {}",
 					listComputer.size(), query != null ? query.getFilter() : "", query != null ? query.getOrder() : "");
@@ -67,11 +61,11 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 	public Computer findById(Long id) {
 		Computer computer = null;
 		String queryText = "SELECT * FROM computer WHERE id = " + id;
-		try (Connection conn = DAOFactory.getConnection();
+		try (Connection conn = daoFactory.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(queryText);
 				ResultSet result = stmt.executeQuery(queryText)) {
 			if (result.next()) {
-				computer = mapper.getFromResultSet(result);
+				computer = computerMapper.getFromResultSet(result);
 			}
 			log.info("Computer retrieved (id = {})", id);
 		} catch (SQLException e) {
@@ -83,7 +77,7 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 	@Override
 	public int count(Query query) {
 		int count = 0;
-		try (Connection conn = DAOFactory.getConnection();
+		try (Connection conn = daoFactory.getConnection();
 				PreparedStatement stmt = createCountPreparedStatement(conn, query);
 				ResultSet result = stmt.executeQuery()) {
 			if (result.next()) {
@@ -100,14 +94,14 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 	@Override
 	public Computer create(Computer obj) throws DAOException {
 		String queryText = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-		try (Connection conn = DAOFactory.getConnection();
+		try (Connection conn = daoFactory.getConnection();
 				PreparedStatement stmt = createUpdatePreparedStatement(conn, obj, queryText)) {
-			stmt.executeUpdate();
-			ResultSet result = stmt.getGeneratedKeys();
-			result.next();
-			obj.setId((long) result.getInt(1));
-			result.close();
-			log.info("Computer created (id = {})", obj.getId());
+			int result = stmt.executeUpdate();
+			ResultSet resultSet = stmt.getGeneratedKeys();
+			resultSet.next();
+			obj.setId((long) resultSet.getInt(1));
+			resultSet.close();
+			log.info("Computer {} (id = {})", result > 0 ? "created" : "not created", obj.getId());
 		}
 		catch (SQLException e) {
 			throw new DAOException(e);
@@ -123,10 +117,10 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 				+ "discontinued = ?, "
 				+ "company_id = ? "
 				+ "WHERE id = " + obj.getId();
-		try (Connection conn = DAOFactory.getConnection();
+		try (Connection conn = daoFactory.getConnection();
 				PreparedStatement stmt = createUpdatePreparedStatement(conn, obj, queryText)) {
-			stmt.executeUpdate();
-			log.info("Computer updated (id = {})", obj.getId());
+			int result = stmt.executeUpdate();
+			log.info("Computer {} (id = {})", result > 0 ? "updated" : "not found", obj.getId());
 			return true;
 		} catch (SQLException e) {
             throw new DAOException(e);
@@ -136,10 +130,10 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 	@Override
 	public boolean delete(Long id) {
 		String query = "DELETE FROM computer WHERE id = " + id;
-		try (Connection conn = DAOFactory.getConnection();
+		try (Connection conn = daoFactory.getConnection();
 				Statement stmt = conn.createStatement()) {
-			stmt.executeUpdate(query);
-			log.info("Computer deleted (id = {})", id);
+			int result = stmt.executeUpdate(query);
+			log.info("Computer {} (id = {})", result > 0 ? "deleted" : "not found", id);
 			return true;
 		} catch (SQLException e) {
 			log.error(e.getMessage());
@@ -153,9 +147,9 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 
 	public void deleteByCompanyId(Long id) throws DAOException {
 		String query = "DELETE FROM computer WHERE company_id = " + id;
-		try (Statement stmt = DAOFactory.getCurrentTransaction().createStatement()) {
-			stmt.executeUpdate(query);
-			log.info("Computer deleted (company id = {})", id);
+		try (Statement stmt = daoFactory.getCurrentTransaction().createStatement()) {
+			int result = stmt.executeUpdate(query);
+			log.info("{} computer{} deleted (company id = {})", result, result > 1 ? "s" : "", id);
 		} catch (SQLException e) {
 			throw new DAOException(e);
 		}

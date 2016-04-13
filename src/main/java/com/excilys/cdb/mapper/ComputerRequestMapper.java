@@ -1,8 +1,8 @@
-package com.excilys.cdb.persistence.mapper;
+package com.excilys.cdb.mapper;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.excilys.cdb.service.dto.ComputerDTO;
+import com.excilys.cdb.dto.implementation.ComputerDTO;
 
 /**
  * Computer mapper for request

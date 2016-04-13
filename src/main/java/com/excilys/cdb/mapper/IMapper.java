@@ -1,14 +1,14 @@
-package com.excilys.cdb.persistence.mapper;
-
-import com.excilys.cdb.service.dto.DTO;
+package com.excilys.cdb.mapper;
 
 import java.sql.ResultSet;
+
+import com.excilys.cdb.dto.IDTO;
 
 /**
  * Generic interface for mapping object
  * @param <T>
  */
- public interface Mapper<T> {
+ public interface IMapper<T> {
 
     /**
      * Maps a SQL row into an object
@@ -22,13 +22,13 @@ import java.sql.ResultSet;
      * @param dto the DTO implementation of the model
      * @return the model from the dto
      */
-    T getFromDTO(DTO dto);
+    T getFromDTO(IDTO dto);
 
     /**
      * Maps a model object into a DTO
      * @param model the object model
      * @return the DTO from the model
      */
-    DTO getFromModel(T model);
+    IDTO getFromModel(T model);
 
 }

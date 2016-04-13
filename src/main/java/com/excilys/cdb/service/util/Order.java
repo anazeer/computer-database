@@ -1,5 +1,8 @@
-package com.excilys.cdb.service;
+package com.excilys.cdb.service.util;
 
+/**
+ * Enumeration for the model order
+ */
 public enum Order {
 	NAME_ASC,
 	NAME_DSC,

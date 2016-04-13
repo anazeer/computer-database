@@ -1,23 +1,30 @@
-package com.excilys.cdb.service;
+package com.excilys.cdb.service.implementation;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.dao.ComputerDAO;
-import com.excilys.cdb.persistence.dao.DAOFactory;
+import com.excilys.cdb.pagination.implementation.ComputerPage;
+import com.excilys.cdb.pagination.util.PageRequest;
+import com.excilys.cdb.persistence.dao.implementation.ComputerDAO;
+import com.excilys.cdb.service.IService;
+import com.excilys.cdb.service.util.Query;
 
 /**
  * Service implementation for computers
  */
-public class ComputerService implements Service<Computer> {
+@Service
+public class ComputerService implements com.excilys.cdb.service.IService<Computer> {
 
+	@Autowired
 	private ComputerDAO computerDAO;
 	private static ComputerService instance;
 
 	private ComputerService() {
 		super();
-		computerDAO = DAOFactory.getComputerDAO();
 	}
 	
 	public static ComputerService getInstance() {
@@ -27,6 +34,16 @@ public class ComputerService implements Service<Computer> {
 		return instance;
 	}
 	
+	@Override
+	public ComputerPage getPage(PageRequest pageRequest) {
+		Query query = pageRequest.getQuery();
+		ComputerPage computerPage = new ComputerPage(pageRequest, count(query));
+		query.setOffset(computerPage.getOffset());
+		List<Computer> computers = list(query);
+		computerPage.setElements(computers);
+		return computerPage;
+	}
+
 	@Override
 	public List<Computer> list(Query query) {
 		return computerDAO.find(query);

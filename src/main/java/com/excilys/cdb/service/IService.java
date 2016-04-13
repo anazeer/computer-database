@@ -2,13 +2,23 @@ package com.excilys.cdb.service;
 
 import java.util.List;
 
+import com.excilys.cdb.pagination.AbstractPage;
+import com.excilys.cdb.pagination.util.PageRequest;
+import com.excilys.cdb.service.util.Query;
+
 /**
  * Generic service for accessing services 
- * @author excilys
- *
  * @param <T>
  */
-public interface Service<T> {
+public interface IService<T> {
+	
+	/**
+	 * 
+	 * @param query the object containing the query constraints 
+	 * @param currentPage the number of the requested page
+	 * @return the list containing the result
+	 */
+	public AbstractPage<T> getPage(PageRequest page);
 	
 	/**
 	 * 

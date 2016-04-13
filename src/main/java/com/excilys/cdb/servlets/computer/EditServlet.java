@@ -8,14 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.cdb.dto.implementation.ComputerDTO;
 import com.excilys.cdb.exception.DAOException;
+import com.excilys.cdb.mapper.ComputerRequestMapper;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.mapper.ComputerRequestMapper;
 import com.excilys.cdb.persistence.mapper.MapperFactory;
-import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ServiceFactory;
-import com.excilys.cdb.service.dto.ComputerDTO;
+import com.excilys.cdb.service.implementation.CompanyService;
+import com.excilys.cdb.service.implementation.ComputerService;
 import com.excilys.cdb.validation.Validator;
 
 /**

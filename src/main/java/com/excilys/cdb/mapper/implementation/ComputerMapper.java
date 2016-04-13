@@ -1,47 +1,35 @@
-package com.excilys.cdb.persistence.mapper;
+package com.excilys.cdb.mapper.implementation;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.excilys.cdb.dto.IDTO;
+import com.excilys.cdb.dto.implementation.ComputerDTO;
+import com.excilys.cdb.mapper.IMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.dao.CompanyDAO;
-import com.excilys.cdb.persistence.dao.DAOFactory;
-import com.excilys.cdb.service.dto.ComputerDTO;
-import com.excilys.cdb.service.dto.DTO;
+import com.excilys.cdb.persistence.dao.implementation.CompanyDAO;
 
 /**
  * Mapper implementation for computers
  */
-public class ComputerMapper implements Mapper<Computer> {
+@Component
+public class ComputerMapper implements IMapper<Computer> {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
-    private static ComputerMapper instance;
+    @Autowired
     private CompanyDAO companyDAO;
+    
+	private Logger log = LoggerFactory.getLogger(getClass());
 
-    /**
-     * ComputerMapper new instance for Computer type object mapping
-     */
 	private ComputerMapper() {
-        companyDAO = DAOFactory.getCompanyDAO();
 	}
-
-    /**
-     *
-     * @return the computer mapper implementation instance
-     */
-    public static ComputerMapper getInstance() {
-        if (instance == null) {
-            instance = new ComputerMapper();
-        }
-        return instance;
-    }
 	
 	@Override
 	public Computer getFromResultSet(ResultSet result) {
@@ -66,7 +54,7 @@ public class ComputerMapper implements Mapper<Computer> {
 	}
 
     @Override
-    public Computer getFromDTO(DTO dto) {
+    public Computer getFromDTO(IDTO dto) {
         ComputerDTO computerDTO = (ComputerDTO) dto;
         String name = computerDTO.getName();
         Long id = computerDTO.getId();
@@ -84,7 +72,7 @@ public class ComputerMapper implements Mapper<Computer> {
     }
 
     @Override
-    public DTO getFromModel(Computer model) {
+    public IDTO getFromModel(Computer model) {
         String name =  model.getName();
         Long id = model.getId();
         LocalDate introducedDate = model.getIntroduced();

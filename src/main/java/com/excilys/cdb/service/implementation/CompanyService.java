@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.exception.DAOException;
+import com.excilys.cdb.mapper.implementation.CompanyMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.pagination.implementation.CompanyPage;
 import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.persistence.dao.DAOFactory;
 import com.excilys.cdb.persistence.dao.implementation.CompanyDAO;
 import com.excilys.cdb.persistence.dao.implementation.ComputerDAO;
-import com.excilys.cdb.service.IService;
 import com.excilys.cdb.service.util.Query;
 
 /**
@@ -28,6 +28,10 @@ public class CompanyService implements com.excilys.cdb.service.IService<Company>
 	private ComputerDAO computerDAO;
 	@Autowired
 	private DAOFactory daoFactory;
+	
+	// Mappers
+	@Autowired
+	private CompanyMapper companyMapper;
 
 	public CompanyService() {
 		super();
@@ -36,7 +40,7 @@ public class CompanyService implements com.excilys.cdb.service.IService<Company>
 	@Override
 	public CompanyPage getPage(PageRequest pageRequest) {
 		Query query = pageRequest.getQuery();
-		CompanyPage companyPage = new CompanyPage(pageRequest, count(query));
+		CompanyPage companyPage = new CompanyPage(companyMapper, pageRequest, count(query));
 		query.setOffset(companyPage.getOffset());
 		List<Company> companies = list(query);
 		companyPage.setElements(companies);

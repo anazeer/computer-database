@@ -161,9 +161,12 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 		String filterText = getFilterText(query);
 		String orderText = getOrderText(query);
 		String joinText = !filterText.isEmpty() || !orderText.isEmpty() ? 
-				" INNER JOIN company ON computer.company_id = company.id " : "";
+				" LEFT JOIN company ON computer.company_id = company.id" : "";
 		String queryText = "SELECT * FROM computer" + joinText + filterText + orderText + limitText;
 		PreparedStatement stmt = conn.prepareStatement(queryText);
+		if (log.isDebugEnabled()) {
+			log.debug(queryText);
+		}
 		if (!filterText.isEmpty()) {
 			stmt.setString(1, "%" + query.getFilter() + "%");
 			stmt.setString(2, "%" + query.getFilter() + "%");
@@ -207,7 +210,7 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 	private PreparedStatement createCountPreparedStatement(Connection conn, Query query) throws SQLException {
 		String filterText = getFilterText(query);
 		String joinText = !filterText.isEmpty() ? 
-				" INNER JOIN company ON computer.company_id = company.id " : "";
+				" LEFT JOIN company ON computer.company_id = company.id" : "";
 		String queryText = "SELECT COUNT(*) as entries FROM computer" + joinText + filterText;
 		PreparedStatement stmt = conn.prepareStatement(queryText);
 		if (!filterText.isEmpty()) {
@@ -230,14 +233,14 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
             return result;
         }
 		switch(order) {
-			case NAME_ASC : result = " ORDER BY computer.name ASC "; break;
-			case NAME_DSC : result = " ORDER BY computer.name DESC "; break;
-			case INTRODUCED_ASC : result = " ORDER BY computer.introduced ASC "; break;
-			case INTRODUCED_DSC : result = " ORDER BY computer.introduced DESC "; break;
-			case DISCONTINUED_ASC : result = " ORDER BY computer.discontinued ASC "; break;
-			case DISCONTINUED_DSC : result = " ORDER BY computer.discontinued DESC "; break;
-			case COMPANY_ASC : result = " ORDER BY company.name ASC "; break;
-			case COMPANY_DSC : result = " ORDER BY company.name DESC "; break;
+			case NAME_ASC : result = " ORDER BY computer.name ASC"; break;
+			case NAME_DSC : result = " ORDER BY computer.name DESC"; break;
+			case INTRODUCED_ASC : result = " ORDER BY computer.introduced ASC"; break;
+			case INTRODUCED_DSC : result = " ORDER BY computer.introduced DESC"; break;
+			case DISCONTINUED_ASC : result = " ORDER BY computer.discontinued ASC"; break;
+			case DISCONTINUED_DSC : result = " ORDER BY computer.discontinued DESC"; break;
+			case COMPANY_ASC : result = " ORDER BY company.name ASC"; break;
+			case COMPANY_DSC : result = " ORDER BY company.name DESC"; break;
 			default : result = "";
 		}
 		return result;
@@ -251,10 +254,10 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 		}
 		String filter = query.getFilter();
 		if (filter != null && !filter.trim().isEmpty()) {
-			result =  " WHERE computer.name LIKE ? "
-                    + "OR company.name LIKE ?"
-                    + "OR computer.introduced LIKE ? "
-                    + "OR computer.discontinued LIKE ? ";
+			result =  " WHERE computer.name LIKE ?"
+                    + " OR company.name LIKE ?"
+                    + " OR computer.introduced LIKE ?"
+                    + " OR computer.discontinued LIKE ?";
 		}
 		return result;
 	}

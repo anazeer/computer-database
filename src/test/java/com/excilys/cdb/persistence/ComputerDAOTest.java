@@ -13,10 +13,10 @@ import com.excilys.cdb.exception.DAOException;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.dao.DAOFactory;
 import com.excilys.cdb.persistence.dao.implementation.ComputerDAO;
 import com.excilys.cdb.service.util.Query;
 
@@ -32,7 +32,10 @@ public class ComputerDAOTest {
 	
 	@BeforeClass
 	public static void init() {
-		computerDAO = DAOFactory.getComputerDAO();
+		try(ClassPathXmlApplicationContext context = 
+				new ClassPathXmlApplicationContext("spring-context.xml")) {
+			computerDAO = context.getBean(ComputerDAO.class);
+		}
 	}
 	
 	/**

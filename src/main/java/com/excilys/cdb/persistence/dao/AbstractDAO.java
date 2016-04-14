@@ -47,7 +47,7 @@ public abstract class AbstractDAO<T> implements IDAO<T> {
         int offset = query.getOffset();
         int limit = query.getLimit();
         if (offset >= 0 && limit > 0) {
-            result = " LIMIT " + offset + ", " + limit + " ";
+            result = " LIMIT " + offset + ", " + limit;
         }
         return result;
     }

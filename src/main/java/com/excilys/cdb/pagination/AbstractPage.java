@@ -1,7 +1,10 @@
 package com.excilys.cdb.pagination;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.excilys.cdb.dto.IDTO;
+import com.excilys.cdb.mapper.IMapper;
 import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.service.util.Query;
 
@@ -45,13 +48,19 @@ public abstract class AbstractPage<T> {
      * The order to apply to the list result
      */
     private String order;
+    
+    /**
+     * The mapper to get DTO from the model
+     */
+    private IMapper<T> mapper;
 
     /**
      * The list containing the result of the pagination
      */
-    private List<T> elements;
+    protected List<IDTO> elements;
     
-    protected AbstractPage(PageRequest pageRequest, int totalCount) {
+    protected AbstractPage(IMapper<T> mapper, PageRequest pageRequest, int totalCount) {
+    	this.mapper = mapper;
     	Query query = pageRequest.getQuery();
     	this.currentPage = pageRequest.getCurrentPage();
         this.totalCount = totalCount;
@@ -89,8 +98,11 @@ public abstract class AbstractPage<T> {
     }
     
     public void setElements(List<T> elements) {
-		this.elements = elements;
-	}
+		List<IDTO> dto = elements.stream()
+		        .map(model -> mapper.getFromModel(model))
+		        .collect(Collectors.toList()); 
+		this.elements = dto;
+    }
     
     public int getCurrentPage() {
 		return currentPage;
@@ -120,7 +132,7 @@ public abstract class AbstractPage<T> {
 		return order;
 	}
 
-	public List<T> getElements() {
+	public List<IDTO> getElements() {
 		return elements;
 	}
 }

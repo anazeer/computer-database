@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.exception.DAOException;
+import com.excilys.cdb.mapper.implementation.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.implementation.ComputerPage;
 import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.persistence.dao.implementation.ComputerDAO;
-import com.excilys.cdb.service.IService;
 import com.excilys.cdb.service.util.Query;
 
 /**
@@ -21,23 +21,18 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 
 	@Autowired
 	private ComputerDAO computerDAO;
-	private static ComputerService instance;
+	
+	@Autowired
+	private ComputerMapper computerMapper;
 
 	private ComputerService() {
 		super();
 	}
 	
-	public static ComputerService getInstance() {
-		if(instance == null) {
-			instance = new ComputerService();
-		}
-		return instance;
-	}
-	
 	@Override
 	public ComputerPage getPage(PageRequest pageRequest) {
 		Query query = pageRequest.getQuery();
-		ComputerPage computerPage = new ComputerPage(pageRequest, count(query));
+		ComputerPage computerPage = new ComputerPage(computerMapper, pageRequest, count(query));
 		query.setOffset(computerPage.getOffset());
 		List<Computer> computers = list(query);
 		computerPage.setElements(computers);

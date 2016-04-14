@@ -1,12 +1,18 @@
 package com.excilys.cdb.servlets.computer;
 
 import java.io.IOException;
+
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.service.ServiceFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import com.excilys.cdb.service.implementation.ComputerService;
 
 /**
@@ -14,6 +20,10 @@ import com.excilys.cdb.service.implementation.ComputerService;
  */
 public class DeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	// Services
+	@Autowired
+	private ComputerService computerService;
 	
 	// ID from the POST form
 	private final String selection = "selection";
@@ -24,6 +34,17 @@ public class DeleteServlet extends HttpServlet {
     public DeleteServlet() {
         super();
     }
+    
+	/**
+	 * Initialize the spring context for the servlet
+	 */
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
+        AutowireCapableBeanFactory beanFactory = springContext.getAutowireCapableBeanFactory();
+        beanFactory.autowireBean(this);
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,7 +58,6 @@ public class DeleteServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String[] ids = request.getParameter(selection).split(",");
-		ComputerService computerService = ServiceFactory.getComputerService();
 		for (String s : ids) {
 			computerService.delete(Long.parseLong(s));
 		}

@@ -6,7 +6,7 @@
 
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.5.1-SNAPSHOT</version>
+	<version>0.5.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>computer-database</name>
 	<url>http://maven.apache.org</url>
@@ -133,10 +133,6 @@
 			<version>${slf4jApiVersion}</version>
 		</dependency>
 
-		<!-- slf4j simple, used by the web driver <dependency> <groupId>org.slf4j</groupId> 
-			<artifactId>slf4j-simple</artifactId> <version>${slf4jSimpleVersion}</version> 
-			</dependency> -->
-
 		<!-- Logback API -->
 
 		<dependency>
@@ -187,15 +183,22 @@
 			<version>${httpclientVersion}</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<!-- Spring framework -->
+
+		<!-- slf4j simple, used by the web driver (Selenium) -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4jSimpleVersion}</version>
+		</dependency>
+
+		<!-- Spring context -->
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${springVersion}</version>
 		</dependency>
-		
+
 		<!-- Spring core -->
 
 		<dependency>
@@ -204,6 +207,13 @@
 			<version>${springVersion}</version>
 		</dependency>
 
+		<!-- Spring web -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
 
 	</dependencies>
 

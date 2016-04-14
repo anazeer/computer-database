@@ -7,12 +7,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import com.excilys.cdb.persistence.dao.DAOFactory;
 import com.excilys.cdb.persistence.dao.implementation.CompanyDAO;
 import com.excilys.cdb.service.util.Query;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.cdb.model.Company;
 
@@ -27,7 +27,10 @@ public class CompanyDAOTest {
 	
 	@BeforeClass
 	public static void init() {
-		companyDAO = DAOFactory.getCompanyDAO();
+		try(ClassPathXmlApplicationContext context = 
+				new ClassPathXmlApplicationContext("spring-context.xml")) {
+			companyDAO = context.getBean(CompanyDAO.class);
+		}
 	}
 
 	/**

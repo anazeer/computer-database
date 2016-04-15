@@ -150,7 +150,7 @@ public class ComputerDAOTest {
 		Computer computer = new Computer.Builder("Sony Cie").build();
 		computer = computerDAO.create(computer);
 		assertNotNull(msgId, computer.getId());
-		computerDAO.delete(computer);
+		computerDAO.delete(computer.getId());
 		computer = computerDAO.findById(computer.getId());
 		assertNull(computer);
 	}
@@ -184,7 +184,7 @@ public class ComputerDAOTest {
 	public void testDelete() {
 		Computer computer = computerDAO.findById(603L);
 		try {
-			computerDAO.delete(computer);
+			computerDAO.delete(computer.getId());
 		} catch (DAOException e) {	
 		}
 		computer = computerDAO.findById(603L);

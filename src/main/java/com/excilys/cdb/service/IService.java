@@ -14,6 +14,13 @@ import com.excilys.cdb.service.util.Query;
 public interface IService<T> {
 	
 	/**
+	 *
+	 * @param id the object reference
+	 * @return the object referenced by id
+	 */
+	public T findById(Long id);
+	
+	/**
 	 * 
 	 * @param query the object containing the query constraints 
 	 * @param currentPage the number of the requested page
@@ -22,7 +29,6 @@ public interface IService<T> {
 	public AbstractPage<T> getPage(PageRequest page);
 	
 	/**
-	 * 
 	 * Get all the objects satisfying the query constraints
 	 * @param query the object containing the query constraints 
 	 * @return the list containing the result

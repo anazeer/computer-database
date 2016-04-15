@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.mapper.implementation.ComputerMapper;
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.implementation.ComputerPage;
 import com.excilys.cdb.pagination.util.PageRequest;
@@ -23,10 +24,18 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 	private ComputerDAO computerDAO;
 	
 	@Autowired
+	CompanyService companyService;
+	
+	@Autowired
 	private ComputerMapper computerMapper;
 
 	private ComputerService() {
 		super();
+	}
+	
+	@Override
+	public Computer findById(Long id) {
+		return computerDAO.findById(id);
 	}
 	
 	@Override
@@ -41,7 +50,17 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 
 	@Override
 	public List<Computer> list(Query query) {
-		return computerDAO.find(query);
+		List<Computer> computers = computerDAO.find(query);
+		// Associate the companies to the computers
+		for (Computer computer : computers) {
+			Company company = computer.getCompany();
+			if (company != null) {
+				Long id = company.getId();
+				company = companyService.findById(id);
+				computer.setCompany(company);
+			}
+		}
+		return computers;
 	}
 	
 	@Override
@@ -59,10 +78,6 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 	
 	public void update(Computer computer) throws DAOException {
 		computerDAO.update(computer);
-	}
-	
-	public void delete(Computer computer) throws DAOException{
-		computerDAO.delete(computer);
 	}
 	
 	@Override

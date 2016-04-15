@@ -6,7 +6,7 @@
 
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.5.3-RELEASE</version>
+	<version>0.6.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>computer-database</name>
 	<url>http://maven.apache.org</url>
@@ -20,6 +20,7 @@
 		<junitVersion>4.4</junitVersion>
 		<slf4jApiVersion>1.7.5</slf4jApiVersion>
 		<slf4jSimpleVersion>1.7.5</slf4jSimpleVersion>
+		<jclOverSlf4j>1.7.21</jclOverSlf4j>
 		<logbackVersion>1.1.6</logbackVersion>
 		<bonecpVersion>0.8.0.RELEASE</bonecpVersion>
 		<mockitoVersion>1.10.19</mockitoVersion>
@@ -132,6 +133,15 @@
 			<version>${slf4jApiVersion}</version>
 		</dependency>
 
+		<!-- slf4j bridge -->
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${jclOverSlf4j}</version>
+		</dependency>
+
+
 		<!-- Logback API -->
 
 		<dependency>
@@ -213,7 +223,7 @@
 			<artifactId>spring-web</artifactId>
 			<version>${springVersion}</version>
 		</dependency>
-		
+
 		<!-- Spring JDBC -->
 
 		<dependency>
@@ -222,7 +232,6 @@
 			<version>4.2.5.RELEASE</version>
 		</dependency>
 
-
 		<!-- Spring transaction -->
 
 		<dependency>
@@ -230,7 +239,6 @@
 			<artifactId>spring-tx</artifactId>
 			<version>4.2.5.RELEASE</version>
 		</dependency>
-
 
 		<!-- Spring test -->
 

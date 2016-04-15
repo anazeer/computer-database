@@ -34,6 +34,11 @@ public class CompanyService implements com.excilys.cdb.service.IService<Company>
 	}
 	
 	@Override
+	public Company findById(Long id) {
+		return companyDAO.findById(id);
+	}
+	
+	@Override
 	public CompanyPage getPage(PageRequest pageRequest) {
 		Query query = pageRequest.getQuery();
 		CompanyPage companyPage = new CompanyPage(companyMapper, pageRequest, count(query));

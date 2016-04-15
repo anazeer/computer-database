@@ -8,16 +8,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.mapper.implementation.CompanyMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.dao.AbstractDAO;
-import com.excilys.cdb.persistence.dao.DAOFactory;
 import com.excilys.cdb.service.util.Order;
 import com.excilys.cdb.service.util.Query;
 
@@ -28,7 +29,7 @@ import com.excilys.cdb.service.util.Query;
 public final class CompanyDAO extends AbstractDAO<Company> {
 	
     @Autowired
-    private DAOFactory daoFactory;
+	private DataSource dataSource;
     @Autowired
     private CompanyMapper companyMapper;
     
@@ -40,7 +41,7 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 	@Override
 	public List<Company> find(Query query) {
 		List<Company> listCompany = null;
-		try (Connection conn = daoFactory.getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement stmt = createPreparedStatement(conn, query);
 				ResultSet result = stmt.executeQuery()) {
 			listCompany = new ArrayList<>();
@@ -59,7 +60,7 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 	@Override
 	public int count(Query query) {
 		int count = 0;
-		try (Connection conn = daoFactory.getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement stmt = createCountPreparedStatement(conn, query);
 				ResultSet result = stmt.executeQuery()) {
 			if (result.next()) {
@@ -77,7 +78,7 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 	public Company findById(Long id) {
 		Company company = null;
 		String queryText = "SELECT * FROM company WHERE id = " + id;
-		try (Connection conn = daoFactory.getConnection();
+		try (Connection conn = dataSource.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet result = stmt.executeQuery(queryText)) {
 			if (result.next()) {
@@ -94,14 +95,15 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 	}
 
     @Override
-	public boolean delete(Long id) throws DAOException {
+	public boolean delete(Long id) {
 		String query = "DELETE FROM company WHERE id = " + id;
-		try (Statement stmt = daoFactory.getCurrentTransaction().createStatement()) {
+		Connection conn = DataSourceUtils.getConnection(dataSource);
+		try (Statement stmt = conn.createStatement()) {
 			int result = stmt.executeUpdate(query);
 			log.info("{} compan{} deleted (id = {})", result, result > 1 ? "ies" : "y", id);
-            return true;
+            return result > 0;
 		} catch (SQLException e) {
-            throw new DAOException(e);
+            throw new RuntimeException(e);
         }
 	}
 

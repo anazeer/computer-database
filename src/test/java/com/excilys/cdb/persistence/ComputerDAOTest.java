@@ -9,12 +9,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
-import com.excilys.cdb.exception.DAOException;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.implementation.ComputerDAO;
@@ -22,21 +24,14 @@ import com.excilys.cdb.service.util.Query;
 
 /**
  * ComputerDAO test class. We assume that the database is not empty and contains more than 500 elements
- * @author excilys
- *
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/spring-context.xml"})
 public class ComputerDAOTest {
 	
+	@Autowired
 	private static ComputerDAO computerDAO;
 	private static final String msgId = "id should be not null";
-	
-	@BeforeClass
-	public static void init() {
-		try(ClassPathXmlApplicationContext context = 
-				new ClassPathXmlApplicationContext("spring-context.xml")) {
-			computerDAO = context.getBean(ComputerDAO.class);
-		}
-	}
 	
 	/**
 	 * We assume that the database is not empty and contains at least 500 keys from 1 to 500
@@ -188,7 +183,10 @@ public class ComputerDAOTest {
 	@Test
 	public void testDelete() {
 		Computer computer = computerDAO.findById(603L);
-		computerDAO.delete(computer);
+		try {
+			computerDAO.delete(computer);
+		} catch (DAOException e) {	
+		}
 		computer = computerDAO.findById(603L);
 		assertNull(computer);
 	}

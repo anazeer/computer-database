@@ -3,14 +3,12 @@ package com.excilys.cdb.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.mapper.implementation.CompanyMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.pagination.implementation.CompanyPage;
 import com.excilys.cdb.pagination.util.PageRequest;
-import com.excilys.cdb.persistence.dao.DAOFactory;
 import com.excilys.cdb.persistence.dao.implementation.CompanyDAO;
 import com.excilys.cdb.persistence.dao.implementation.ComputerDAO;
 import com.excilys.cdb.service.util.Query;
@@ -18,16 +16,14 @@ import com.excilys.cdb.service.util.Query;
 /**
  * Service implementation for companies
  */
-@Service
+@Transactional
 public class CompanyService implements com.excilys.cdb.service.IService<Company> {
-
+	
 	// Dao's references
 	@Autowired
 	private CompanyDAO companyDAO;
 	@Autowired
 	private ComputerDAO computerDAO;
-	@Autowired
-	private DAOFactory daoFactory;
 	
 	// Mappers
 	@Autowired
@@ -58,14 +54,9 @@ public class CompanyService implements com.excilys.cdb.service.IService<Company>
 	}
 
 	@Override
+	@Transactional(readOnly=false)
 	public void delete(Long id) {
-		try {
-            daoFactory.initTransaction();
-			computerDAO.deleteByCompanyId(id);
-			companyDAO.delete(id);
-			daoFactory.commitTransaction();
-		} catch (DAOException e) {
-			daoFactory.rollbackTransaction();
-		}
+		computerDAO.deleteByCompanyId(id);
+		companyDAO.delete(id);
 	}
 }

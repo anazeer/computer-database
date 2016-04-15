@@ -6,7 +6,7 @@
 
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.5.2-SNAPSHOT</version>
+	<version>0.5.3-RELEASE</version>
 	<packaging>war</packaging>
 	<name>computer-database</name>
 	<url>http://maven.apache.org</url>
@@ -113,7 +113,6 @@
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstlVersion}</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<!-- JUnit API -->
@@ -213,6 +212,33 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${springVersion}</version>
+		</dependency>
+		
+		<!-- Spring JDBC -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+
+
+		<!-- Spring transaction -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+
+
+		<!-- Spring test -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${springVersion}</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

@@ -92,7 +92,7 @@ public class Cli {
 	 * Show pagination menu
 	 */
 	private void showPage(List<?> list) {
-		for(Object o : list) {
+		for (Object o : list) {
 			System.out.println(o);
 		}
 		System.out.print("\nNext page : n. ");
@@ -104,13 +104,13 @@ public class Cli {
 	 * Initialize the list containing the valid options
 	 */
 	private void initLists() {
-		for(int i = 1; i <= countGeneralInstr; i++) {
+		for (int i = 1; i <= countGeneralInstr; i++) {
 			generalInstr.add(i);
 		}
-		for(int i = 1; i <= countCompanyInstr; i++) {
+		for (int i = 1; i <= countCompanyInstr; i++) {
 			companyInstr.add(i);
 		}
-		for(int i = 1; i <= countComputerInstr; i++) {
+		for (int i = 1; i <= countComputerInstr; i++) {
 			computerInstr.add(i);
 		}
 		pageInstr.add('n');
@@ -128,17 +128,16 @@ public class Cli {
 		int entry;
 		try {
 			entry = Integer.parseInt(scan.nextLine());
-			if(step == 0 && !generalInstr.contains(entry)) {
+			if (step == 0 && !generalInstr.contains(entry)) {
 				throw new IllegalArgumentException();
 			}
-			else if(step == 1 && !companyInstr.contains(entry)) {
+			else if (step == 1 && !companyInstr.contains(entry)) {
 				throw new IllegalArgumentException();
 			}
-			else if(step == 2 && !computerInstr.contains(entry)) {
+			else if (step == 2 && !computerInstr.contains(entry)) {
 				throw new IllegalArgumentException();
 			}
-		}
-		catch(IllegalArgumentException e) {
+		} catch(IllegalArgumentException e) {
 			System.err.println("Select a valid operation.");
 			entry = -1;
 		}
@@ -151,12 +150,11 @@ public class Cli {
 	 */
 	private Long readId() {
 		Long id = null;
-		while(id == null) {
+		while (id == null) {
 			System.out.println("Enter the ID:");
 			try {
 				id = Long.parseLong(scan.nextLine());
-			}
-			catch(NumberFormatException e) {
+			} catch(NumberFormatException e) {
 				System.err.println("Select a valid operation.");
 			}
 		 }
@@ -169,10 +167,10 @@ public class Cli {
 	 */
 	private String readName() {
 		String entry = null;
-		while(entry == null) {
+		while (entry == null) {
 			System.out.println("Select the name:");
 			entry = scan.nextLine().trim();
-			if(entry.isEmpty()) {
+			if (entry.isEmpty()) {
 				entry = null;
 				System.err.println("Enter a valid name");
 			}
@@ -189,26 +187,24 @@ public class Cli {
 		String entry = null;
 		//String parse = "yyyy/mm/dd";
 		String parse = "dd/mm/yyyy";
-		while(date == null) {
+		while (date == null) {
 			try {
 				System.out.println("Select date " + parse + ": (If unknown, enter u)");
 				entry = scan.next("((0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d))|u");
 				//entry = scan.next("(((19|20)\\d\\d)/(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01]))|u");
 			    date = new SimpleDateFormat(parse).parse(entry);
-			}
-			catch (ParseException e) {
-				if("u".equals(entry)) {
+			} catch (ParseException e) {
+				if ("u".equals(entry)) {
 					break;
 				}
 				else {
 					e.printStackTrace();
 				}
 			}
-			catch(InputMismatchException e) {
+			catch (InputMismatchException e) {
 				date = null;
 				System.err.println(("Enter a correct date " + parse + " or u to ignore it"));
-			}
-			finally {
+			} finally {
 				scan.nextLine(); // consume new line left-over
 			}
 		}
@@ -221,16 +217,15 @@ public class Cli {
 	 */
 	private char readPage() {
 		Character c = null;
-		while(c == null) {
+		while (c == null) {
 			System.out.println("Enter an option:");
 			try {
 				c = scan.nextLine().charAt(0);
-				if(!pageInstr.contains(c)) {
+				if (!pageInstr.contains(c)) {
 					c = null;
 					throw new IllegalArgumentException();
 				}
-			}
-			catch(IllegalArgumentException | StringIndexOutOfBoundsException e) {
+			} catch(IllegalArgumentException | StringIndexOutOfBoundsException e) {
 				System.err.println("Select a valid option.");
 			}
 		}
@@ -244,7 +239,7 @@ public class Cli {
         	PageRequest pageRequest = new PageRequest(null, currentPage);
     		AbstractPage<?> page = service.getPage(pageRequest);
             showPage(page.getElements());
-            switch(readPage()) {
+            switch (readPage()) {
                 case 'n' : page.next(); break;
                 case 'p' : page.previous(); break;
                 case 'q' : end = true; break;
@@ -265,20 +260,20 @@ public class Cli {
 		do {
 			introducedDate = readDate();
 			discontinuedDate = readDate();
-			if(introducedDate == null || discontinuedDate == null) {
+			if (introducedDate == null || discontinuedDate == null) {
 				break;
 			}
 		}
-		while(!introducedDate.before(discontinuedDate));
+		while (!introducedDate.before(discontinuedDate));
 		
 		Instant instant;
 	    LocalDate introduced = null;
 	    LocalDate discontinued = null;
-		if(introducedDate != null) {
+		if (introducedDate != null) {
 			instant = Instant.ofEpochMilli(introducedDate.getTime());
 			introduced = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
 		}
-		if(discontinuedDate != null) {
+		if (discontinuedDate != null) {
 			instant = Instant.ofEpochMilli(discontinuedDate.getTime());
 			discontinued = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
 		}
@@ -287,10 +282,10 @@ public class Cli {
 		Long company_id = readId();
 		
 		ComputerDTO computer = new ComputerDTO(name);
-		if(introduced != null) {
+		if (introduced != null) {
             computer.setIntroduced(introduced.toString());
         }
-        if(discontinued != null) {
+        if (discontinued != null) {
             computer.setDiscontinued(discontinued.toString());
         }
 		computer.setCompanyId(company_id);
@@ -305,24 +300,23 @@ public class Cli {
 		initLists();
 		boolean exit = false;
 		int step = 0;
-		while(!exit) {
+		while (!exit) {
 			int entry = -1;
-			while(entry == -1) {
-				switch(step) {
+			while (entry == -1) {
+				switch (step) {
 					case 0 : showGeneralInstr(); entry = readOption(step); break;
 					case 1 : showCompanyInstr(); entry = readOption(step); break;
 					case 2 : showComputerInstr(); entry = readOption(step); break;
 				}
 			}
-			if(step == 0) {
-				switch(entry) {
+			if (step == 0) {
+				switch (entry) {
 					case 1 : step = 1; break;
 					case 2 : step = 2; break;
 					case 3 : exit = true; break;
 				}
-			}
-			else if(step == 1) {
-				switch(entry) {
+			} else if (step == 1) {
+				switch (entry) {
 					case 1 : 
 						System.out.println("---------------------");
 						System.out.println("- List of companies -");
@@ -336,11 +330,10 @@ public class Cli {
 					case 3 : step = 0;
                         break;
 				}
-			}
-			else {
+			} else {
                 Computer computer;
                 ComputerDTO computerDTO;
-				switch(entry) {
+				switch (entry) {
 					case 1 :
 						System.out.println("---------------------");
 						System.out.println("- List of computers -");
@@ -350,10 +343,9 @@ public class Cli {
 					case 2 :
 						Long id = readId();
 						computer = computerService.getComputer(id);
-						if(computer == null) {
+						if (computer == null) {
 							System.out.println("No computer is referenced by id " + id);
-						}
-						else {
+						} else {
 							System.out.println(computer.toDetailedString());
 						}
 						break;
@@ -363,8 +355,7 @@ public class Cli {
                             computer = computerMapper.getFromDTO(computerDTO);
                             computerService.create(computer);
                             break;
-                        }
-                        catch(DAOException e) {
+                        } catch(DAOException e) {
                             System.err.println("Error on computer creation");
                             break;
                         }
@@ -376,12 +367,17 @@ public class Cli {
 	                        computer = computerMapper.getFromDTO(computerDTO);
 	                        computerService.update(computer);                     
 	                        break;
-                        }
-                        catch(DAOException e) {
+                        } catch(DAOException e) {
                             System.err.println("Error on computer creation");
                             break;
                         }
-					case 5 : Long delId = readId(); computerService.delete(delId); break;
+					case 5 : Long delId = readId(); 
+					try {
+						computerService.delete(delId);
+						break;
+					} catch (DAOException e) {
+                        System.err.println("Error on computer deletion");
+					}
 					case 6 : step = 0; break;
 				}
 			}

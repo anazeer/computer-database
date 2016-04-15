@@ -61,12 +61,12 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 		computerDAO.update(computer);
 	}
 	
-	public void delete(Computer computer) {
+	public void delete(Computer computer) throws DAOException{
 		computerDAO.delete(computer);
 	}
 	
 	@Override
-	public void delete(Long id) {
+	public void delete(Long id) throws DAOException {
 		computerDAO.delete(id);
 	}
 }

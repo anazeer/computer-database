@@ -2,6 +2,7 @@ package com.excilys.cdb.service;
 
 import java.util.List;
 
+import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.pagination.AbstractPage;
 import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.service.util.Query;
@@ -38,6 +39,7 @@ public interface IService<T> {
 	/**
 	 * Delete the row referenced by id
 	 * @param id the row reference
+	 * @throws DAOException 
 	 */
-	void delete(Long id);
+	void delete(Long id) throws DAOException;
 }

@@ -7,32 +7,26 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.dao.implementation.CompanyDAO;
 import com.excilys.cdb.service.util.Query;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.excilys.cdb.model.Company;
-
 /**
  * CompanyDAO test class. We assume that the database is not empty and contains 42 elements
- * @author excilys
- *
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/spring-context.xml"})
 public class CompanyDAOTest {
 
+	@Autowired
 	private static CompanyDAO companyDAO;
 	
-	@BeforeClass
-	public static void init() {
-		try(ClassPathXmlApplicationContext context = 
-				new ClassPathXmlApplicationContext("spring-context.xml")) {
-			companyDAO = context.getBean(CompanyDAO.class);
-		}
-	}
-
 	/**
 	 * We assume that the database is not empty and contains exactly 42 keys from 1 to 42
 	 * @throws Exception

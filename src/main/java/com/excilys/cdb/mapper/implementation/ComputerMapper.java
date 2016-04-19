@@ -1,12 +1,7 @@
 package com.excilys.cdb.mapper.implementation;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,31 +21,7 @@ public class ComputerMapper implements IMapper<Computer> {
     @Autowired
     private CompanyDAO companyDAO;
     
-	private Logger log = LoggerFactory.getLogger(getClass());
-
 	private ComputerMapper() {
-	}
-	
-	@Override
-	public Computer getFromResultSet(ResultSet result) {
-		try {
-            String name = result.getString("name");
-            Long id = result.getLong("id");
-            Date introducedDate = result.getDate("introduced");
-			LocalDate introduced = introducedDate == null ? null : introducedDate.toLocalDate();
-            Date discontinuedDate = result.getDate("discontinued");
-			LocalDate discontinued = discontinuedDate == null ? null : discontinuedDate.toLocalDate();
-            Company company = companyDAO.findById(result.getLong("company_id"));
-            return new Computer.Builder(name)
-                    .id(id)
-                    .introduced(introduced)
-                    .discontinued(discontinued)
-                    .company(company)
-                    .build();
-		} catch (SQLException e) {
-            log.error(e.getMessage());
-		}
-		return null;
 	}
 
     @Override

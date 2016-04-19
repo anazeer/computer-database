@@ -95,7 +95,6 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 		Map<String, String> namedParameters = Collections.singletonMap("filter", '%' + filter + '%');
 		// Execute the query
 		int count = jdbcTemplate.queryForObject(queryText, namedParameters, Integer.class);
-		log.info(queryText);
 
 		// Log the result
 		log.info("Computers counted {}, filter = {}", count, filter);
@@ -104,9 +103,11 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 
 	@Override
 	public Computer create(Computer obj) throws DAOException {
+		// Get the company ID
+		String id = obj.getCompany() != null ? obj.getCompany().getId() + "" : "NULL";
 		// Build the query text
 		String queryText = "INSERT INTO computer (name, introduced, discontinued, company_id)"
-				+ "VALUES (:name, :introduced, :discontinued, :company.id)";
+				+ "VALUES (:name, :introduced, :discontinued, " + id + ")";
 		// Map the computer attributes based on the class name attributes and set it to the parameters map
 		SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(obj);
 		// Use to retrieve the auto-generated key returned by JDBC
@@ -122,11 +123,14 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 
 	@Override
 	public boolean update(Computer obj) throws DAOException {
+		// Get the company ID
+		String id = obj.getCompany() != null ? obj.getCompany().getId() + "" : "NULL";
+		// Build the query text
 		String queryText = "UPDATE computer SET "
 				+ "name = :name, "
 				+ "introduced = :introduced, "
 				+ "discontinued = :discontinued, "
-				+ "company_id = :company.id "
+				+ "company_id = " + id + " "
 				+ "WHERE id = " + obj.getId();
 		// Map the computer attributes based on the class name attributes and set it to the parameters map
 		SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(obj);

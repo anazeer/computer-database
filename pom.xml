@@ -90,7 +90,7 @@
 
 	<dependencies>
 
-		<!-- Servlet API -->
+		<!-- Servlet API, include JSTL -->
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -223,6 +223,14 @@
 			<artifactId>spring-web</artifactId>
 			<version>${springVersion}</version>
 		</dependency>
+		
+		<!-- Spring web mvc -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
 
 		<!-- Spring JDBC -->
 
@@ -252,9 +260,3 @@
 	</dependencies>
 
 </project>
-
-
-
-
-
-

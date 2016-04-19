@@ -24,7 +24,7 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 	private ComputerDAO computerDAO;
 	
 	@Autowired
-	CompanyService companyService;
+	private CompanyService companyService;
 	
 	@Autowired
 	private ComputerMapper computerMapper;

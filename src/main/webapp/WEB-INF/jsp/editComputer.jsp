@@ -43,7 +43,7 @@
 					</c:if>
                     <h1>Edit Computer</h1>
 					<!-- Computer editing form -->
-                    <form action="computerEdit?id=${computer.id}" method="POST">
+                    <form action="editComputer?id=${computer.id}" method="POST">
                         <input type="hidden" value="0"/>
                         <fieldset>
                             <div class="form-group">

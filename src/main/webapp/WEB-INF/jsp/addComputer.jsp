@@ -10,13 +10,13 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="resources/css/bootstrap.min.css" rel="stylesheet"
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
-<link href="resources/css/font-awesome.css" rel="stylesheet"
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet"
 	media="screen">
-<link href="resources/css/main.css" rel="stylesheet" media="screen">
-<script src="resources/js/jquery.min.js"></script>
-<script src="resources/js/jquery.validate.js"></script>
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" media="screen">
+<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery.validate.js"></script>
 <!-- <script src="resources/js/jquery.validation.js"></script> -->
 </head>
 <body>
@@ -46,7 +46,7 @@
 					</c:if>
 					<h1>Add Computer</h1>
 					<!-- Computer adding form -->
-					<form action="computerAdd" method="POST" id="computerForm">
+					<form action="addComputer" method="POST" id="computerForm">
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input

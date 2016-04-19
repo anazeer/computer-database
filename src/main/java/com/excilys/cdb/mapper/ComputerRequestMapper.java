@@ -1,6 +1,6 @@
 package com.excilys.cdb.mapper;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 import com.excilys.cdb.dto.implementation.ComputerDTO;
 
@@ -26,17 +26,17 @@ public class ComputerRequestMapper {
 	 * @param request the user request
 	 * @return the DTO depending on the user inputs
 	 */
-	public ComputerDTO getFromRequest(HttpServletRequest request) {
+	public ComputerDTO getFromRequest(Map<String, String> request) {
 		
 		// We first get the parameters from the POST form
-		String computerId = request.getParameter(idParam);
+		String computerId = request.get(idParam);
 		computerId = computerId == null || computerId.trim().isEmpty() ? null : computerId.trim();
-		String name = request.getParameter(nameParam);
-		String companyId = request.getParameter(companyIdParam);
+		String name = request.get(nameParam);
+		String companyId = request.get(companyIdParam);
 		companyId = companyId == null || companyId.trim().isEmpty() ? null : companyId.trim();
-		String introduced = request.getParameter(introParam);
+		String introduced = request.get(introParam);
 		introduced = introduced == null || introduced.trim().isEmpty() ? null : introduced.trim();
-		String discontinued = request.getParameter(discontinuedParam);
+		String discontinued = request.get(discontinuedParam);
 		discontinued = discontinued == null || discontinued.trim().isEmpty() ? null : discontinued.trim();
 		Long idComputer = null;
 		Long idCompany = null;

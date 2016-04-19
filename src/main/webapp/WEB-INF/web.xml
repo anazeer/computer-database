@@ -3,80 +3,37 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
-
+	
+	<!-- Description -->
+	<description>Computer database web application</description>
+	
+	<!-- Display name -->
 	<display-name>Web Application</display-name>
 
-	<!-- Servlets declaration -->
-
-	<servlet>
-		<servlet-name>ComputerServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.servlets.computer.ComputerServlet</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>AddServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.servlets.computer.AddServlet</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>EditServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.servlets.computer.EditServlet</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>DeleteServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.servlets.computer.DeleteServlet</servlet-class>
-	</servlet>
-
-	<!-- Servlets mapping -->
-
-	<servlet-mapping>
-		<servlet-name>ComputerServlet</servlet-name>
-		<url-pattern>/computer</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>AddServlet</servlet-name>
-		<url-pattern>/computerAdd</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>EditServlet</servlet-name>
-		<url-pattern>/computerEdit</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>DeleteServlet</servlet-name>
-		<url-pattern>/computerDelete</url-pattern>
-	</servlet-mapping>
-
-	<!-- Error pages -->
-
-	<error-page>
-		<error-code>403</error-code>
-		<location>/WEB-INF/403.jsp</location>
-	</error-page>
-	<error-page>
-		<error-code>404</error-code>
-		<location>/WEB-INF/404.jsp</location>
-	</error-page>
-	<error-page>
-		<error-code>500</error-code>
-		<location>/WEB-INF/500.jsp</location>
-
-	</error-page>
-
 	<!-- Spring context -->
-
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring-config.xml</param-value>
+		<param-value>classpath:spring-config.xml</param-value>
 	</context-param>
 
 	<!-- Spring context listener -->
-
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-
+	
+	<!-- Initialize the DispatcherServlet -->
+	<servlet>
+   		<servlet-name>spring-dispatcher</servlet-name>
+        	<servlet-class>
+         	    org.springframework.web.servlet.DispatcherServlet
+        	</servlet-class>
+     	<load-on-startup>1</load-on-startup>
+	</servlet>  
+	
+	<!-- Map the request in order to be handled by the DispatcherServlet -->
+	<servlet-mapping>
+		<servlet-name>spring-dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

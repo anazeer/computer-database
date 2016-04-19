@@ -10,9 +10,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="resources/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="resources/css/main.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -38,13 +38,13 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="computerAdd">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
         </div>
 
-        <form id="deleteForm" action="computerDelete" method="POST">
+        <form id="deleteForm" action="computer" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -117,7 +117,7 @@
                             <input type="checkbox" name="cb" class="cb" value="${computer.id}">
                         </td>
                         <td>
-                        	<mylib:link target="computerEdit" text="${computer.name}" id="${computer.id}"/>
+                        	<mylib:link target="editComputer" text="${computer.name}" id="${computer.id}"/>
                         </td>
                         <td><c:out value="${computer.introduced}"/> </td>
                         <td><c:out value="${computer.discontinued}"/> </td>
@@ -145,9 +145,9 @@
       </div>
     </footer>
     <!-- Scripts -->
-    <script src="resources/js/jquery.min.js"></script>
-    <script src="resources/js/bootstrap.min.js"></script>
-    <script src="resources/js/dashboard.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
 
     </body>
 </html>

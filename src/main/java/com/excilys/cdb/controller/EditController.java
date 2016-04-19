@@ -1,18 +1,13 @@
-package com.excilys.cdb.servlets.computer;
+package com.excilys.cdb.controller;
 
-import java.io.IOException;
 import java.util.Map;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.dto.implementation.ComputerDTO;
 import com.excilys.cdb.exception.DAOException;
@@ -24,10 +19,10 @@ import com.excilys.cdb.service.implementation.ComputerService;
 import com.excilys.cdb.validation.Validator;
 
 /**
- * Servlet implementation class EditServlet
+ * Computer editing controller
  */
-public class EditServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+@Controller
+public class EditController {
 	
     // Services
 	@Autowired
@@ -56,68 +51,66 @@ public class EditServlet extends HttpServlet {
 	
 	// ID for the editComputer JSP for the edited computer
 	private final String compJSP = "computer";
+	
+	// ID for the URL parameter id
+	private final String idParam = "id";
 
     /**
      * Default constructor. 
      */
-    public EditServlet() {
+    private EditController() {
     }
     
-	/**
-	 * Initialize the spring context for the servlet
-	 */
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
-        AutowireCapableBeanFactory beanFactory = springContext.getAutowireCapableBeanFactory();
-        beanFactory.autowireBean(this);
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@RequestMapping(path="/editComputer", method = RequestMethod.GET)
+	public ModelAndView doGet(@RequestParam Map<String, String> request, ModelAndView mav) {
 		// We first get the DTO associated to the id parameter from the URL
 		ComputerDTO dto = new ComputerRequestMapper().getFromRequest(request);
 		
 		// Then we try to retrieve the computer
 		Computer computer = computerService.getComputer(dto.getId());
+		
+		// ModelAndView isn't null if we come from post
+		if (mav == null) {
+			mav = new ModelAndView();
+		}
 
 		// The id is not valid so the edit page associated doesn't exist
 		if (computer == null) {
-			getServletContext().getRequestDispatcher("/WEB-INF/404.jsp").forward(request, response);
+			mav.setViewName("404");
+			return mav;
 		}
         // The id is correct, we retrieve the computer and send its DTO to the JSP
 		else {
+			mav.setViewName("editComputer");
             dto = (ComputerDTO) computerMapper.getFromModel(computer);
-            request.setAttribute(compJSP, dto);
-            request.setAttribute(companyList, companyService.list(null));
-            getServletContext().getRequestDispatcher("/WEB-INF/editComputer.jsp").forward(request, response);
+            mav.addObject(compJSP, dto);
+            mav.addObject(companyList, companyService.list(null));
+            mav.addObject(idParam, request.get(idParam));
+            return mav;
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@RequestMapping(path="/editComputer", method = RequestMethod.POST)
+	public ModelAndView doPost(@RequestParam(value = "id") Long id, @RequestParam Map<String, String> request) {
         // We first get the DTO from the request
 		ComputerDTO dto = new ComputerRequestMapper().getFromRequest(request);
 		
         // Then we check the user inputs with the help of Validator class
 		Map<String, String> errors = Validator.validateComputer(dto);
 		
+		ModelAndView mav = new ModelAndView("editComputer");
+		
         // If the inputs are not good, we set some error messages
 		if (!errors.isEmpty()) {
-			request.setAttribute(globalError, Validator.CREATE_ERROR);
+			mav.addObject(globalError, Validator.CREATE_ERROR);
 			for (Map.Entry<String, String> entry : errors.entrySet()) {
 			    String errorName = entry.getKey();
 			    String errorValue = entry.getValue();
-			    request.setAttribute(errorName, errorValue);
-			    request.setAttribute(failure, true);
+			    mav.addObject(errorName, errorValue);
+			    mav.addObject(failure, true);
 			}
-			doGet(request, response);
-			return;
+			return doGet(request, mav);
+			//return "editComputer";
 		}
 
         // If the validation went good, we try to edit the computer
@@ -125,15 +118,14 @@ public class EditServlet extends HttpServlet {
 		try {
 			computerService.update(computer);
 		} catch (DAOException e) {
-			request.setAttribute(globalError, e.getMessage());
-			request.setAttribute(failure, true);
-			doGet(request, response);
-			return;
+			mav.addObject(globalError, e.getMessage());
+			mav.addObject(failure, true);
+			return doGet(request, mav);
 		}
 
         // If the persistence is successful we print a success message on the page
-		request.setAttribute(success, true);
-		request.setAttribute(editSuccess, Validator.COMP_SUCCESS);
-		getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
+		mav.addObject(success, true);
+		mav.addObject(editSuccess, Validator.COMP_SUCCESS);
+		return doGet(request, mav);
 	}
 }

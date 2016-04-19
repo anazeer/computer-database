@@ -1,7 +1,5 @@
 package com.excilys.cdb.mapper;
 
-import java.sql.ResultSet;
-
 import com.excilys.cdb.dto.IDTO;
 
 /**
@@ -9,13 +7,6 @@ import com.excilys.cdb.dto.IDTO;
  * @param <T>
  */
  public interface IMapper<T> {
-
-    /**
-     * Maps a SQL row into an object
-     * @param result : the result set containing the row
-     * @return the fresh mapped object
-     */
-	T getFromResultSet(ResultSet result);
 
     /**
      * Maps a DTO object into its model implementation

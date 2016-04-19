@@ -1,11 +1,11 @@
 package com.excilys.cdb.pagination.mapper;
 
+import java.util.Map;
+
 import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.service.util.Order;
 import com.excilys.cdb.service.util.Query;
 import com.excilys.cdb.validation.Parser;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Page mapper for request
@@ -23,19 +23,19 @@ public class PageRequestMapper {
 
     // Id for the order parameter
     private static final String ORDER_ID = "order";
-
+    
     /**
      * Analyze the user request and generate the corresponding page
-     * @param request the page request
+     * @param map the page request
      * @return the page depending on the request parameters
      */
-    public static PageRequest get(HttpServletRequest request) {
-
+    public static PageRequest get(Map<String, String> request) {
+    	    	
         // We first get the page information from the URL (method GET)
-        String pageRequest = request.getParameter(PAGE_NUMBER_ID);
-        String limitRequest = request.getParameter(LIMIT_ID);
-        String searchRequest = request.getParameter(SEARCH_ID);
-        String orderRequest = request.getParameter(ORDER_ID);
+        String pageRequest = request.get(PAGE_NUMBER_ID);
+        String limitRequest = request.get(LIMIT_ID);
+        String searchRequest = request.get(SEARCH_ID);
+        String orderRequest = request.get(ORDER_ID);
 
         // Parse the page number
         int page = Parser.parsePageNumber(pageRequest);

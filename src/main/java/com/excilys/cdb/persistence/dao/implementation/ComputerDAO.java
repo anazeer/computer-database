@@ -72,7 +72,7 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 		List<Computer> computer = jdbcTemplate.query(queryText, namedParameters, new ComputerMapper());
 		// Log the result
 		if (computer.isEmpty()) {
-			if (id > 0) {
+			if (id != null && id > 0) {
 				log.warn("Computer not retrieved (id = {})", id);
 			}
 			return null;

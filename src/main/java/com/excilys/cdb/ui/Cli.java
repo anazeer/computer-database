@@ -186,7 +186,7 @@ public class Cli {
 		Date date = null;
 		String entry = null;
 		//String parse = "yyyy/mm/dd";
-		String parse = "dd/mm/yyyy";
+		String parse = "dd/MM/yyyy";
 		while (date == null) {
 			try {
 				System.out.println("Select date " + parse + ": (If unknown, enter u)");

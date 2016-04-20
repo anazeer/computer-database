@@ -26,6 +26,7 @@
 	<context:component-scan
 		base-package="com.excilys.cdb.persistence.dao.implementation" />
 	<context:component-scan base-package="com.excilys.cdb.mapper.implementation" />
+	<context:component-scan base-package="com.excilys.cdb.dto.implementation" />
 
 	<!-- Use the JDBC properties file for the data source -->
 	<context:property-placeholder location="classpath:dbconf.properties" />

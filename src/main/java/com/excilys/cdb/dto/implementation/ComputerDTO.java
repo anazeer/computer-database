@@ -1,30 +1,46 @@
 package com.excilys.cdb.dto.implementation;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.excilys.cdb.dto.IDTO;
+import com.excilys.cdb.dto.validation.ConsistentDate;
+import com.excilys.cdb.dto.validation.DateFormat;
 
 /**
  * DTO implementation for computers
  */
+@ConsistentDate
 public class ComputerDTO implements IDTO {
-	
+
 	private Long id;
+
+	@NotNull(message="name is required")
+	@NotEmpty(message="name should not be empty")
+	@Size(max=80, message="name is too long (80 characters max)")
+	@Pattern(regexp = "^([\\p{L} 0123456789.'+-/]|[(]|[)])*$", message = "illegal character in name (only alphanumeric and .'+-()/ are allowed)")
 	private String name;
+	@DateFormat
 	private String introduced;
+	@DateFormat
 	private String discontinued;
 	private Long companyId;
 	private String companyName;
 
-    public ComputerDTO() {
-    }
+	public ComputerDTO() {
+	}
 
-    private ComputerDTO(Long id, String name, String introduced, String discontinued, Long companyId, String companyName) {
-        this.id = id;
-        this.name = name;
-        this.introduced = introduced;
-        this.discontinued = discontinued;
-        this.companyId = companyId;
-        this.companyName = companyName;
-    }
+	private ComputerDTO(Long id, String name, String introduced, String discontinued, Long companyId, String companyName) {
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.companyId = companyId;
+		this.companyName = companyName;
+	}
 
 	public ComputerDTO(String name) {
 		setName(name);
@@ -138,45 +154,45 @@ public class ComputerDTO implements IDTO {
 		return name + " (id: " + id + ")";
 	}
 
-    public static class Builder {
-        private Long id;
-        private String name;
-        private String introduced;
-        private String discontinued;
-        private Long companyId;
-        private String companyName;
+	public static class Builder {
+		private Long id;
+		private String name;
+		private String introduced;
+		private String discontinued;
+		private Long companyId;
+		private String companyName;
 
-        public Builder(String name) {
-            this.name = name;
-        }
+		public Builder(String name) {
+			this.name = name;
+		}
 
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
+		public Builder id(Long id) {
+			this.id = id;
+			return this;
+		}
 
-        public Builder introduced(String introduced) {
-            this.introduced = introduced;
-            return this;
-        }
+		public Builder introduced(String introduced) {
+			this.introduced = introduced;
+			return this;
+		}
 
-        public Builder discontinued(String discontinued) {
-            this.discontinued = discontinued;
-            return this;
-        }
+		public Builder discontinued(String discontinued) {
+			this.discontinued = discontinued;
+			return this;
+		}
 
-        public Builder companyId(Long companyId) {
-            this.companyId = companyId;
-            return this;
-        }
+		public Builder companyId(Long companyId) {
+			this.companyId = companyId;
+			return this;
+		}
 
-        public Builder companyName(String companyName) {
-            this.companyName = companyName;
-            return this;
-        }
+		public Builder companyName(String companyName) {
+			this.companyName = companyName;
+			return this;
+		}
 
-        public ComputerDTO build() {
-            return new ComputerDTO(id, name, introduced, discontinued, companyId, companyName);
-        }
-    }
+		public ComputerDTO build() {
+			return new ComputerDTO(id, name, introduced, discontinued, companyId, companyName);
+		}
+	}
 }

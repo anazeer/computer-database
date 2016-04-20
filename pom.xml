@@ -6,7 +6,7 @@
 
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.6.0-SNAPSHOT</version>
+	<version>0.6.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>computer-database</name>
 	<url>http://maven.apache.org</url>
@@ -28,6 +28,8 @@
 		<seleniumVersion>2.53.0</seleniumVersion>
 		<httpclientVersion>4.3.5</httpclientVersion>
 		<springVersion>4.2.5.RELEASE</springVersion>
+		<validationVersion>1.1.0.Final</validationVersion>
+		<hibernateVersion>5.2.4.Final</hibernateVersion>
 
 		<!-- Source encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -223,7 +225,7 @@
 			<artifactId>spring-web</artifactId>
 			<version>${springVersion}</version>
 		</dependency>
-		
+
 		<!-- Spring web mvc -->
 
 		<dependency>
@@ -255,6 +257,22 @@
 			<artifactId>spring-test</artifactId>
 			<version>${springVersion}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- Spring validation -->
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${validationVersion}</version>
+		</dependency>
+
+		<!-- Hibernate validator -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernateVersion}</version>
 		</dependency>
 
 	</dependencies>

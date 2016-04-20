@@ -1,6 +1,7 @@
 package com.excilys.cdb.mapper.implementation;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,9 +31,11 @@ public class ComputerMapper implements IMapper<Computer> {
         String name = computerDTO.getName();
         Long id = computerDTO.getId();
         String introducedString = computerDTO.getIntroduced();
-        LocalDate introduced = introducedString == null ? null : LocalDate.parse(introducedString);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        		
+        LocalDate introduced = introducedString == null || introducedString.trim().isEmpty() ? null : LocalDate.parse(introducedString, formatter);
         String discontinuedString = computerDTO.getDiscontinued();
-        LocalDate discontinued = discontinuedString == null ? null : LocalDate.parse(computerDTO.getDiscontinued());
+        LocalDate discontinued = discontinuedString == null || discontinuedString.trim().isEmpty() ? null : LocalDate.parse(computerDTO.getDiscontinued(), formatter);
         Company company = companyDAO.findById(computerDTO.getCompanyId());
         return new Computer.Builder(name)
                 .id(id)

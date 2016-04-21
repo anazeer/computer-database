@@ -7,6 +7,10 @@ import java.time.format.DateTimeParseException;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+
 /**
  * Date validator.
  * Validate a String annotated by @DateFormat that should be a date
@@ -14,10 +18,9 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class DateFormatValidator implements ConstraintValidator<DateFormat, String> {
 	
-	// Date format
-	private static final String FORMAT = "yyyy-MM-dd";
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(FORMAT);
-	
+	@Autowired
+	private MessageSource messageSource;
+
 	@Override
 	public void initialize(DateFormat constraintAnnotation) {
 	}
@@ -36,6 +39,8 @@ public class DateFormatValidator implements ConstraintValidator<DateFormat, Stri
 		}
 		// Try to parse the date
 		try {
+			String pattern = messageSource.getMessage("util.date.format", null, LocaleContextHolder.getLocale());
+			DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(pattern);
 			LocalDate localDate = LocalDate.parse(date, FORMATTER);
 			// The date need to be after 1970 to be successfully persisted
 			if (localDate.isBefore(LocalDate.of(1970, 01, 02))) {

@@ -104,7 +104,7 @@ public class ComputerController {
 		for (String s : ids) {
 			try {
 			computerService.delete(Long.parseLong(s));
-			} catch(DAOException e) {
+			} catch (DAOException e) {
 				log.error(e.getMessage());
 			}
 		}

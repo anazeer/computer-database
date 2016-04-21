@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.dto.IDTO;
@@ -22,6 +24,9 @@ public class ComputerMapper implements IMapper<Computer> {
     @Autowired
     private CompanyDAO companyDAO;
     
+    @Autowired
+    private MessageSource messageSource;
+    
 	private ComputerMapper() {
 	}
 
@@ -31,8 +36,7 @@ public class ComputerMapper implements IMapper<Computer> {
         String name = computerDTO.getName();
         Long id = computerDTO.getId();
         String introducedString = computerDTO.getIntroduced();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        		
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(messageSource.getMessage("util.date.format", null, LocaleContextHolder.getLocale()));
         LocalDate introduced = introducedString == null || introducedString.trim().isEmpty() ? null : LocalDate.parse(introducedString, formatter);
         String discontinuedString = computerDTO.getDiscontinued();
         LocalDate discontinued = discontinuedString == null || discontinuedString.trim().isEmpty() ? null : LocalDate.parse(computerDTO.getDiscontinued(), formatter);

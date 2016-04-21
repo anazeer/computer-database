@@ -172,13 +172,13 @@ public class ComputerController {
 			longId = Long.parseLong(id);
 		} catch(NumberFormatException e) {
 			// The ID is incorrect, the page doesn't exist
-			return "404";
+			return "error/404";
 		}
 		// Get the computer associated to the id parameter from the URL
 		Computer computer = computerService.findById(longId);
 		if (computer == null) {
 			// The id is not valid so the edit page associated doesn't exist
-			return "404";
+			return "error/404";
 		}
         // The id is correct, we retrieve the computer and send its DTO to the JSP
 		ComputerDTO dto = (ComputerDTO) computerMapper.getFromModel(computer);
@@ -220,4 +220,7 @@ public class ComputerController {
 		model.addAttribute(SUCCESS, true);
 		return "editComputer";
 	}
+	
+	
+	
 }

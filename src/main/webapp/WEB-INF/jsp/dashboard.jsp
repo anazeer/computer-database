@@ -71,11 +71,11 @@
 							<!-- Retrieve the current ordering for computer name --> <c:set
 								var="newOrder" scope="page"
 								value="${not empty page.order ? (page.order eq 'name_dsc' ? 'name_asc' : 'name_dsc') : 'name_asc'}" />
-								
-							<spring:message code="label.computerName" var="compName" />
-							<mylib:link text="${compName}" target="computer"
-								limit="${page.limit}" page="${page.currentPage}"
-								search="${page.filter}" order="${newOrder}" /> <c:choose>
+
+							<spring:message code="label.computerName" var="compName" /> <mylib:link
+								text="${compName}" target="computer" limit="${page.limit}"
+								page="${page.currentPage}" search="${page.filter}"
+								order="${newOrder}" /> <c:choose>
 								<c:when test="${newOrder eq 'name_dsc' }">
 									<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
 								</c:when>
@@ -90,10 +90,10 @@
 							<!-- Retrieve the current ordering for introduced date --> <c:set
 								var="newOrder" scope="page"
 								value="${not empty page.order ? (page.order eq 'introduced_dsc' ? 'introduced_asc' : 'introduced_dsc') : 'introduced_asc'}" />
-							<spring:message code="label.introduced" var="intro" />
-							<mylib:link text="${intro}" target="computer"
-								limit="${page.limit}" page="${page.currentPage}"
-								search="${page.filter}" order="${newOrder}" /> <c:choose>
+							<spring:message code="label.introduced" var="intro" /> <mylib:link
+								text="${intro}" target="computer" limit="${page.limit}"
+								page="${page.currentPage}" search="${page.filter}"
+								order="${newOrder}" /> <c:choose>
 								<c:when test="${newOrder eq 'introduced_dsc' }">
 									<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
 								</c:when>
@@ -108,10 +108,10 @@
 							<!-- Retrieve the current ordering for discontinued date --> <c:set
 								var="newOrder" scope="page"
 								value="${not empty page.order ? (page.order eq 'discontinued_dsc' ? 'discontinued_asc' : 'discontinued_dsc') : 'discontinued_asc'}" />
-							<spring:message code="label.discontinued" var="discon" />
-							<mylib:link text="${discon}" target="computer"
-								limit="${page.limit}" page="${page.currentPage}"
-								search="${page.filter}" order="${newOrder}" /> <c:choose>
+							<spring:message code="label.discontinued" var="discon" /> <mylib:link
+								text="${discon}" target="computer" limit="${page.limit}"
+								page="${page.currentPage}" search="${page.filter}"
+								order="${newOrder}" /> <c:choose>
 								<c:when test="${newOrder eq 'discontinued_dsc' }">
 									<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
 								</c:when>
@@ -126,10 +126,10 @@
 							<!-- Retrieve the current ordering for company --> <c:set
 								var="newOrder" scope="page"
 								value="${not empty page.order ? (page.order eq 'company_dsc' ? 'company_asc' : 'company_dsc') : 'company_asc'}" />
-							<spring:message code="label.company" var="company" />
-							<mylib:link text="${company}" target="computer"
-								limit="${page.limit}" page="${page.currentPage}"
-								search="${page.filter}" order="${newOrder}" /> <c:choose>
+							<spring:message code="label.company" var="company" /> <mylib:link
+								text="${company}" target="computer" limit="${page.limit}"
+								page="${page.currentPage}" search="${page.filter}"
+								order="${newOrder}" /> <c:choose>
 								<c:when test="${newOrder eq 'company_dsc' }">
 									<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
 								</c:when>
@@ -180,6 +180,15 @@
 			</div>
 		</div>
 	</footer>
+
+	<!-- Translate text in scripts -->
+	<script type="text/javascript">
+		var translate = new Array();
+		translate['view'] = "<spring:message code='js.view' javaScriptEscape='true' />";
+		translate['edit'] = "<spring:message code='js.edit' javaScriptEscape='true' />";
+		translate['confirm'] = "<spring:message code='js.confirm' javaScriptEscape='true' />";
+	</script>
+
 	<!-- Scripts -->
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>

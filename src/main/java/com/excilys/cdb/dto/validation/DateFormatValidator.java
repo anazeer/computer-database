@@ -40,7 +40,7 @@ public class DateFormatValidator implements ConstraintValidator<DateFormat, Stri
 			// The date need to be after 1970 to be successfully persisted
 			if (localDate.isBefore(LocalDate.of(1970, 01, 02))) {
 				context.disableDefaultConstraintViolation();
-				context.buildConstraintViolationWithTemplate("The date is too old (must be after 1970)").addConstraintViolation();
+				context.buildConstraintViolationWithTemplate("{error.date.old}").addConstraintViolation();
 				return false;
 			}
 		} catch(DateTimeParseException e) {

@@ -48,10 +48,11 @@ public class ConsistentDateValidator implements ConstraintValidator<ConsistentDa
 			// Introduced should be before discontinued
 			if (introduced.isAfter(discontinued)) {
 				context.disableDefaultConstraintViolation();
-				context.buildConstraintViolationWithTemplate("discontinued date should be after introduced date").addConstraintViolation();
+				context.buildConstraintViolationWithTemplate("{error.date.temporal}").addConstraintViolation();
 				return false;
 			}
 		} catch(DateTimeParseException e) {
+			// If a parse exception occurs, the error message already has been printed by the @DateFormat annotation on the date
 			return false;
 		}
 		return true;

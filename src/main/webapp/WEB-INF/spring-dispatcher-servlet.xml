@@ -15,11 +15,39 @@
 	<context:component-scan base-package="com.excilys.cdb.controller" />
 	<context:component-scan base-package="com.excilys.cdb.dto" />
 
-	<!-- Enables the Spring MVC @Controller programming model -->
-	<mvc:annotation-driven />
+	<!-- Enable the Spring MVC @Controller programming model, and enable i18n on validation -->
+	<mvc:annotation-driven validator="validator"/>
 
 	<!-- Include the resources -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Enable i18n (internationalization), with messages_{locale}.properties 
+		type files -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:messages" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
+	<!-- Resolves the locale based on the predefined attribute in the session. -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en" />
+	</bean>
+
+	<!-- Intercept the user request and change the locale when a 'lang' request 
+		parameter is sent -->
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="lang" />
+		</bean>
+	</mvc:interceptors>
+
+	<!-- Enable the use of properties file (i18n) for validation error messages -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean>
 
 	<!-- View resolver, translates a view name to the corresponding JSP -->
 	<bean id="viewResolver"

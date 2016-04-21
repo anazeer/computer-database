@@ -19,7 +19,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DateFormat {
  
-    String message() default "incorrect date format, should be yyyy-MM-dd";
+    String message() default "{error.date.format}";
      
     Class<?>[] groups() default {};
      

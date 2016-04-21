@@ -17,11 +17,10 @@ import com.excilys.cdb.dto.validation.DateFormat;
 public class ComputerDTO implements IDTO {
 
 	private Long id;
-
-	@NotNull(message="name is required")
-	@NotEmpty(message="name should not be empty")
-	@Size(max=80, message="name is too long (80 characters max)")
-	@Pattern(regexp = "^([\\p{L} 0123456789.'+-/]|[(]|[)])*$", message = "illegal character in name (only alphanumeric and .'+-()/ are allowed)")
+	@NotNull(message="{error.name.null}")
+	@NotEmpty(message="{error.name.empty}")
+	@Size(max=80, message="{error.name.size")
+	@Pattern(regexp = "^([\\p{L} 0123456789.'+-/]|[(]|[)])*$", message = "{error.name.content}")
 	private String name;
 	@DateFormat
 	private String introduced;

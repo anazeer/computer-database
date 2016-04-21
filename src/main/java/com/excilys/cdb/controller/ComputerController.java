@@ -24,7 +24,6 @@ import com.excilys.cdb.pagination.mapper.PageRequestMapper;
 import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.service.implementation.CompanyService;
 import com.excilys.cdb.service.implementation.ComputerService;
-import com.excilys.cdb.validation.Validator;
 
 /**
  * Dashboard controller
@@ -53,12 +52,6 @@ public class ComputerController {
     
     // ID for boolean for an adding/editing failure
     private static final String FAILURE = "failure";
-
-    // ID for the adding/editing success message
-    private static final String GLOBAL_SUCCESS = "vsuccess";
-    
-    // ID for the adding/editing error messages
-    private static final String GLOBAL_FAILURE = "vfailure";
     
     // ID for the DTO object for the JSP
     private static final String DTO = "computerDTO";
@@ -147,7 +140,6 @@ public class ComputerController {
 		model.addAttribute(COMPANIES, companyService.list(null));
 		// If the validation have some errors, we print it
 		if (result.hasErrors()) {
-			model.addAttribute(GLOBAL_FAILURE, Validator.CREATE_ERROR);
 			model.addAttribute(FAILURE, true);
 			return "addComputer";
 		}
@@ -156,14 +148,13 @@ public class ComputerController {
 		try {
 			computerService.create(computer);
 		} catch (DAOException e) {
-			// The DAO layer can still throw an exception, we show it
-			model.addAttribute(GLOBAL_FAILURE, e.getMessage());
+			// The DAO layer can still throw an exception
+			log.error(e.getMessage());
 			model.addAttribute(FAILURE, "true");
 			return "addComputer";
 		}
 		// Everything is good
 		model.addAttribute(SUCCESS, true);
-		model.addAttribute(GLOBAL_SUCCESS, Validator.COMP_SUCCESS);
 		return "addComputer";
 	}
 	
@@ -208,9 +199,8 @@ public class ComputerController {
 	public String doPost(Model model, @Valid ComputerDTO dto, BindingResult result) {
 		model.addAttribute(DTO, dto);
 		model.addAttribute(COMPANIES, companyService.list(null));
-		// If the validation have some errors, we print it
+		// The validation have some errors,
 		if (result.hasErrors()) {
-			model.addAttribute(GLOBAL_FAILURE, Validator.CREATE_ERROR);
 			model.addAttribute(FAILURE, true);
 			return "editComputer";
 		}
@@ -220,15 +210,14 @@ public class ComputerController {
 		try {
 			computerService.update(computer);
 		} catch (DAOException e) {
-			// The DAO layer can still throw an exception, we show it
-			model.addAttribute(GLOBAL_FAILURE, e.getMessage());
+			// The DAO layer can still throw an exception
+			log.error(e.getMessage());
 			model.addAttribute(FAILURE, "true");
 			return "editComputer";
 		}
 
 		// Everything is good
 		model.addAttribute(SUCCESS, true);
-		model.addAttribute(GLOBAL_SUCCESS, Validator.COMP_SUCCESS);
 		return "editComputer";
 	}
 }

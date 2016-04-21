@@ -8,10 +8,10 @@
 	pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false"%>
 <html>
-<head>
-<title>Computer Database</title>
+<title><spring:message code="label.title" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Bootstrap -->
+<meta charset="utf-8">
+<!-- Include the Bootstrap -->
 <link
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet" media="screen">
@@ -20,19 +20,27 @@
 	rel="stylesheet" media="screen">
 <link href="${pageContext.request.contextPath}/resources/css/main.css"
 	rel="stylesheet" media="screen">
-<script
-	src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/jquery.validate.js"></script>
-<!-- <script src="resources/js/jquery.validation.js"></script> -->
-</head>
+
+<header class="navbar navbar-inverse navbar-fixed-top">
+
+	<!-- The navbar can redirect to the dashboard -->
+	<div class="container">
+		<a class="navbar-brand" href="dashboard.html"> <spring:message
+				code="label.app" />
+		</a>
+	</div>
+
+	<!-- Show the language flags in the right of the navbar, they're used to change the page language -->
+	<div align="right" id="flags">
+		<a href="?id=${computerDTO.id}&lang=en"> <img alt="en" title="English"
+			src=<spring:url value="/resources/images/gb.png"></spring:url>>
+		</a> <a href="?id=${computerDTO.id}&lang=fr"> <img alt="fr" title="French"
+			src=<spring:url value="/resources/images/fr.png"></spring:url>>
+		</a>
+	</div>
+
+</header>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<mylib:link target="computer" classLink="navbar-brand"
-				text=" Application - Computer Database " />
-		</div>
-	</header>
 	<section id="main">
 		<div class="container">
 			<div class="row">
@@ -45,52 +53,71 @@
 					<c:if test="${success}">
 						<div class="alert alert-dismissible alert-success">
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
-							${vsuccess}
+							<label id="computerSuccess"><spring:message code="label.edit.success" /></label>
 						</div>
 					</c:if>
 					<!-- Print the failure alert -->
 					<c:if test="${failure}">
 						<div class="alert alert-dismissible alert-danger">
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
-							${vfailure}
+							<label id="computerSuccess"><spring:message code="label.edit.failure" /></label>
 						</div>
 					</c:if>
-					<h1>Edit Computer</h1>
+					<h1>
+						<spring:message code="label.edit" />
+					</h1>
 					<!-- Computer editing form -->
-					<form:form action="editComputer?id=${computerDTO.id}" method="POST" modelAttribute="computerDTO">
+					<form:form action="editComputer?id=${computerDTO.id}" method="POST"
+						modelAttribute="computerDTO">
 						<input type="hidden" value="0" />
 						<fieldset>
+							<!-- Computer name form -->
 							<div class="form-group">
-								<form:label for="computerName" path="name">Computer name</form:label>
-								<form:input
-									type="text" class="form-control" id="computerName"
-									name="computerName" placeholder="Computer name"
+								<form:label for="computerName" path="name">
+									<spring:message code="label.computerName" />
+								</form:label>
+								<!-- Placeholder text -->
+								<spring:message code="tooltip.discontinued" var="compName" />
+								<form:input type="text" class="form-control" id="computerName"
+									name="computerName" placeholder="${compName}"
 									value="${computerDTO.name}" path="name" />
 								<form:errors path="name" cssclass="error" />
 							</div>
+							<!-- Introduced date form -->
 							<div class="form-group">
-								<form:label for="introduced" path="introduced">Introduced date</form:label>
-								<form:input
-									type="date" class="form-control" id="introduced"
-									name="introduced" placeholder="Introduced date (yyyy-MM-dd)"
+								<form:label for="introduced" path="introduced">
+									<spring:message code="label.introduced" />
+								</form:label>
+								<!-- Placeholder text -->
+								<spring:message code="tooltip.introduced" var="intro" />
+								<form:input type="date" class="form-control" id="introduced"
+									name="introduced" placeholder="${intro}"
 									value="${computerDTO.introduced}" path="introduced" />
 								<form:errors path="introduced" cssclass="error" />
 							</div>
+							<!-- Discontinued date form -->
 							<div class="form-group">
-								<form:label for="discontinued" path="discontinued">Discontinued date</form:label>
-								<form:input
-									type="date" class="form-control" id="discontinued"
-									name="discontinued" placeholder="Discontinued date (yyyy-MM-dd)"
+								<form:label for="discontinued" path="discontinued">
+									<spring:message code="label.discontinued" />
+								</form:label>
+								<!-- Placeholder text -->
+								<spring:message code="tooltip.discontinued" var="discon" />
+								<form:input type="date" class="form-control" id="discontinued"
+									name="discontinued" placeholder="${discon}"
 									value="${computerDTO.discontinued}" path="discontinued" />
-									<form:errors path="discontinued" cssclass="error" />
-									<form:errors cssclass="error" />
+								<form:errors path="discontinued" cssclass="error" />
+								<form:errors cssclass="error" />
 							</div>
+							<!-- Company form -->
 							<div class="form-group">
-								<form:label for="companyId" path="companyId">Company</form:label>
+								<form:label for="companyId" path="companyId">
+									<spring:message code="label.company" />
+								</form:label>
 								<!-- Browse companies -->
 								<select class="form-control" id="companyId" name="companyId">
 									<option value="0"><c:out value="--" /></option>
 									<c:forEach items="${companies}" var="company">
+										<!-- Select the current company -->
 										<option value="${company.id}"
 											${company.id == computerDTO.companyId ? 'selected="selected"' : ''}>
 											<c:out value="${company.name}" />
@@ -100,10 +127,12 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
-							or
-							<mylib:link target="computer" classLink="btn btn-default"
-								text="Cancel" />
+							<input type="submit"
+								value=<spring:message code="label.editButton" />
+								class="btn btn-primary">
+							<spring:message code="label.or" />
+							<a href="computer" class="btn btn-default"><spring:message
+									code="label.cancel" /></a>
 						</div>
 					</form:form>
 				</div>

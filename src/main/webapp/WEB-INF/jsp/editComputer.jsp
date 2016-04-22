@@ -32,12 +32,29 @@
 
 	<!-- Show the language flags in the right of the navbar, they're used to change the page language -->
 	<div align="right" id="flags">
-		<a href="?id=${computerDTO.id}&lang=en"> <img alt="en" title="English"
+		<a href="?id=${computerDTO.id}&lang=en"> <img alt="en"
+			title="English"
 			src=<spring:url value="/resources/images/gb.png"></spring:url>>
-		</a> <a href="?id=${computerDTO.id}&lang=fr"> <img alt="fr" title="French"
+		</a> <a href="?id=${computerDTO.id}&lang=fr"> <img alt="fr"
+			title="French"
 			src=<spring:url value="/resources/images/fr.png"></spring:url>>
 		</a>
 	</div>
+
+	<!-- Translate text in scripts -->
+	<script type="text/javascript">
+		var translate = new Array();
+		translate['nameEmpty'] = "<spring:message code='error.name.empty' javaScriptEscape='true' />";
+		translate['nameSize'] = "<spring:message code='error.name.size' javaScriptEscape='true' />";
+		translate['nameContent'] = "<spring:message code='error.name.content' javaScriptEscape='true' />";
+		translate['dateFormat'] = "<spring:message code='error.date.format' javaScriptEscape='true' />";
+		translate['dateOld'] = "<spring:message code='error.date.old' javaScriptEscape='true' />";
+		translate['dateTemporal'] = "<spring:message code='error.date.temporal' javaScriptEscape='true' />";
+	</script>
+
+	<!-- Scripts -->
+	<script
+		src="${pageContext.request.contextPath}/resources/js/computer.validation.js"></script>
 
 </header>
 <body>
@@ -53,14 +70,16 @@
 					<c:if test="${success}">
 						<div class="alert alert-dismissible alert-success">
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
-							<label id="computerSuccess"><spring:message code="label.edit.success" /></label>
+							<label id="computerSuccess"><spring:message
+									code="label.edit.success" /></label>
 						</div>
 					</c:if>
 					<!-- Print the failure alert -->
 					<c:if test="${failure}">
 						<div class="alert alert-dismissible alert-danger">
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
-							<label id="computerSuccess"><spring:message code="label.edit.failure" /></label>
+							<label id="computerSuccess"><spring:message
+									code="label.edit.failure" /></label>
 						</div>
 					</c:if>
 					<h1>

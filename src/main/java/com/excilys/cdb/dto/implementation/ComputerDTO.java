@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.excilys.cdb.dto.IDTO;
 import com.excilys.cdb.dto.validation.ConsistentDate;
@@ -18,7 +18,7 @@ public class ComputerDTO implements IDTO {
 
 	private Long id;
 	@NotNull(message="{error.name.null}")
-	@NotEmpty(message="{error.name.empty}")
+	@NotBlank(message="{error.name.empty}")
 	@Size(max=80, message="{error.name.size")
 	@Pattern(regexp = "^([\\p{L} 0123456789.'+-/]|[(]|[)])*$", message = "{error.name.content}")
 	private String name;

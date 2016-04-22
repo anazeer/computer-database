@@ -10,6 +10,22 @@
 <html>
 <head>
 <jsp:include page="include/head.jsp" />
+
+<!-- Translate text in scripts -->
+<script type="text/javascript">
+	var translate = new Array();
+	translate['nameEmpty'] = "<spring:message code='error.name.empty' javaScriptEscape='true' />";
+	translate['nameSize'] = "<spring:message code='error.name.size' javaScriptEscape='true' />";
+	translate['nameContent'] = "<spring:message code='error.name.content' javaScriptEscape='true' />";
+	translate['dateFormat'] = "<spring:message code='error.date.format' javaScriptEscape='true' />";
+	translate['dateOld'] = "<spring:message code='error.date.old' javaScriptEscape='true' />";
+	translate['dateTemporal'] = "<spring:message code='error.date.temporal' javaScriptEscape='true' />";
+</script>
+
+<!-- Scripts -->
+<script
+	src="${pageContext.request.contextPath}/resources/js/computer.validation.js"></script>
+
 </head>
 <body>
 	<section id="main">
@@ -20,14 +36,16 @@
 					<c:if test="${success}">
 						<div class="alert alert-dismissible alert-success">
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
-							<label id="computerSuccess"><spring:message code="label.add.success" /></label>
+							<label id="computerSuccess"><spring:message
+									code="label.add.success" /></label>
 						</div>
 					</c:if>
 					<!-- Print the failure alert -->
 					<c:if test="${failure}">
 						<div class="alert alert-dismissible alert-danger">
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
-							<label id="computerError"><spring:message code="label.add.failure" /></label>
+							<label id="computerError"><spring:message
+									code="label.add.failure" /></label>
 						</div>
 					</c:if>
 					<h1>

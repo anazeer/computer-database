@@ -26,25 +26,24 @@ import com.excilys.cdb.service.util.Query;
  * ComputerDAO test class. We assume that the database is not empty and contains more than 500 elements
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"/spring-context.xml"})
+@ContextConfiguration(locations = {"classpath:/spring-context.xml"})
 public class ComputerDAOTest {
 	
 	@Autowired
-	private static ComputerDAO computerDAO;
-	private static final String msgId = "id should be not null";
+	private ComputerDAO computerDAO;
+	private final String msgId = "id should be not null";
 	
 	/**
 	 * We assume that the database is not empty and contains at least 500 keys from 1 to 500
-	 * @throws Exception
 	 */
 	@Test
-	public void testFindOk() throws Exception {
+	public void testFindOk() {
 		Computer computer = computerDAO.findById(52L);
 		assertNotNull(computer);
 	}
 	
 	@Test
-	public void testFindNotOk() throws Exception {
+	public void testFindNotOk() {
 		Computer computer = computerDAO.findById(2500L);
 		assertNull(computer);
 	}
@@ -62,22 +61,6 @@ public class ComputerDAOTest {
 		List<Computer> list = computerDAO.find(null);
 		assertNotNull(list);
 		assert(list.size() > 0);
-	}
-	
-	@Test
-	public void testFindFilter() {
-		String filter = "apple";
-		Query query = new Query.Builder().filter(filter).build();
-		List<Computer> list = computerDAO.find(query);
-		for (Computer c : list) {
-            Company company = c.getCompany();
-			boolean contains =
-					   c.getName().toLowerCase().contains(filter) 
-					|| (c.getIntroduced() != null && c.getIntroduced().toString().toLowerCase().contains(filter))
-					|| (c.getDiscontinued() != null && c.getDiscontinued().toString().toLowerCase().contains(filter))
-					|| (company != null && company.getName().toLowerCase().contains(filter));
-			assertTrue(contains);
-		}
 	}
 	
 	@Test

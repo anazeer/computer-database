@@ -88,7 +88,7 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 		// Get the filter
 		String filter = query != null ? query.getFilter() : "";
 		// Join company for filtering
-		if (!filter.isEmpty()) {
+		if (filter != null && !filter.isEmpty()) {
 			queryText = queryText.replaceFirst("computer", "computer LEFT JOIN company ON computer.company_id = company.id");
 		}
 		// Set the filter in the parameters map

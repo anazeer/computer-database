@@ -38,8 +38,16 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 
 	@Override
 	public List<Company> find(Query query) {
-	    // Execute the query
-		List<Company> listCompany = jdbcTemplate.query(getQueryText(query), new CompanyMapper());
+		// Get the query text
+		String queryText = getQueryText(query);
+		// Get the filter
+		String filter = query != null ? query.getFilter() : "";
+		// Join company for filtering and ordering
+		queryText = queryText.replaceFirst("computer", "computer LEFT JOIN company ON computer.company_id = company.id");
+		// Set the filter in the parameters map
+		Map<String, String> namedParameters = Collections.singletonMap("filter", '%' + filter + '%');
+		// Execute the query
+		List<Company> listCompany = jdbcTemplate.query(getQueryText(query), namedParameters, new CompanyMapper());
 		// Log the result
 		log.info("Companies retrieved ({}), filter = {}, orderBy = {}", 
 				listCompany.size(), query != null ? query.getFilter() : "", query != null ? query.getOrder() : "");
@@ -66,10 +74,14 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 
 	@Override
 	public int count(Query query) {
+		// Get the query text
+		String queryText = getQueryText(query);
 		// Get the filter
 		String filter = query != null ? query.getFilter() : "";
+		// Join company for filtering and ordering
+		queryText = queryText.replaceFirst("computer", "computer LEFT JOIN company ON computer.company_id = company.id");
 		// Set the filter in the parameters map
-		Map<String, String> namedParameters = Collections.singletonMap("filter", filter);
+		Map<String, String> namedParameters = Collections.singletonMap("filter", '%' + filter + '%');
 		// Execute the query
 		int count = jdbcTemplate.queryForObject(getCountQueryText(query), namedParameters, Integer.class);
 		// Log the result

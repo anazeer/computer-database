@@ -18,23 +18,23 @@ import com.excilys.cdb.persistence.dao.implementation.CompanyDAO;
 import com.excilys.cdb.service.util.Query;
 
 /**
- * CompanyDAO test class. We assume that the database is not empty and contains 42 elements
+ * CompanyDAO test class. We assume that the database for testing is not empty and contains 42 elements
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"/spring-context.xml"})
+@ContextConfiguration(locations = {"classpath:/spring-context.xml"})
 public class CompanyDAOTest {
 
 	@Autowired
-	private static CompanyDAO companyDAO;
+	private CompanyDAO companyDAO;
 	
 	/**
-	 * We assume that the database is not empty and contains exactly 42 keys from 1 to 42
-	 * @throws Exception
+	 * The test database contains a 24th element that is Nintendo company
 	 */
 	@Test
-	public void testFindOk() {
-		Company company = companyDAO.findById(40L);
+	public void testFindById() {
+		Company company = companyDAO.findById(24L);
 		assertNotNull(company);
+		assertEquals("Nintendo", company.getName());
 	}
 	
 	@Test
@@ -44,29 +44,35 @@ public class CompanyDAOTest {
 	}
 	
 	@Test
-	public void testFindFromOffset() {
+	public void testFindPageQuery() {
 		Query query = new Query.Builder().offset(0).limit(10).build();
 		List<Company> list = companyDAO.find(query);
 		assertNotNull(list);
-		assertTrue(list.size() <= 10);
+		assertTrue(list.size() == 10);
 	}
 	
 	@Test
-	public void testFindFilter() {
+	public void testFindFilterQuery() {
 		String filter = "in";
 		Query query = new Query.Builder().filter(filter).build();
 		List<Company> list = companyDAO.find(query);
-		for(Company c : list) {
+		for (Company c : list) {
 			assertTrue(c.getName().toLowerCase().contains(filter));
 		}
 	}
 	
 	@Test
-	public void testPageFilter() {
+	public void testFindQuery() {
 		String filter = "In";
 		Query query = new Query.Builder().offset(0).limit(10).filter(filter).build();
 		List<Company> list = companyDAO.find(query);
 		assertTrue(list.size() <= 10);
+	}
+	
+	@Test
+	public void testCount() {
+		int count = companyDAO.count(null);
+		assertEquals(42, count);
 	}
 	
 	@Test
@@ -78,15 +84,9 @@ public class CompanyDAOTest {
 	}
 	
 	@Test
-	public void testCountEntries() {
-		Query query = new Query.Builder().filter("  ").build();
-		assertEquals(companyDAO.count(null), companyDAO.count(query));
-	}
-	
-	@Test
 	public void testFindAll() throws Exception {
 		List<Company> list = companyDAO.find(null);
 		assertNotNull(list);
-		assertEquals(list.size(), companyDAO.count(null));
+		assertEquals(42, list.size());
 	}
 }

@@ -33,10 +33,11 @@ public class ComputerMapper implements IMapper<Computer> {
     @Override
     public Computer getFromDTO(IDTO dto) {
         ComputerDTO computerDTO = (ComputerDTO) dto;
+    	System.out.println(super.toString());
         String name = computerDTO.getName();
         Long id = computerDTO.getId();
+        DateTimeFormatter formatter = getFormat();
         String introducedString = computerDTO.getIntroduced();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(messageSource.getMessage("util.date.format", null, LocaleContextHolder.getLocale()));
         LocalDate introduced = introducedString == null || introducedString.trim().isEmpty() ? null : LocalDate.parse(introducedString, formatter);
         String discontinuedString = computerDTO.getDiscontinued();
         LocalDate discontinued = discontinuedString == null || discontinuedString.trim().isEmpty() ? null : LocalDate.parse(computerDTO.getDiscontinued(), formatter);
@@ -53,10 +54,11 @@ public class ComputerMapper implements IMapper<Computer> {
     public IDTO getFromModel(Computer model) {
         String name =  model.getName();
         Long id = model.getId();
+        DateTimeFormatter formatter = getFormat();
         LocalDate introducedDate = model.getIntroduced();
-        String introduced = introducedDate == null ? null : introducedDate.toString();
+        String introduced = introducedDate == null ? null : introducedDate.format(formatter).toString();
         LocalDate discontinuedDate = model.getDiscontinued();
-        String discontinued = discontinuedDate == null ? null : discontinuedDate.toString();
+        String discontinued = discontinuedDate == null ? null : discontinuedDate.format(formatter).toString();
         Company company = model.getCompany();
         Long companyId = null;
         String companyName = null;
@@ -71,5 +73,14 @@ public class ComputerMapper implements IMapper<Computer> {
                 .companyId(companyId)
                 .companyName(companyName)
                 .build();
+    }
+    
+    /**
+     * Retrieve the current locale and return the associated date format
+     * @return the date format
+     */
+    private DateTimeFormatter getFormat() {
+    	String pattern = messageSource.getMessage("util.date.format", null, LocaleContextHolder.getLocale());
+    	return DateTimeFormatter.ofPattern(pattern);
     }
 }

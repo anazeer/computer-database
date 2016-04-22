@@ -100,7 +100,7 @@ public abstract class AbstractPage<T> {
     public void setElements(List<T> elements) {
 		List<IDTO> dto = elements.stream()
 		        .map(model -> mapper.getFromModel(model))
-		        .collect(Collectors.toList()); 
+		        .collect(Collectors.toList());
 		this.elements = dto;
     }
     

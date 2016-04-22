@@ -40,8 +40,8 @@ public class DateFormatValidator implements ConstraintValidator<DateFormat, Stri
 		// Try to parse the date
 		try {
 			String pattern = messageSource.getMessage("util.date.format", null, LocaleContextHolder.getLocale());
-			DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(pattern);
-			LocalDate localDate = LocalDate.parse(date, FORMATTER);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+			LocalDate localDate = LocalDate.parse(date, formatter);
 			// The date need to be after 1970 to be successfully persisted
 			if (localDate.isBefore(LocalDate.of(1970, 01, 02))) {
 				context.disableDefaultConstraintViolation();

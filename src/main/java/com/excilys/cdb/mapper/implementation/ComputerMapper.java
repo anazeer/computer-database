@@ -33,7 +33,6 @@ public class ComputerMapper implements IMapper<Computer> {
     @Override
     public Computer getFromDTO(IDTO dto) {
         ComputerDTO computerDTO = (ComputerDTO) dto;
-    	System.out.println(super.toString());
         String name = computerDTO.getName();
         Long id = computerDTO.getId();
         DateTimeFormatter formatter = getFormat();

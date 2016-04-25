@@ -46,15 +46,28 @@
 	<context:property-placeholder location="classpath:dbconf.properties" />
 
 	<!-- Data source initialization -->
-	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource"
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
 		destroy-method="close">
-		<property name="driverClass" value="${db.driver}" />
+		<property name="poolName" value="springHikariCP" />
+		<property name="connectionTestQuery" value="SELECT 1" />
+		<!-- Data source connection parameters -->
+		<property name="driverClassName" value="${db.driver}" />
 		<property name="jdbcUrl" value="${db.url}" />
 		<property name="username" value="${db.username}" />
 		<property name="password" value="${db.password}" />
-		<property name="minConnectionsPerPartition" value="${db.minConnection}" />
-		<property name="maxConnectionsPerPartition" value="${db.maxConnection}" />
-		<property name="partitionCount" value="${db.partitionCount}" />
+		<!-- Data source size and times -->
+		<property name="maximumPoolSize" value="${db.maximumPoolSize}" />
+		<property name="idleTimeout" value="${db.idleTimeout}" />
+		<property name="maxLifetime" value="${db.maxLifeTime}" />
+		<!-- Data source cache -->
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="prepStmtCacheSize">250</prop>
+				<prop key="prepStmtCacheSqlLimit">2048</prop>
+				<prop key="cachePrepStmts">true</prop>
+				<prop key="useServerPrepStmts">true</prop>
+			</props>
+		</property>
 	</bean>
 
 	<!-- JDBC template initialization with data source -->

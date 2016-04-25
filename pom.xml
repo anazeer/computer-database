@@ -6,7 +6,7 @@
 
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.6.6-RELEASE</version>
+	<version>0.6.7-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>computer-database</name>
 	<url>http://maven.apache.org</url>
@@ -22,14 +22,16 @@
 		<slf4jSimpleVersion>1.7.5</slf4jSimpleVersion>
 		<jclOverSlf4j>1.7.21</jclOverSlf4j>
 		<logbackVersion>1.1.6</logbackVersion>
-		<bonecpVersion>0.8.0.RELEASE</bonecpVersion>
+		<hikaricpVersion>2.4.5</hikaricpVersion>
 		<mockitoVersion>1.10.19</mockitoVersion>
 		<checkstyleVersion>2.17</checkstyleVersion>
 		<seleniumVersion>2.53.0</seleniumVersion>
 		<httpclientVersion>4.3.5</httpclientVersion>
 		<springVersion>4.2.5.RELEASE</springVersion>
 		<validationVersion>1.1.0.Final</validationVersion>
-		<hibernateVersion>5.2.4.Final</hibernateVersion>
+		<hibernateValidationVersion>5.2.4.Final</hibernateValidationVersion>
+		<hibernateVersion>5.1.0.Final</hibernateVersion>
+
 
 		<!-- Source encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -152,12 +154,12 @@
 			<version>${logbackVersion}</version>
 		</dependency>
 
-		<!-- BoneCP API -->
+		<!-- HikariCP API -->
 
 		<dependency>
-			<groupId>com.jolbox</groupId>
-			<artifactId>bonecp</artifactId>
-			<version>${bonecpVersion}</version>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikaricpVersion}</version>
 		</dependency>
 
 		<!-- Mockito API -->
@@ -272,6 +274,14 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernateValidationVersion}</version>
+		</dependency>
+
+		<!-- Hibernate API -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
 			<version>${hibernateVersion}</version>
 		</dependency>
 

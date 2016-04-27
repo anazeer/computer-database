@@ -6,7 +6,7 @@
 
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.6.7-SNAPSHOT</version>
+	<version>0.7.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>computer-database</name>
 	<url>http://maven.apache.org</url>
@@ -31,7 +31,6 @@
 		<validationVersion>1.1.0.Final</validationVersion>
 		<hibernateValidationVersion>5.2.4.Final</hibernateValidationVersion>
 		<hibernateVersion>5.1.0.Final</hibernateVersion>
-
 
 		<!-- Source encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -269,6 +268,14 @@
 			<version>${validationVersion}</version>
 		</dependency>
 
+		<!-- Spring ORM dependency -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+
 		<!-- Hibernate validator -->
 
 		<dependency>
@@ -282,6 +289,14 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
+			<version>${hibernateVersion}</version>
+		</dependency>
+		
+		<!-- Hibernate Java 8 support -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
 			<version>${hibernateVersion}</version>
 		</dependency>
 

@@ -12,16 +12,18 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.dao.implementation.CompanyDAO;
-import com.excilys.cdb.service.util.Query;
+import com.excilys.cdb.service.util.Constraint;
 
 /**
  * CompanyDAO test class. We assume that the database for testing is not empty and contains 42 elements
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/spring-context.xml"})
+@Transactional
 public class CompanyDAOTest {
 
 	@Autowired
@@ -45,7 +47,7 @@ public class CompanyDAOTest {
 	
 	@Test
 	public void testFindPageQuery() {
-		Query query = new Query.Builder().offset(0).limit(10).build();
+		Constraint query = new Constraint.Builder().offset(0).limit(10).build();
 		List<Company> list = companyDAO.find(query);
 		assertNotNull(list);
 		assertTrue(list.size() == 10);
@@ -54,7 +56,7 @@ public class CompanyDAOTest {
 	@Test
 	public void testFindFilterQuery() {
 		String filter = "in";
-		Query query = new Query.Builder().filter(filter).build();
+		Constraint query = new Constraint.Builder().filter(filter).build();
 		List<Company> list = companyDAO.find(query);
 		for (Company c : list) {
 			assertTrue(c.getName().toLowerCase().contains(filter));
@@ -64,7 +66,7 @@ public class CompanyDAOTest {
 	@Test
 	public void testFindQuery() {
 		String filter = "In";
-		Query query = new Query.Builder().offset(0).limit(10).filter(filter).build();
+		Constraint query = new Constraint.Builder().offset(0).limit(10).filter(filter).build();
 		List<Company> list = companyDAO.find(query);
 		assertTrue(list.size() <= 10);
 	}
@@ -78,7 +80,7 @@ public class CompanyDAOTest {
 	@Test
 	public void testCountFilter() {
 		String filter = "a";
-		Query query = new Query.Builder().filter(filter).build();
+		Constraint query = new Constraint.Builder().filter(filter).build();
 		List<Company> list = companyDAO.find(query);
 		assertEquals(list.size(), companyDAO.count(query));
 	}

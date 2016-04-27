@@ -4,7 +4,7 @@ package com.excilys.cdb.persistence.dao;
 import java.util.List;
 
 import com.excilys.cdb.exception.DAOException;
-import com.excilys.cdb.service.util.Query;
+import com.excilys.cdb.service.util.Constraint;
 
 /**
  * Generic DAO for CRUD implementation
@@ -22,14 +22,14 @@ import com.excilys.cdb.service.util.Query;
 	 * @param query the object containing the query constraints
 	 * @return the number of rows in the table satisfying the query constraints
 	 */
-	int count(Query query);
+	int count(Constraint query);
 	
 	/**
 	 * Get all the objects from the database satisfying the query constraints
 	 * @param query the object containing the query constraints 
 	 * @return the list containing the result
 	 */
-	List<T> find(Query query);
+	List<T> find(Constraint query);
 	
 	/**
 	 * 

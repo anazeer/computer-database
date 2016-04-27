@@ -1,21 +1,17 @@
 package com.excilys.cdb.persistence.dao.implementation;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.dao.AbstractDAO;
-import com.excilys.cdb.service.util.Query;
+import com.excilys.cdb.service.util.Constraint;
+import com.excilys.cdb.service.util.Order;
 
 /**
  * DAO implementation for companies
@@ -26,109 +22,83 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 	// Logger
 	private Logger log = LoggerFactory.getLogger(getClass());
 
-	// JDBC template for named parameters
-	@Autowired
-	private NamedParameterJdbcTemplate jdbcTemplate;
-
 	/**
 	 * DAO dependency is only injected by spring
 	 */
 	private CompanyDAO() {
 	}
-
-	@Override
-	public List<Company> find(Query query) {
-		// Get the query text
-		String queryText = getQueryText(query);
-		// Get the filter
-		String filter = query != null ? query.getFilter() : "";
-		// Join company for filtering and ordering
-		queryText = queryText.replaceFirst("computer", "computer LEFT JOIN company ON computer.company_id = company.id");
-		// Set the filter in the parameters map
-		Map<String, String> namedParameters = Collections.singletonMap("filter", '%' + filter + '%');
-		// Execute the query
-		List<Company> listCompany = jdbcTemplate.query(getQueryText(query), namedParameters, new CompanyMapper());
-		// Log the result
-		log.info("Companies retrieved ({}), filter = {}, orderBy = {}", 
-				listCompany.size(), query != null ? query.getFilter() : "", query != null ? query.getOrder() : "");
-		return listCompany;
-	}
 	
 	@Override
-	public Company findById(Long id) {
-		// Build the query text
-		String queryText = "SELECT * FROM company WHERE id = :id";
-		// Set the filter in the parameters map
-		Map<String, Long> namedParameters = Collections.singletonMap("id", id);
+	public List<Company> find(Constraint constraint) {
+		// Build the query
+		String hql = "FROM Company c";
+		Query query = getQuery(constraint, hql, true);
 		// Execute the query
-		List<Company> company = jdbcTemplate.query(queryText, namedParameters, new CompanyMapper());
+		@SuppressWarnings("unchecked")
+		List<Company> listCompany = query.list();
 		// Log the result
-		if (company.isEmpty()) {
-			if (id > 0) {
-				log.warn("Company not retrieved (id = {})", id);
-			}
-			return null;
-		}
-		return company.get(0);
+		log.info("Companies retrieved ({}), filter = {}, orderBy = {}", 
+				listCompany.size(), constraint != null ? constraint.getFilter() : null, constraint != null ? constraint.getOrder() : null);
+		return listCompany;
 	}
 
 	@Override
-	public int count(Query query) {
-		// Get the query text
-		String queryText = getQueryText(query);
-		// Get the filter
-		String filter = query != null ? query.getFilter() : "";
-		// Join company for filtering and ordering
-		queryText = queryText.replaceFirst("computer", "computer LEFT JOIN company ON computer.company_id = company.id");
-		// Set the filter in the parameters map
-		Map<String, String> namedParameters = Collections.singletonMap("filter", '%' + filter + '%');
+	public int count(Constraint constraint) {
+		// Build the query
+		String hql = "SELECT count(*) FROM Company c";
+		Query query = getQuery(constraint, hql, false);
 		// Execute the query
-		int count = jdbcTemplate.queryForObject(getCountQueryText(query), namedParameters, Integer.class);
+		int result = ((Long) (query.iterate().next())).intValue();
 		// Log the result
-		log.info("Companies counted {}, filter = {}", count, filter);
-		return count;
+		log.info("Companies counted {}, filter = {}", result, constraint != null ? constraint.getFilter() : "");
+		return result;
 	}
 
 	@Override
 	public boolean delete(Long id) {
-		// Build the query text
-		String queryText = "DELETE FROM company WHERE id = :id";
-		// Set the filter in the parameters map
-		Map<String, Long> namedParameters = Collections.singletonMap("id", id);
+		// Get the hibernate session
+        Session session = sessionFactory.getCurrentSession();
+		// Build the query
+		String hql = "DELETE FROM Company WHERE id = :id";
+		Query query = session.createQuery(hql).setParameter("id", id);
 		// Execute the query
-		int result = jdbcTemplate.update(queryText, namedParameters);
+		int result = query.executeUpdate();
 		// Log the result
 		log.info("{} compan{} deleted (id = {})", result, result > 1 ? "ies" : "y", id);
 		return result > 0;
 	}
-
+	
 	@Override
-	protected String getFilterText(Query query) {
+	protected String getTableName() {
+		return "Company";
+	}
+	
+	@Override
+	protected Logger getLogger() {
+		return log;
+	}
+	
+	/**
+	 * Construct the query text for ordering
+	 * @param query the object containing the query constraints
+	 * @return a query text with the order for the table columns, the empty string otherwise
+	 */
+	@Override
+	protected String getOrderText(Constraint constraint) {
 		String result = "";
-		if (query == null) {
+		if (constraint == null) {
 			return result;
 		}
-		String filter = query.getFilter();
-		if (filter != null && !filter.trim().isEmpty()) {
-			result = " WHERE company.name LIKE :filter";
+		Order order = constraint.getOrder();
+		if (order == null) {
+			return result;
+		}
+		switch(order) {
+			case COMPANY_ASC : result = " ORDER BY company.name ASC"; break;
+			case COMPANY_DSC : result = " ORDER BY company.name DESC"; break;
+		default : result = "";
 		}
 		return result;
 	}
 	
-	@Override
-	protected String getTableName() {
-		return "company";
-	}
-
-	/**
-	 * Map a result set into a company object
-	 */
-	private static final class CompanyMapper implements RowMapper<Company> {
-		public Company mapRow(ResultSet result, int rowNum) throws SQLException {
-			Company company = new Company();
-			company.setId(result.getLong("id"));
-			company.setName(result.getString("name"));
-			return company;
-		}
-	}
 }

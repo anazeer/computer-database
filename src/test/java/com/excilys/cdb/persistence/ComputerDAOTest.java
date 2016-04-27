@@ -15,18 +15,21 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.implementation.ComputerDAO;
-import com.excilys.cdb.service.util.Query;
+import com.excilys.cdb.service.util.Constraint;
+import com.excilys.cdb.service.util.Order;
 
 /**
  * ComputerDAO test class. We assume that the database is not empty and contains more than 500 elements
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/spring-context.xml"})
+@Transactional
 public class ComputerDAOTest {
 	
 	@Autowired
@@ -50,7 +53,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void testFindFromOffset() {
-		Query query = new Query.Builder().offset(0).limit(10).build();
+		Constraint query = new Constraint.Builder().offset(0).limit(10).build();
 		List<Computer> list = computerDAO.find(query);
 		assertNotNull(list);
 		assertTrue(list.size() <= 10);
@@ -66,7 +69,7 @@ public class ComputerDAOTest {
 	@Test
 	public void testCountFilter() {
 		String filter = "a";
-		Query query = new Query.Builder().filter(filter).build();
+		Constraint query = new Constraint.Builder().filter(filter).build();
 		List<Computer> list = computerDAO.find(query);
 		assertTrue(list.size() <= computerDAO.count(query));
 	}
@@ -165,12 +168,60 @@ public class ComputerDAOTest {
 	@Ignore
 	@Test
 	public void testDelete() {
-		Computer computer = computerDAO.findById(603L);
+		Computer computer = computerDAO.findById(574L);
 		try {
 			computerDAO.delete(computer.getId());
 		} catch (DAOException e) {	
 		}
-		computer = computerDAO.findById(603L);
+		computer = computerDAO.findById(574L);
 		assertNull(computer);
+	}
+	
+	@Test
+	public void testOrderByNameAsc() {
+		Constraint query = new Constraint.Builder().order(Order.NAME_ASC).build();
+		List<Computer> list = computerDAO.find(query);
+		for (int i = 0; i < list.size() - 1; i++) {
+			Computer comp1 = list.get(i);
+			Computer comp2 = list.get(i + 1);
+			assertTrue(comp1.getName().toLowerCase().compareTo(comp2.getName().toLowerCase()) <= 0);
+		}
+	}
+	
+	@Test
+	public void testOrderByNameDesc() {
+		Constraint query = new Constraint.Builder().order(Order.NAME_DSC).build();
+		List<Computer> list = computerDAO.find(query);
+		for (int i = 0; i < list.size() - 1; i++) {
+			Computer comp1 = list.get(i);
+			Computer comp2 = list.get(i + 1);
+			assertTrue(comp1.getName().toLowerCase().compareTo(comp2.getName().toLowerCase()) >= 0);
+		}
+	}
+	
+	@Test
+	public void testOrderByCompanyNameAsc() {
+		Constraint query = new Constraint.Builder().order(Order.COMPANY_ASC).build();
+		List<Computer> list = computerDAO.find(query);
+		for (int i = 0; i < list.size() - 1; i++) {
+			Company comp1 = list.get(i).getCompany();
+			Company comp2 = list.get(i + 1).getCompany();
+			if (comp1 != null && comp2 != null) {
+				assertTrue(comp1.getName().toLowerCase().compareTo(comp2.getName().toLowerCase()) <= 0);
+			}
+		}
+	}
+	
+	@Test
+	public void testOrderByCompanyNameDesc() {
+		Constraint query = new Constraint.Builder().order(Order.COMPANY_DSC).build();
+		List<Computer> list = computerDAO.find(query);
+		for (int i = 0; i < list.size() - 1; i++) {
+			Company comp1 = list.get(i).getCompany();
+			Company comp2 = list.get(i + 1).getCompany();
+			if (comp1 != null && comp2 != null) {
+				assertTrue(comp1.getName().toLowerCase().compareTo(comp2.getName().toLowerCase()) >= 0);
+			}
+		}
 	}
 }

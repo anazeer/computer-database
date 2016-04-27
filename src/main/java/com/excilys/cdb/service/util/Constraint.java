@@ -1,18 +1,26 @@
 package com.excilys.cdb.service.util;
 
 /**
- * Object containing the query parameters
+ * Object containing the query parameters.
+ * By default, order is set to NOP and limit is set to 10
  */
-public class Query {
+public class Constraint {
 	
 	private int offset;
 	private int limit;
 	private String filter;
 	private Order order;
 	
-	public Query() {
+	public Constraint() {
 	}
 	
+	public Constraint(int offset, int limit, String filter, Order order) {
+		this.offset = offset;
+		this.limit = limit;
+		this.filter = filter;
+		this.order = order;
+	}
+
 	public void setOffset(int offset) {
 		this.offset = offset;
 	}
@@ -64,7 +72,7 @@ public class Query {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Query other = (Query) obj;
+		Constraint other = (Constraint) obj;
 		if (filter == null) {
 			if (other.filter != null)
 				return false;
@@ -81,40 +89,43 @@ public class Query {
 
 	public static class Builder {
 		
-		private Query query;
+		private int offset;
+		private int limit;
+		private String filter;
+		private Order order;
 		
 		public Builder() {
-			query = new Query();
+			order = Order.NOP;
 		}
 		
 		public Builder offset(int offset) {
 			if (offset < 0) {
 				throw new IllegalStateException("The offset should be positive");
 			}
-			query.offset = offset;
+			this.offset = offset;
 			return this;
 		}
 		
 		public Builder limit(int limit) {
 			if (limit < 0) {
-				throw new IllegalStateException("The limit shouldn't be negattive");
+				throw new IllegalStateException("The limit should be positive");
 			}
-			query.limit = limit;
+			this.limit = limit;
 			return this;
 		}
 		
 		public Builder filter(String filter) {
-			query.filter = filter;
+			this.filter = filter;
 			return this;
 		}
 		
 		public Builder order(Order order) {
-			query.order = order;
+			this.order = order;
 			return this;
 		}
 		
-		public Query build() {
-			return query;
+		public Constraint build() {
+			return new Constraint(offset, limit, filter, order);
 		}
 	}
 }

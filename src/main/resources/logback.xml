@@ -10,7 +10,7 @@
   
   <logger name="com.excilys.cdb" level="TRACE"/>
 
-  <root level="debug">
+  <root level="info">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>

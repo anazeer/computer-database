@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.service.util.Order;
-import com.excilys.cdb.service.util.Query;
+import com.excilys.cdb.service.util.Constraint;
 import com.excilys.cdb.validation.Parser;
 
 /**
@@ -50,7 +50,7 @@ public class PageRequestMapper {
         Order order = Parser.parseOrder(orderRequest);
 
         // Construct and return the result page
-        Query query = new Query.Builder().limit(limit).filter(search).order(order).build();
+        Constraint query = new Constraint.Builder().limit(limit).filter(search).order(order).build();
         return new PageRequest(query, page);
     }
 }

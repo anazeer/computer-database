@@ -2,17 +2,48 @@ package com.excilys.cdb.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.ParamDef;
+
 /**
  * Computer model
- * @author excilys
- *
  */
+@Entity
+@Table(name="computer")
+@FilterDef(name="filter", parameters={
+		@ParamDef(name="filter", type="string")
+})
+@Filters( {
+	@Filter(name="filter", condition="name LIKE :filter")
+} )
 public class Computer {
-	
+		
+	@Id
+    @Column
+    @GeneratedValue
 	private Long id;
+	
+	@Column
 	private String name;
+	
+	@Column
 	private LocalDate introduced;
+	
+	@Column
 	private LocalDate discontinued;
+	
+	@ManyToOne
+	@JoinColumn
 	private Company company;
 
 	public Computer() {

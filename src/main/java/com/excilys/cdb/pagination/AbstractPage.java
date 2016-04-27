@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import com.excilys.cdb.dto.IDTO;
 import com.excilys.cdb.mapper.IMapper;
 import com.excilys.cdb.pagination.util.PageRequest;
-import com.excilys.cdb.service.util.Query;
+import com.excilys.cdb.service.util.Constraint;
 
 /**
  * Generic class for pagination implementation
@@ -61,7 +61,7 @@ public abstract class AbstractPage<T> {
     
     protected AbstractPage(IMapper<T> mapper, PageRequest pageRequest, int totalCount) {
     	this.mapper = mapper;
-    	Query query = pageRequest.getQuery();
+    	Constraint query = pageRequest.getQuery();
     	this.currentPage = pageRequest.getCurrentPage();
         this.totalCount = totalCount;
         limit = query.getLimit();

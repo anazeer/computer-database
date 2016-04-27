@@ -1,13 +1,35 @@
 package com.excilys.cdb.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.ParamDef;
+
 /**
  * Company model
- * @author excilys
- *
  */
+@Entity
+@Table(name = "company")
+@FilterDef(name="filter", parameters={
+		@ParamDef(name="filter", type="string")
+})
+@Filters( {
+    @Filter(name="filter", condition="name like :filter")
+} )
 public class Company {
 	
+	@Id
+    @Column
+    @GeneratedValue
 	private Long id;
+	
+	@Column
 	private String name;
 
 	public Company() {

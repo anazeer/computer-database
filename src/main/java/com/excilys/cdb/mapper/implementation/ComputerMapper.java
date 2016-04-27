@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.dto.IDTO;
 import com.excilys.cdb.dto.implementation.ComputerDTO;
@@ -19,6 +20,7 @@ import com.excilys.cdb.persistence.dao.implementation.CompanyDAO;
  * Mapper implementation for computers
  */
 @Component
+@Transactional
 public class ComputerMapper implements IMapper<Computer> {
 
     @Autowired
@@ -27,9 +29,6 @@ public class ComputerMapper implements IMapper<Computer> {
     @Autowired
     private MessageSource messageSource;
     
-	private ComputerMapper() {
-	}
-
     @Override
     public Computer getFromDTO(IDTO dto) {
         ComputerDTO computerDTO = (ComputerDTO) dto;

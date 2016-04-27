@@ -1,6 +1,6 @@
 package com.excilys.cdb.pagination.util;
 
-import com.excilys.cdb.service.util.Query;
+import com.excilys.cdb.service.util.Constraint;
 
 /**
  * Page request contains the information about the pagination
@@ -9,18 +9,21 @@ import com.excilys.cdb.service.util.Query;
  */
 public class PageRequest {
 	
-	private Query query;
+	private Constraint query;
 	private int currentPage;
 	
-	public PageRequest(Query query, int currentPage) {
+	public PageRequest(Constraint query, int currentPage) {
     	if (query == null) {
-    		query = new Query.Builder().limit(10).build();
+    		query = new Constraint.Builder().limit(10).build();
+    	}
+    	if (query.getLimit() <= 0) {
+    		query.setLimit(10);
     	}
 		this.query = query;
 		this.currentPage = currentPage;
 	}
 	
-	public void setQuery(Query query) {
+	public void setQuery(Constraint query) {
 		this.query = query;
 	}
 
@@ -28,7 +31,7 @@ public class PageRequest {
 		this.currentPage = currentPage;
 	}
 
-	public Query getQuery() {
+	public Constraint getQuery() {
 		return query;
 	}
 

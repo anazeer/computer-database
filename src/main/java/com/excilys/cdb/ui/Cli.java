@@ -1,18 +1,16 @@
 package com.excilys.cdb.ui;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.cdb.dto.implementation.ComputerDTO;
@@ -37,6 +35,10 @@ public class Cli {
 	// Mappers
 	@Autowired
 	private ComputerMapper computerMapper;
+	
+	// Properties messages
+	@Autowired
+	private MessageSource messageSource;
 	
 	// List containing valid inputs for each menu
 	private List<Integer> generalInstr = new ArrayList<>();
@@ -182,18 +184,17 @@ public class Cli {
 	 * Read a Date input
 	 * @return the input date
 	 */
-	private Date readDate() {
-		Date date = null;
+	private LocalDate readDate() {
+		LocalDate date = null;
 		String entry = null;
-		//String parse = "yyyy/mm/dd";
-		String parse = "dd/MM/yyyy";
+    	String pattern = messageSource.getMessage("util.date.format", null, LocaleContextHolder.getLocale());
 		while (date == null) {
 			try {
-				System.out.println("Select date " + parse + ": (If unknown, enter u)");
-				entry = scan.next("((0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d))|u");
+				System.out.println("Select date " + pattern + ": (If unknown, enter u)");
+				entry = scan.next("((0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d))|u");
 				//entry = scan.next("(((19|20)\\d\\d)/(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01]))|u");
-			    date = new SimpleDateFormat(parse).parse(entry);
-			} catch (ParseException e) {
+			    date = LocalDate.parse(entry, DateTimeFormatter.ofPattern(pattern));
+			} catch (DateTimeParseException e) {
 				if ("u".equals(entry)) {
 					break;
 				}
@@ -203,7 +204,7 @@ public class Cli {
 			}
 			catch (InputMismatchException e) {
 				date = null;
-				System.err.println(("Enter a correct date " + parse + " or u to ignore it"));
+				System.err.println(("Enter a correct date " + pattern + " or u to ignore it"));
 			} finally {
 				scan.nextLine(); // consume new line left-over
 			}
@@ -255,38 +256,27 @@ public class Cli {
 	private ComputerDTO constructComputer() {
 		String name = readName();
 		
-		Date introducedDate;
-		Date discontinuedDate;
+		LocalDate introduced;
+		LocalDate discontinued;
 		do {
-			introducedDate = readDate();
-			discontinuedDate = readDate();
-			if (introducedDate == null || discontinuedDate == null) {
+			introduced = readDate();
+			discontinued = readDate();
+			if (introduced == null || discontinued == null) {
 				break;
 			}
 		}
-		while (!introducedDate.before(discontinuedDate));
-		
-		Instant instant;
-	    LocalDate introduced = null;
-	    LocalDate discontinued = null;
-		if (introducedDate != null) {
-			instant = Instant.ofEpochMilli(introducedDate.getTime());
-			introduced = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
-		}
-		if (discontinuedDate != null) {
-			instant = Instant.ofEpochMilli(discontinuedDate.getTime());
-			discontinued = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
-		}
+		while (!introduced.isBefore(discontinued));
 		
 		System.out.println("Select company id");
 		Long company_id = readId();
-		
 		ComputerDTO computer = new ComputerDTO(name);
+    	String pattern = messageSource.getMessage("util.date.format", null, LocaleContextHolder.getLocale());
+    	DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
 		if (introduced != null) {
-            computer.setIntroduced(introduced.toString());
+            computer.setIntroduced(introduced.format(format));
         }
         if (discontinued != null) {
-            computer.setDiscontinued(discontinued.toString());
+            computer.setDiscontinued(discontinued.format(format));
         }
 		computer.setCompanyId(company_id);
 		return computer;

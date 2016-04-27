@@ -4,19 +4,20 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.mapper.implementation.ComputerMapper;
-import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.implementation.ComputerPage;
 import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.persistence.dao.implementation.ComputerDAO;
-import com.excilys.cdb.service.util.Query;
+import com.excilys.cdb.service.util.Constraint;
 
 /**
  * Service implementation for computers
  */
+@Transactional
 @Service
 public class ComputerService implements com.excilys.cdb.service.IService<Computer> {
 
@@ -24,13 +25,9 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 	private ComputerDAO computerDAO;
 	
 	@Autowired
-	private CompanyService companyService;
-	
-	@Autowired
 	private ComputerMapper computerMapper;
 
-	private ComputerService() {
-		super();
+	public ComputerService() {
 	}
 	
 	@Override
@@ -40,7 +37,7 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 	
 	@Override
 	public ComputerPage getPage(PageRequest pageRequest) {
-		Query query = pageRequest.getQuery();
+		Constraint query = pageRequest.getQuery();
 		ComputerPage computerPage = new ComputerPage(computerMapper, pageRequest, count(query));
 		query.setOffset(computerPage.getOffset());
 		List<Computer> computers = list(query);
@@ -49,22 +46,12 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 	}
 
 	@Override
-	public List<Computer> list(Query query) {
-		List<Computer> computers = computerDAO.find(query);
-		// Associate the companies to the computers
-		for (Computer computer : computers) {
-			Company company = computer.getCompany();
-			if (company != null) {
-				Long id = company.getId();
-				company = companyService.findById(id);
-				computer.setCompany(company);
-			}
-		}
-		return computers;
+	public List<Computer> list(Constraint query) {
+		return computerDAO.find(query);
 	}
 	
 	@Override
-	public int count(Query query) {
+	public int count(Constraint query) {
 		return computerDAO.count(query);
 	}
 	

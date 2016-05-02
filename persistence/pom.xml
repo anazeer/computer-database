@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>computer-database-persistence</artifactId>
+	<packaging>jar</packaging>
+
+	<parent>
+		<artifactId>computer-database</artifactId>
+		<groupId>com.excilys.cdb</groupId>
+		<version>${parentAppVersion}</version>
+	</parent>
+
+	<!-- Dependencies -->
+
+	<dependencies>
+
+		<!-- CDB core dependency -->
+
+		<dependency>
+			<groupId>com.excilys.cdb</groupId>
+			<artifactId>computer-database-core</artifactId>
+			<version>${parentAppVersion}</version>
+		</dependency>
+
+		<!-- MySQL driver -->
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysqlVersion}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- HikariCP API -->
+
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikaricpVersion}</version>
+		</dependency>
+
+		<!-- Spring ORM dependency -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+
+		<!-- Hibernate API -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernateVersion}</version>
+		</dependency>
+
+		<!-- Hibernate Java 8 support (LocalDate) -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>${hibernateVersion}</version>
+		</dependency>
+
+		<!-- Junit 4 -->
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junitVersion}</version>
+		</dependency>
+
+		<!-- Spring test -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${springVersion}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+</project>

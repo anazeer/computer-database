@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>computer-database-core</artifactId>
+	<packaging>jar</packaging>
+
+	<parent>
+		<artifactId>computer-database</artifactId>
+		<groupId>com.excilys.cdb</groupId>
+		<version>${parentAppVersion}</version>
+	</parent>
+
+	<!-- Dependencies -->
+
+	<dependencies>
+
+		<!-- Hibernate API -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernateVersion}</version>
+		</dependency>
+
+	</dependencies>
+</project>

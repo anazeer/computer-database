@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>computer-database-binding</artifactId>
+	<packaging>jar</packaging>
+
+	<parent>
+		<artifactId>computer-database</artifactId>
+		<groupId>com.excilys.cdb</groupId>
+		<version>${parentAppVersion}</version>
+	</parent>
+
+	<!-- Dependencies -->
+
+	<dependencies>
+
+		<!-- CDB Core dependency -->
+
+		<dependency>
+			<groupId>com.excilys.cdb</groupId>
+			<artifactId>computer-database-core</artifactId>
+			<version>${parentAppVersion}</version>
+		</dependency>
+
+		<!-- CDB Persistence dao dependency -->
+
+		<dependency>
+			<groupId>com.excilys.cdb</groupId>
+			<artifactId>computer-database-persistence</artifactId>
+			<version>${parentAppVersion}</version>
+		</dependency>
+
+		<!-- Spring validation -->
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${validationVersion}</version>
+		</dependency>
+
+		<!-- Hibernate validator -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernateValidationVersion}</version>
+		</dependency>
+
+		<!-- Spring transaction -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+
+	</dependencies>
+
+</project>

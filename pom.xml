@@ -1,29 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- Project information -->
-
-	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.7.0-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<groupId>com.excilys.cdb</groupId>
+	<version>${parentAppVersion}</version>
+	<packaging>pom</packaging>
+
 	<name>computer-database</name>
 	<url>http://maven.apache.org</url>
+
+	<!-- Child modules -->
+	<modules>
+		<module>binding</module>
+		<module>console</module>
+		<module>core</module>
+		<module>persistence</module>
+		<module>service</module>
+		<module>webapp</module>
+
+	</modules>
+
 	<properties>
 
 		<!-- Dependencies version -->
 		<javaVersion>1.8</javaVersion>
-		<servletVersion>3.1.0</servletVersion>
 		<mysqlVersion>5.1.38</mysqlVersion>
 		<jstlVersion>1.2</jstlVersion>
-		<junitVersion>4.4</junitVersion>
+		<junitVersion>4.12</junitVersion>
 		<slf4jApiVersion>1.7.5</slf4jApiVersion>
 		<slf4jSimpleVersion>1.7.5</slf4jSimpleVersion>
 		<jclOverSlf4j>1.7.21</jclOverSlf4j>
 		<logbackVersion>1.1.6</logbackVersion>
 		<hikaricpVersion>2.4.5</hikaricpVersion>
-		<mockitoVersion>1.10.19</mockitoVersion>
 		<checkstyleVersion>2.17</checkstyleVersion>
 		<seleniumVersion>2.53.0</seleniumVersion>
 		<httpclientVersion>4.3.5</httpclientVersion>
@@ -37,6 +47,9 @@
 
 		<!-- Application name -->
 		<appName>computer-database</appName>
+
+		<!-- Application version -->
+		<parentAppVersion>0.7.1-SNAPSHOT</parentAppVersion>
 
 	</properties>
 
@@ -81,8 +94,8 @@
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>${checkstyleVersion}</version>
 				<configuration>
-					<configLocation>src/main/resources/checkstyle.xml</configLocation>
-					<suppressionsLocation>src/main/resources/suppressions.xml</suppressionsLocation>
+					<configLocation>core/src/main/resources/checkstyle.xml</configLocation>
+					<suppressionsLocation>core/src/main/resources/suppressions.xml</suppressionsLocation>
 				</configuration>
 			</plugin>
 
@@ -93,39 +106,20 @@
 
 	<dependencies>
 
-		<!-- Servlet API, include JSTL -->
+		<!-- Spring core -->
 
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${servletVersion}</version>
-			<scope>provided</scope>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${springVersion}</version>
 		</dependency>
 
-		<!-- MySQL driver -->
+		<!-- Spring context -->
 
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysqlVersion}</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<!-- JSTL API -->
-
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${jstlVersion}</version>
-		</dependency>
-
-		<!-- JUnit API -->
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junitVersion}</version>
-			<scope>test</scope>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${springVersion}</version>
 		</dependency>
 
 		<!-- sl4j API -->
@@ -144,29 +138,12 @@
 			<version>${jclOverSlf4j}</version>
 		</dependency>
 
-
 		<!-- Logback API -->
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logbackVersion}</version>
-		</dependency>
-
-		<!-- HikariCP API -->
-
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>${hikaricpVersion}</version>
-		</dependency>
-
-		<!-- Mockito API -->
-
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>${mockitoVersion}</version>
 		</dependency>
 
 		<!-- Maven checkstyle API -->
@@ -176,128 +153,6 @@
 			<artifactId>maven-checkstyle-plugin</artifactId>
 			<version>${checkstyleVersion}</version>
 			<scope>test</scope>
-		</dependency>
-
-		<!-- Selenium API -->
-
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<version>${seleniumVersion}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Use by Selenium -->
-
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>${httpclientVersion}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- slf4j simple, used by the web driver (Selenium) -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>${slf4jSimpleVersion}</version>
-		</dependency>
-
-		<!-- Spring context -->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
-
-		<!-- Spring core -->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
-
-		<!-- Spring web -->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
-
-		<!-- Spring web mvc -->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
-
-		<!-- Spring JDBC -->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>4.2.5.RELEASE</version>
-		</dependency>
-
-		<!-- Spring transaction -->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<version>4.2.5.RELEASE</version>
-		</dependency>
-
-		<!-- Spring test -->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${springVersion}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Spring validation -->
-
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>${validationVersion}</version>
-		</dependency>
-
-		<!-- Spring ORM dependency -->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
-
-		<!-- Hibernate validator -->
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernateValidationVersion}</version>
-		</dependency>
-
-		<!-- Hibernate API -->
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernateVersion}</version>
-		</dependency>
-		
-		<!-- Hibernate Java 8 support -->
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-java8</artifactId>
-			<version>${hibernateVersion}</version>
 		</dependency>
 
 	</dependencies>

@@ -17,7 +17,7 @@
 
 	<dependencies>
 
-		<!-- Computer databse dependencies -->
+		<!-- Computer database dependencies -->
 
 		<!-- CDB Core model dependency -->
 
@@ -43,7 +43,7 @@
 			<version>${parentAppVersion}</version>
 		</dependency>
 
-		<!-- Spring web dependencies -->
+		<!-- Spring web and security -->
 
 		<!-- Spring web -->
 
@@ -61,12 +61,37 @@
 			<version>${springVersion}</version>
 		</dependency>
 
+		<!-- Spring web security -->
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${springSecurityVersion}</version>
+		</dependency>
+
+		<!-- Spring security configuration -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${springSecurityVersion}</version>
+		</dependency>
+
 		<!-- JSTL API -->
 
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstlVersion}</version>
+		</dependency>
+
+		<!-- Compile time -->
+
+		<!-- Servlet dependency for maven build -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Test dependencies -->

@@ -12,6 +12,14 @@
 <jsp:include page="include/head.jsp" />
 </head>
 
+<!-- Logout link -->
+<div align="right" id="login">
+	<c:if test="${not empty user}">
+		<c:out value="${user}" />
+		<a href="logout"><c:out value="(Logout)" /> </a>
+	</c:if>
+</div>
+
 <body>
 	<section id="main">
 		<div class="container">
@@ -49,7 +57,9 @@
 		</div>
 
 		<form id="deleteForm" action="computer" method="POST">
-			<input type="hidden" name="selection" value="">
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" /> <input type="hidden" name="selection"
+				value="">
 		</form>
 
 		<div class="container" style="margin-top: 10px;">

@@ -2,7 +2,6 @@ package com.excilys.cdb.dao;
 
 import java.util.List;
 
-import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.util.Constraint;
 
 /**
@@ -18,17 +17,17 @@ import com.excilys.cdb.util.Constraint;
 	
 	/**
 	 * 
-	 * @param query the object containing the query constraints
+	 * @param constraint the object containing the query constraints
 	 * @return the number of rows in the table satisfying the query constraints
 	 */
-	int count(Constraint query);
+	int count(Constraint constraint);
 	
 	/**
 	 * Get all the objects from the database satisfying the query constraints
-	 * @param query the object containing the query constraints 
+	 * @param constraint the object containing the query constraints 
 	 * @return the list containing the result
 	 */
-	List<T> find(Constraint query);
+	List<T> find(Constraint constraint);
 	
 	/**
 	 * 
@@ -42,7 +41,7 @@ import com.excilys.cdb.util.Constraint;
 	 * @param obj the object we want to persist
 	 * @return the object completed by its fresh id if the object has been successfully inserted in the table
 	 */
-	default T create(T obj) throws NoSuchMethodError, DAOException {
+	default T create(T obj) throws NoSuchMethodError {
 		throw new NoSuchMethodError(unimplementedException);
 	}
 	
@@ -51,7 +50,7 @@ import com.excilys.cdb.util.Constraint;
 	 * @param obj the object containing the updated fields
 	 * @return true if the object has been successfully updated in the table
 	 */
-	default boolean update(T obj) throws NoSuchMethodError, DAOException {
+	default boolean update(T obj) throws NoSuchMethodError {
 		throw new NoSuchMethodError(unimplementedException);
 	}
 	
@@ -60,7 +59,7 @@ import com.excilys.cdb.util.Constraint;
 	 * @param id the reference we want to delete
 	 * @return true if the object has been successfully deleted from the table
 	 */
-	default boolean delete(Long id) throws NoSuchMethodError, DAOException {
+	default boolean delete(Long id) throws NoSuchMethodError {
 		throw new NoSuchMethodError(unimplementedException);
 	}
 }

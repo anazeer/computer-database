@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.dao.AbstractDAO;
-import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.Constraint;
 import com.excilys.cdb.util.Order;
@@ -56,7 +55,7 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 	}
 
 	@Override
-	public Computer create(Computer obj) throws DAOException {
+	public Computer create(Computer obj) {
 		// Get the hibernate session
 		Session session = sessionFactory.getCurrentSession();
 		// Persist the object
@@ -67,7 +66,7 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 	}
 
 	@Override
-	public boolean update(Computer obj) throws DAOException {
+	public boolean update(Computer obj) {
 		// Get the hibernate session
 		Session session = sessionFactory.getCurrentSession();
         // Build the query
@@ -90,21 +89,6 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 		boolean success = result > 0;
 		// Log the result
 		log.info("Computer {} (id = {})", success ? "updated" : "not found", obj.getId());
-		return success;
-	}
-
-	@Override
-	public boolean delete(Long id) throws DAOException {
-		// Get the hibernate session
-		Session session = sessionFactory.getCurrentSession();
-		// Build the query
-		String hql = "DELETE FROM Computer WHERE id = :id";
-		Query query = session.createQuery(hql).setParameter("id", id);
-		// Execute the query
-		int result = query.executeUpdate();
-		// Log the result
-		boolean success = result > 0;
-		log.info("Computer {} (id = {})", success ? "deleted" : "not found", id);
 		return success;
 	}
 

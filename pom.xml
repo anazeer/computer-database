@@ -38,6 +38,7 @@
 		<seleniumVersion>2.53.0</seleniumVersion>
 		<httpclientVersion>4.3.5</httpclientVersion>
 		<springVersion>4.2.5.RELEASE</springVersion>
+		<springSecurityVersion>4.0.4.RELEASE</springSecurityVersion>
 		<validationVersion>1.1.0.Final</validationVersion>
 		<hibernateValidationVersion>5.2.4.Final</hibernateValidationVersion>
 		<hibernateVersion>5.1.0.Final</hibernateVersion>
@@ -49,7 +50,7 @@
 		<appName>computer-database</appName>
 
 		<!-- Application version -->
-		<parentAppVersion>0.7.1-SNAPSHOT</parentAppVersion>
+		<parentAppVersion>0.7.2-SNAPSHOT</parentAppVersion>
 
 	</properties>
 
@@ -106,6 +107,10 @@
 
 	<dependencies>
 
+
+
+		<!-- Spring -->
+
 		<!-- Spring core -->
 
 		<dependency>
@@ -121,6 +126,8 @@
 			<artifactId>spring-context</artifactId>
 			<version>${springVersion}</version>
 		</dependency>
+
+		<!-- Logger -->
 
 		<!-- sl4j API -->
 
@@ -145,6 +152,8 @@
 			<artifactId>logback-classic</artifactId>
 			<version>${logbackVersion}</version>
 		</dependency>
+
+		<!-- Miscellaneous -->
 
 		<!-- Maven checkstyle API -->
 

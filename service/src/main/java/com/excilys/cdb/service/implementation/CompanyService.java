@@ -50,13 +50,13 @@ public class CompanyService implements com.excilys.cdb.service.IService<Company>
 	}
 
 	@Override
-	public List<Company> list(Constraint query) {
-		return companyDAO.find(query);
+	public List<Company> list(Constraint constraint) {
+		return companyDAO.find(constraint);
 	}
 
 	@Override
-	public int count(Constraint query) {
-		return companyDAO.count(query);
+	public int count(Constraint constraint) {
+		return companyDAO.count(constraint);
 	}
 
 	@Override

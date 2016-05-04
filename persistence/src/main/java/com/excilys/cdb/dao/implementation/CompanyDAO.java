@@ -3,7 +3,6 @@ package com.excilys.cdb.dao.implementation;
 import java.util.List;
 
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -52,20 +51,6 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 		// Log the result
 		log.info("Companies counted {}, filter = {}", result, constraint != null ? constraint.getFilter() : "");
 		return result;
-	}
-
-	@Override
-	public boolean delete(Long id) {
-		// Get the hibernate session
-        Session session = sessionFactory.getCurrentSession();
-		// Build the query
-		String hql = "DELETE FROM Company WHERE id = :id";
-		Query query = session.createQuery(hql).setParameter("id", id);
-		// Execute the query
-		int result = query.executeUpdate();
-		// Log the result
-		log.info("{} compan{} deleted (id = {})", result, result > 1 ? "ies" : "y", id);
-		return result > 0;
 	}
 	
 	@Override

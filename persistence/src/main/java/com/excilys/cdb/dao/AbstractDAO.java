@@ -35,7 +35,7 @@ public abstract class AbstractDAO<T> implements IDAO<T> {
 	
 	/**
 	 * 
-	 * @return the dao implementation class logger
+	 * @return the DAO implementation class logger
 	 */
 	protected abstract Logger getLogger();
 	
@@ -112,4 +112,20 @@ public abstract class AbstractDAO<T> implements IDAO<T> {
 		log.info("{} retrieved (id = {})", tableName, id);
 		return list.get(0);
 	}
+	
+	@Override
+	public boolean delete(Long id) {
+		// Get the hibernate session
+		Session session = sessionFactory.getCurrentSession();
+		// Build the query
+		String hql = "DELETE FROM " + getTableName() + " WHERE id = :id";
+		Query query = session.createQuery(hql).setParameter("id", id);
+		// Execute the query
+		int result = query.executeUpdate();
+		// Log the result
+		boolean success = result > 0;
+		getLogger().info("{} (id = {})", getTableName(), success ? "deleted" : "not found", id);
+		return success;
+	}
+	
 }

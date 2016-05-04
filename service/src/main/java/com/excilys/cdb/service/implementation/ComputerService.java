@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.dao.implementation.ComputerDAO;
-import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.mapper.implementation.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.implementation.ComputerPage;
@@ -46,29 +45,31 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 	}
 
 	@Override
-	public List<Computer> list(Constraint query) {
-		return computerDAO.find(query);
+	public List<Computer> list(Constraint constraint) {
+		return computerDAO.find(constraint);
 	}
 	
 	@Override
-	public int count(Constraint query) {
-		return computerDAO.count(query);
+	public int count(Constraint constraint) {
+		return computerDAO.count(constraint);
 	}
 	
 	public Computer getComputer(Long id) {
 		return computerDAO.findById(id);
 	}
 	
-	public void create(Computer computer) throws DAOException {
-		computerDAO.create(computer);
+	@Override
+	public Computer create(Computer computer) {
+		return computerDAO.create(computer);
 	}
 	
-	public void update(Computer computer) throws DAOException {
+	@Override
+	public void update(Computer computer) {
 		computerDAO.update(computer);
 	}
 	
 	@Override
-	public void delete(Long id) throws DAOException {
+	public void delete(Long id) {
 		computerDAO.delete(id);
 	}
 }

@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.dao.implementation.ComputerDAO;
-import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.Constraint;
@@ -31,11 +29,11 @@ import com.excilys.cdb.util.Order;
 @ContextConfiguration(locations = {"classpath:/persistence-context.xml"})
 @Transactional
 public class ComputerDAOTest {
-	
+
 	@Autowired
 	private ComputerDAO computerDAO;
 	private final String msgId = "id should be not null";
-	
+
 	/**
 	 * We assume that the database is not empty and contains at least 500 keys from 1 to 500
 	 */
@@ -44,13 +42,13 @@ public class ComputerDAOTest {
 		Computer computer = computerDAO.findById(52L);
 		assertNotNull(computer);
 	}
-	
+
 	@Test
 	public void testFindNotOk() {
 		Computer computer = computerDAO.findById(2500L);
 		assertNull(computer);
 	}
-	
+
 	@Test
 	public void testFindFromOffset() {
 		Constraint query = new Constraint.Builder().offset(0).limit(10).build();
@@ -58,14 +56,14 @@ public class ComputerDAOTest {
 		assertNotNull(list);
 		assertTrue(list.size() <= 10);
 	}
-	
+
 	@Test
 	public void testFindAll() throws Exception {
 		List<Computer> list = computerDAO.find(null);
 		assertNotNull(list);
 		assert(list.size() > 0);
 	}
-	
+
 	@Test
 	public void testCountFilter() {
 		String filter = "a";
@@ -73,13 +71,13 @@ public class ComputerDAOTest {
 		List<Computer> list = computerDAO.find(query);
 		assertTrue(list.size() <= computerDAO.count(query));
 	}
-	
+
 	@Test
 	public void testCountEntries() {
 		List<Computer> list = computerDAO.find(null);
 		assertEquals(list.size(), computerDAO.count(null));
 	}
-	
+
 	@Test
 	public void testCreate() throws Exception {
 		Computer computer = new Computer.Builder("Sony Cie").build();
@@ -90,35 +88,30 @@ public class ComputerDAOTest {
 		assertNotNull(msgId, computer.getId());
 		assertNull(computer.getCompany().getId());
 	}
-	
+
 	@Test(expected = IllegalStateException.class)
 	public void testBadCreate() {
 		Computer computer = new Computer.Builder("    ").build();
 		computer.setIntroduced(LocalDate.now());
 		computer.setDiscontinued(LocalDate.now().plusDays(1));
 		computer.setCompany(new Company());
-		try {
-			computer = computerDAO.create(computer);
-			assertNotNull(msgId, computer.getId());
-			assertNull(computer.getCompany().getId());
-		} catch(DAOException e) {
-		}
+		computer = computerDAO.create(computer);
+		assertNotNull(msgId, computer.getId());
+		assertNull(computer.getCompany().getId());
+
 	}
-	
+
 	@Test(expected = DateTimeParseException.class)
 	public void testBadDateCreate() {
 		Computer computer = new Computer.Builder("Computer z").build();
 		computer.setIntroduced(LocalDate.parse("1111/11/11"));
 		computer.setDiscontinued(LocalDate.now().plusDays(1));
 		computer.setCompany(new Company());
-		try {
-			computer = computerDAO.create(computer);
-			assertNotNull(msgId, computer.getId());
-			assertNull(computer.getCompany().getId());
-		} catch(DAOException e) {
-		}
+		computer = computerDAO.create(computer);
+		assertNotNull(msgId, computer.getId());
+		assertNull(computer.getCompany().getId());
 	}
-	
+
 	@Test
 	public void testCreateWithCompany() throws Exception {
 		Computer computer = new Computer.Builder("All").build();
@@ -130,7 +123,7 @@ public class ComputerDAOTest {
 		assertNotNull(msgId, computer.getId());
 		assertEquals(computer.getCompany().getId(), (Long) 40L);
 	}
-	
+
 	@Test
 	public void testCreateAndDelete() throws Exception {
 		Computer computer = new Computer.Builder("Sony Cie").build();
@@ -140,43 +133,36 @@ public class ComputerDAOTest {
 		computer = computerDAO.findById(computer.getId());
 		assertNull(computer);
 	}
-	
+
 	@Test
 	public void testUpdate() {
 		Computer computer = computerDAO.findById(50L);
 		String newName = computer.getName() + "a";
 		assertNotNull(computer);
 		computer.setName(newName);
-		try {
-			boolean bool = computerDAO.update(computer);
-			assertTrue(bool);
-			Computer computerUpdated = computerDAO.findById(50L);
-			assertEquals(newName, computerUpdated.getName());
-		} catch(DAOException e) {
-        }
+		boolean bool = computerDAO.update(computer);
+		assertTrue(bool);
+		Computer computerUpdated = computerDAO.findById(50L);
+		assertEquals(newName, computerUpdated.getName());
+
 	}
-	
+
 	@Test
 	public void testUpdate2() {
 		Computer computer = computerDAO.findById(55L);
-		try {
-			assertTrue(computerDAO.update(computer));
-		} catch (DAOException e) {
-		}
+		assertTrue(computerDAO.update(computer));
 	}
-	
-	@Ignore
+
 	@Test
 	public void testDelete() {
-		Computer computer = computerDAO.findById(574L);
-		try {
-			computerDAO.delete(computer.getId());
-		} catch (DAOException e) {	
-		}
-		computer = computerDAO.findById(574L);
+		Computer computer = computerDAO.create(new Computer.Builder("Test").build());
+		Long id = computer.getId();
+		assertNotNull(id);
+		computerDAO.delete(id);
+		computer = computerDAO.findById(id);
 		assertNull(computer);
 	}
-	
+
 	@Test
 	public void testOrderByNameAsc() {
 		Constraint query = new Constraint.Builder().order(Order.NAME_ASC).build();
@@ -187,7 +173,7 @@ public class ComputerDAOTest {
 			assertTrue(comp1.getName().toLowerCase().compareTo(comp2.getName().toLowerCase()) <= 0);
 		}
 	}
-	
+
 	@Test
 	public void testOrderByNameDesc() {
 		Constraint query = new Constraint.Builder().order(Order.NAME_DSC).build();
@@ -198,7 +184,7 @@ public class ComputerDAOTest {
 			assertTrue(comp1.getName().toLowerCase().compareTo(comp2.getName().toLowerCase()) >= 0);
 		}
 	}
-	
+
 	@Test
 	public void testOrderByCompanyNameAsc() {
 		Constraint query = new Constraint.Builder().order(Order.COMPANY_ASC).build();
@@ -211,7 +197,7 @@ public class ComputerDAOTest {
 			}
 		}
 	}
-	
+
 	@Test
 	public void testOrderByCompanyNameDesc() {
 		Constraint query = new Constraint.Builder().order(Order.COMPANY_DSC).build();

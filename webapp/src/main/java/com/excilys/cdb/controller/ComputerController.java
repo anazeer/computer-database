@@ -4,9 +4,9 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.dto.implementation.ComputerDTO;
-import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.mapper.implementation.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.implementation.ComputerPage;
@@ -25,16 +24,11 @@ import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.service.implementation.CompanyService;
 import com.excilys.cdb.service.implementation.ComputerService;
 
-
-
 /**
  * Dashboard controller
  */
 @Controller
 public class ComputerController {
-	
-	// Logger
-	private Logger log = LoggerFactory.getLogger(getClass());
 
     // Services
 	@Autowired
@@ -63,6 +57,9 @@ public class ComputerController {
 	
 	// ID from the POST form for deletion
 	private static final String selection = "selection";
+	
+	// Id for the user login
+	private static final String USER = "user";
 
 	/**
 	 * Default constructor. 
@@ -71,11 +68,11 @@ public class ComputerController {
 	}
 
 	/**
-	 * 
-	 * @param request
-	 * @return
+	 * Dashboards GET (view computers)
+	 * @param request the request object
+	 * @return the name of the result JSP (result view)
 	 */
-	@RequestMapping(path = {"/", "computer"}, method = RequestMethod.GET)
+	@RequestMapping(path = "computer", method = RequestMethod.GET)
 	public ModelAndView dashboard(@RequestParam Map<String, String> request) {
 		// Get the page request from the request
 		PageRequest pageRequest = PageRequestMapper.get(request);
@@ -85,6 +82,7 @@ public class ComputerController {
 		
 		// Construct the forward object
 		ModelAndView mav = new ModelAndView("dashboard");
+		mav.addObject(USER, getPrincipal());
 		
 		// Add the page attribute
 		mav.addObject(PAGE, computerPage);
@@ -94,8 +92,8 @@ public class ComputerController {
 	}
 	
 	/**
-	 * 
-	 * @param request
+	 * Dashboard POST (delete computers)
+	 * @param request the request object
 	 * @return the name of the result JSP (result view)
 	 */
 	@RequestMapping(path = {"/", "computer"}, method = RequestMethod.POST)
@@ -104,11 +102,7 @@ public class ComputerController {
 		String[] ids = request.get(selection).split(",");
 		// Delete all the computers referenced by id
 		for (String s : ids) {
-			try {
 			computerService.delete(Long.parseLong(s));
-			} catch (DAOException e) {
-				log.error(e.getMessage());
-			}
 		}
 		// Return to the dashboard
 		return "redirect:/computer";
@@ -145,17 +139,9 @@ public class ComputerController {
 			model.addAttribute(FAILURE, true);
 			return "addComputer";
 		}
-        // If the validation went good, we try to persist the computer
+        // The validation went good, we can persist the computer
 		Computer computer = computerMapper.getFromDTO(dto);
-		try {
-			computerService.create(computer);
-		} catch (DAOException e) {
-			// The DAO layer can still throw an exception
-			log.error(e.getMessage());
-			model.addAttribute(FAILURE, "true");
-			return "addComputer";
-		}
-		// Everything is good
+		computerService.create(computer);
 		model.addAttribute(SUCCESS, true);
 		return "addComputer";
 	}
@@ -207,22 +193,22 @@ public class ComputerController {
 			return "editComputer";
 		}
 		
-        // If the validation went good, we try to update the computer
+        // The validation went good, we can update the computer
 		Computer computer = computerMapper.getFromDTO(dto);
-		try {
-			computerService.update(computer);
-		} catch (DAOException e) {
-			// The DAO layer can still throw an exception
-			log.error(e.getMessage());
-			model.addAttribute(FAILURE, "true");
-			return "editComputer";
-		}
-
-		// Everything is good
+		computerService.update(computer);
 		model.addAttribute(SUCCESS, true);
 		return "editComputer";
 	}
 	
-	
-	
+	private String getPrincipal() {
+		String userName = null;
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (principal instanceof UserDetails) {
+			userName = ((UserDetails) principal).getUsername();
+		} else {
+			userName = principal.toString();
+		}
+		return userName;
+	}
 }

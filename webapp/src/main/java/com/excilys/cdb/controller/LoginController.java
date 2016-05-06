@@ -3,6 +3,7 @@ package com.excilys.cdb.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -16,10 +17,15 @@ import com.excilys.cdb.model.User;
 @Controller
 public class LoginController {
 	
-	@RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/", "login"}, method = RequestMethod.GET)
 	public String loginPage(Model model) {
 		model.addAttribute("user", new User());
-	    return "login";
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+		    // The user is logged in
+		    return "forward:/computer";
+		}
+		return "login";
 	}
 	
 	/**

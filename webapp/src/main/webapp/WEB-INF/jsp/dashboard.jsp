@@ -4,6 +4,8 @@
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false"%>
@@ -46,13 +48,15 @@
 							class="btn btn-primary" />
 					</form>
 				</div>
-				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">
-						<spring:message code="label.add" />
-					</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();"><spring:message
-							code="label.editButton" /></a>
-				</div>
+				<sec:authorize access="hasRole('ADMIN')">
+					<div class="pull-right">
+						<a class="btn btn-success" id="addComputer" href="addComputer">
+							<spring:message code="label.add" />
+						</a> <a class="btn btn-default" id="editComputer" href="#"
+							onclick="$.fn.toggleEditMode();"><spring:message
+								code="label.editButton" /></a>
+					</div>
+				</sec:authorize>
 			</div>
 		</div>
 
@@ -68,14 +72,17 @@
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
+						<sec:authorize access="hasRole('ADMIN')">
 
-						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
-							</a>
-						</span></th>
+							<th class="editMode" style="width: 60px; height: 22px;"><input
+								type="checkbox" id="selectall" /> <span
+								style="vertical-align: top;"> - <a href="#"
+									id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
+										class="fa fa-trash-o fa-lg"></i>
+								</a>
+							</span></th>
+						</sec:authorize>
+
 						<!-- Table header for Computer name -->
 						<th>
 							<!-- Retrieve the current ordering for computer name --> <c:set
@@ -158,8 +165,12 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
-							<td><mylib:link target="editComputer"
-									text="${computer.name}" id="${computer.id}" /></td>
+							<td><sec:authorize access="hasAnyRole('ADMIN')">
+									<mylib:link target="editComputer" text="${computer.name}"
+										id="${computer.id}" />
+								</sec:authorize> <sec:authorize access="!hasRole('ADMIN')">
+									<c:out value="${computer.name}" />
+								</sec:authorize></td>
 							<td><c:out value="${computer.introduced}" /></td>
 							<td><c:out value="${computer.discontinued}" /></td>
 							<td><c:out value="${computer.companyName}" /></td>

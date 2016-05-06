@@ -1,5 +1,6 @@
 package com.excilys.cdb.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -40,7 +41,7 @@ public class User {
 	private String password;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-	private Set<UserRole> userRole;
+	private Set<UserRole> userRole = new HashSet<>();
 
 	public Long getId() {
 		return id;
@@ -72,5 +73,10 @@ public class User {
 
 	public void setUserRole(Set<UserRole> userRole) {
 		this.userRole = userRole;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", userRole=" + userRole + "]";
 	}
 }

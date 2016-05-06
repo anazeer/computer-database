@@ -2,6 +2,8 @@ package com.excilys.cdb.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -12,6 +14,8 @@ import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.Filters;
 import org.hibernate.annotations.ParamDef;
+
+import com.excilys.cdb.util.Role;
 
 /**
  * User role model
@@ -31,7 +35,8 @@ public class UserRole {
 	private Long id;
 
 	@Column(nullable = false)
-	private String role;
+	@Enumerated(EnumType.STRING)
+	private Role role;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -45,11 +50,11 @@ public class UserRole {
 		this.id = id;
 	}
 
-	public String getRole() {
+	public Role getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
 
@@ -59,5 +64,10 @@ public class UserRole {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "UserRole [id=" + id + ", role=" + role + "]";
 	}
 }

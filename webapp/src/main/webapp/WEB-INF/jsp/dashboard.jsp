@@ -56,7 +56,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="computer" method="POST">
+		<form id="deleteForm" action="delete" method="POST">
 			<input type="hidden" name="${_csrf.parameterName}"
 				value="${_csrf.token}" /> <input type="hidden" name="selection"
 				value="">

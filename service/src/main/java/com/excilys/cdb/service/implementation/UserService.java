@@ -3,6 +3,8 @@ package com.excilys.cdb.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +26,11 @@ public class UserService implements IService<User> {
     @Autowired
     private UserDAO dao;
      
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
  
-
 	@Override
 	public User findById(Long id) {
 		return dao.findById(id);
@@ -59,7 +62,7 @@ public class UserService implements IService<User> {
 	
 	@Override
 	public User create(User obj) {
-        obj.setPassword(passwordEncoder.encode(obj.getPassword()));
+        obj.setPassword(passwordEncoder().encode(obj.getPassword()));
         return dao.create(obj);
 	}
 
@@ -67,5 +70,4 @@ public class UserService implements IService<User> {
 	public void delete(Long id) {
 		dao.delete(id);
 	}
-
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.dao.AbstractDAO;
 import com.excilys.cdb.model.User;
+import com.excilys.cdb.model.UserRole;
 import com.excilys.cdb.util.Constraint;
 
 /**
@@ -82,6 +83,11 @@ public class UserDAO extends AbstractDAO<User> {
 		Session session = sessionFactory.getCurrentSession();
 		// Persist the object
 		session.persist(obj);
+		// Associate the roles
+		for (UserRole role : obj.getUserRole()) {
+			role.setUser(obj);
+			session.saveOrUpdate(role);
+		}
 		// Log the result
 		log.info("User {} (id = {})", obj.getId() > 0 ? "created" : "not created", obj.getId());
 		return obj;

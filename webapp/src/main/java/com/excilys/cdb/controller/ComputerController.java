@@ -96,7 +96,7 @@ public class ComputerController {
 	 * @param request the request object
 	 * @return the name of the result JSP (result view)
 	 */
-	@RequestMapping(path = {"/", "computer"}, method = RequestMethod.POST)
+	@RequestMapping(path = {"delete"}, method = RequestMethod.POST)
 	public String delete(@RequestParam Map<String, String> request) {
 		// Retrieve the list of id's
 		String[] ids = request.get(selection).split(",");

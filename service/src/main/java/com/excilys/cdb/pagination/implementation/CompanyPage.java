@@ -12,6 +12,7 @@ public final class CompanyPage extends AbstractPage<Company> {
 	
 	/**
 	 * Company pagination object
+	 * @param companyMapper the company mapper
 	 * @param pageRequest the page request
 	 * @param totalCount the total number of elements
 	 */

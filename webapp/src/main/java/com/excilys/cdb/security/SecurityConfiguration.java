@@ -45,7 +45,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
       http.authorizeRequests()
         .antMatchers("/", "/home").permitAll()
-        .antMatchers("/computer", "/computer/**").access("hasRole('USER') or hasRole('ADMIN')")
+        .antMatchers("/computer", "/computer/**").access("hasAnyRole('USER', 'ADMIN')")
+        .antMatchers("/delete").access("hasRole('ADMIN')")
         .antMatchers("/addComputer").access("hasRole('ADMIN')")
         .antMatchers("/editComputer/**").access("hasRole('ADMIN')")
         .and().formLogin().loginPage("/login")

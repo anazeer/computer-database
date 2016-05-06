@@ -12,6 +12,7 @@ public final class ComputerPage extends AbstractPage<Computer> {
 
 	/**
 	 * Computer pagination object
+	 * @param computerMapper the computer mapper
 	 * @param pageRequest the page request
 	 * @param totalCount the total number of elements
 	 */

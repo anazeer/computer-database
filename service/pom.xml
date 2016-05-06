@@ -41,8 +41,8 @@
 			<version>${parentAppVersion}</version>
 		</dependency>
 
-		<!-- Spring web security to encrypt the password -->
-
+		<!-- Spring web security -->
+		
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>

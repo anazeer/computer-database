@@ -124,7 +124,7 @@ public abstract class AbstractDAO<T> implements IDAO<T> {
 		int result = query.executeUpdate();
 		// Log the result
 		boolean success = result > 0;
-		getLogger().info("{} (id = {})", getTableName(), success ? "deleted" : "not found", id);
+		getLogger().info("{} {} (id = {})", getTableName(), success ? "deleted" : "not found", id);
 		return success;
 	}
 	

@@ -4,9 +4,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -16,11 +20,15 @@ import org.springframework.stereotype.Controller;
 import com.excilys.cdb.dto.implementation.ComputerDTO;
 import com.excilys.cdb.mapper.implementation.ComputerMapper;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.User;
+import com.excilys.cdb.model.UserRole;
 import com.excilys.cdb.pagination.AbstractPage;
 import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.service.IService;
 import com.excilys.cdb.service.implementation.CompanyService;
 import com.excilys.cdb.service.implementation.ComputerService;
+import com.excilys.cdb.service.implementation.UserService;
+import com.excilys.cdb.util.Role;
 
 @Controller
 public class Cli {
@@ -30,6 +38,8 @@ public class Cli {
 	private CompanyService companyService;
 	@Autowired
 	private ComputerService computerService;
+	@Autowired
+	private UserService userService;
 
 	// Mappers
 	@Autowired
@@ -43,15 +53,34 @@ public class Cli {
 	private List<Integer> generalInstr = new ArrayList<>();
 	private List<Integer> companyInstr = new ArrayList<>();
 	private List<Integer> computerInstr = new ArrayList<>();
+	private List<Integer> userInstr = new ArrayList<>();
+	private List<Integer> roleInstr = new ArrayList<>();
 	private List<Character> pageInstr = new ArrayList<>();
 
 	// Number of options for each menu
-	private final int countGeneralInstr = 3;
+	private final int countGeneralInstr = 4;
 	private final int countCompanyInstr = 3;
 	private final int countComputerInstr = 6;
+	private final int countUserInstr = 5;
+	private final int countRoleInstr = 3;
 
 	// Read inputs
 	private Scanner scan;
+	
+	// User roles map
+	private Map<Integer, UserRole> userRoles = new HashMap<>();
+	
+	/**
+	 * Initialize the roles map
+	 */
+	{
+		UserRole roleAdmin = new UserRole();
+		roleAdmin.setRole(Role.ADMIN);
+		UserRole roleUser = new UserRole();
+		roleUser.setRole(Role.USER);
+		userRoles.put(1, roleAdmin);
+		userRoles.put(2, roleUser);
+	}
 
 	/**
 	 * Show main menu
@@ -61,7 +90,8 @@ public class Cli {
 		System.out.println("Choose your database:");
 		System.out.println("1. Company");
 		System.out.println("2. Computer");
-		System.out.println("3. Exit");
+		System.out.println("3. User");
+		System.out.println("4. Exit");
 	}
 
 	/**
@@ -87,6 +117,30 @@ public class Cli {
 		System.out.println("4. Update computer");
 		System.out.println("5. Delete computer");
 		System.out.println("6. Return to menu");
+	}
+	
+	/**
+	 * Show user menu
+	 */
+	private void showUserInstr() {
+		System.out.println("\nUser");
+		System.out.println("Choose your operation:");
+		System.out.println("1. List users");
+		System.out.println("2. User details");
+		System.out.println("3. Create user");
+		System.out.println("4. Delete user");
+		System.out.println("5. Return to menu");
+	}
+	
+	/**
+	 * Show available roles
+	 */
+	private void showRoleInstr() {
+		System.out.println("\nRole");
+		System.out.println("Choose the role:");
+		System.out.println("1. Admin");
+		System.out.println("2. User");
+		System.out.println("End : 0");
 	}
 
 	/**
@@ -114,6 +168,12 @@ public class Cli {
 		for (int i = 1; i <= countComputerInstr; i++) {
 			computerInstr.add(i);
 		}
+		for (int i = 1; i <= countUserInstr; i++) {
+			userInstr.add(i);
+		}
+		for (int i = 1; i <= countRoleInstr; i++) {
+			roleInstr.add(i);
+		}
 		pageInstr.add('n');
 		pageInstr.add('p');
 		pageInstr.add('q');
@@ -131,14 +191,14 @@ public class Cli {
 			entry = Integer.parseInt(scan.nextLine());
 			if (step == 0 && !generalInstr.contains(entry)) {
 				throw new IllegalArgumentException();
-			}
-			else if (step == 1 && !companyInstr.contains(entry)) {
+			} else if (step == 1 && !companyInstr.contains(entry)) {
+				throw new IllegalArgumentException();
+			} else if (step == 2 && !computerInstr.contains(entry)) {
+				throw new IllegalArgumentException();
+			} else if (step == 3 && ! userInstr.contains(entry)) {
 				throw new IllegalArgumentException();
 			}
-			else if (step == 2 && !computerInstr.contains(entry)) {
-				throw new IllegalArgumentException();
-			}
-		} catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			System.err.println("Select a valid operation.");
 			entry = -1;
 		}
@@ -163,17 +223,18 @@ public class Cli {
 	}
 
 	/**
-	 * Read a valid name (not empty)
-	 * @return the input name
+	 * Read a non empty String
+	 * @param text the instruction text for the user
+	 * @return the correct input String
 	 */
-	private String readName() {
+	private String readString(String text) {
 		String entry = null;
 		while (entry == null) {
-			System.out.println("Select the name:");
+			System.out.println(text);
 			entry = scan.nextLine().trim();
 			if (entry.isEmpty()) {
 				entry = null;
-				System.err.println("Enter a valid name");
+				System.err.println("The string should not be empty");
 			}
 		}
 		return entry;
@@ -231,11 +292,36 @@ public class Cli {
 		}
 		return c;
 	}
+	
+	private Set<UserRole> readRole() {
+		boolean end = false;
+		Set<UserRole> roles = new HashSet<>();
+		while (!end) {
+			showRoleInstr();
+			try {
+				int option = Integer.parseInt(scan.nextLine());
+				if (option == 0) {
+					end = true;
+				} else if (!roleInstr.contains(option)) {
+					throw new IllegalArgumentException();
+				} else {
+					roles.add(userRoles.get(option));
+				}
+			} catch(IllegalArgumentException e) {
+				System.err.println("Select a valid operation.");
+			}
+		}
+		return roles;
+	}
 
+	/**
+	 * Navigate through the object pages
+	 * @param service the service of the paginated object
+	 */
 	private void navigatePage(IService<?> service) {
 		int currentPage = 1;
 		boolean end = false;
-		while(!end) {
+		while (!end) {
 			PageRequest pageRequest = new PageRequest(null, currentPage);
 			AbstractPage<?> page = service.getPage(pageRequest);
 			showPage(page.getElements());
@@ -253,7 +339,7 @@ public class Cli {
 	 * @return the created computer
 	 */
 	private ComputerDTO constructComputer() {
-		String name = readName();
+		String name = readString("Choose the name:");
 
 		LocalDate introduced;
 		LocalDate discontinued;
@@ -280,6 +366,21 @@ public class Cli {
 		computer.setCompanyId(company_id);
 		return computer;
 	}
+	
+	/**
+	 * Construct a new user in line command
+	 * @return the new user
+	 */
+	private User constructUser() {
+		User user = new User();
+		String name = readString("Choose the name:");
+		String pwd = readString("Choose the password:");
+		Set<UserRole> roles = readRole();
+		user.setUsername(name);
+		user.setPassword(pwd);
+		user.setUserRole(roles);
+		return user;
+	}
 
 	/**
 	 * The main UI
@@ -293,16 +394,19 @@ public class Cli {
 			int entry = -1;
 			while (entry == -1) {
 				switch (step) {
-				case 0 : showGeneralInstr(); entry = readOption(step); break;
-				case 1 : showCompanyInstr(); entry = readOption(step); break;
-				case 2 : showComputerInstr(); entry = readOption(step); break;
+				case 0 : showGeneralInstr(); break;
+				case 1 : showCompanyInstr(); break;
+				case 2 : showComputerInstr(); break;
+				case 3 : showUserInstr(); break;
 				}
+				entry = readOption(step);
 			}
 			if (step == 0) {
 				switch (entry) {
 				case 1 : step = 1; break;
 				case 2 : step = 2; break;
-				case 3 : exit = true; break;
+				case 3 : step = 3; break;
+				case 4 : exit = true; break;
 				}
 			} else if (step == 1) {
 				switch (entry) {
@@ -319,7 +423,7 @@ public class Cli {
 				case 3 : step = 0;
 				break;
 				}
-			} else {
+			} else if (step == 2) {
 				Computer computer;
 				ComputerDTO computerDTO;
 				switch (entry) {
@@ -352,6 +456,37 @@ public class Cli {
 					break;
 				case 5 : Long delId = readId(); computerService.delete(delId); break;
 				case 6 : step = 0; break;
+				}
+			} else {
+				User user;
+				Long id;
+				switch (entry) {
+				case 1:
+					System.out.println("---------------------");
+					System.out.println("- List of users -");
+					System.out.println("---------------------");
+					navigatePage(userService);
+					break;
+				case 2:
+					id = readId();
+					user = userService.findById(id);
+					if (user == null) {
+						System.out.println("No user is referenced by id " + id);
+					} else {
+						System.out.println(user);
+					}
+					break;
+				case 3:
+					user = constructUser();
+					userService.create(user);
+					break;
+				case 4:
+					id = readId();
+					userService.delete(id);
+					break;
+				case 5:
+					step = 0;
+					break;
 				}
 			}
 		}

@@ -50,7 +50,7 @@
 		<appName>computer-database</appName>
 
 		<!-- Application version -->
-		<parentAppVersion>0.7.2-SNAPSHOT</parentAppVersion>
+		<parentAppVersion>0.7.3-RELEASE</parentAppVersion>
 
 	</properties>
 

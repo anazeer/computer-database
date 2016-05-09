@@ -25,7 +25,7 @@
 
 	<!-- The navbar can redirect to the dashboard -->
 	<div class="container">
-		<a class="navbar-brand" href="dashboard.html"> <spring:message
+		<a class="navbar-brand" href="computer"> <spring:message
 				code="label.app" />
 		</a>
 	</div>
@@ -87,8 +87,8 @@
 					</h1>
 					<!-- Computer editing form -->
 					<form:form action="editComputer?id=${computerDTO.id}" method="POST"
-						modelAttribute="computerDTO">
-						<input type="hidden" value="0" />
+						modelAttribute="computerDTO" id="${computer.name}_id" >
+						<input type="hidden" value="${computerDTO.id}" id="id" />
 						<fieldset>
 							<!-- Computer name form -->
 							<div class="form-group">
@@ -153,6 +153,8 @@
 							<a href="computer" class="btn btn-default"><spring:message
 									code="label.cancel" /></a>
 						</div>
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" id="_csrf" />
 					</form:form>
 				</div>
 			</div>

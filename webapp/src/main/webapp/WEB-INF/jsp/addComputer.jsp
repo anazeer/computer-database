@@ -116,6 +116,9 @@
 							<a href="computer" class="btn btn-default"><spring:message
 									code="label.cancel" /></a>
 						</div>
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" id="_csrf" />
+						<input type="hidden" name="selection" value="">
 					</form:form>
 				</div>
 			</div>

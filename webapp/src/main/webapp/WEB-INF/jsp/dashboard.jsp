@@ -46,6 +46,8 @@
 							value="${page.filter}" /> <input type="submit" id="searchsubmit"
 							value=<spring:message code="label.searchButton" />
 							class="btn btn-primary" />
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" id="_csrf" />
 					</form>
 				</div>
 				<sec:authorize access="hasRole('ADMIN')">
@@ -60,9 +62,9 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="delete" method="POST">
+		<form id="deleteForm" action="delete" method="POST" >
 			<input type="hidden" name="${_csrf.parameterName}"
-				value="${_csrf.token}" /> <input type="hidden" name="selection"
+				value="${_csrf.token}" id="_csrf" /> <input type="hidden" name="selection"
 				value="">
 		</form>
 
@@ -164,10 +166,11 @@
 					<c:forEach var="computer" items="${page.elements}">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="${computer.id}"></td>
+								id="${computer.name}_id" class="cb" value="${computer.id}"></td>
 							<td><sec:authorize access="hasAnyRole('ADMIN')">
-									<mylib:link target="editComputer" text="${computer.name}"
-										id="${computer.id}" />
+									<a href="editComputer?id=${computer.id}" id="${computer.name}_name">
+										<c:out value="${computer.name}" />
+									</a>
 								</sec:authorize> <sec:authorize access="!hasRole('ADMIN')">
 									<c:out value="${computer.name}" />
 								</sec:authorize></td>

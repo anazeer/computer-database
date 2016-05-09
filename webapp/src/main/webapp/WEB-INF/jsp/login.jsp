@@ -62,7 +62,7 @@
 						<!-- Validate credentials -->
 						<div class="actions pull-right">
 							<input type="hidden" name="${_csrf.parameterName}"
-								value="${_csrf.token}" /> <input type="submit"
+								value="${_csrf.token}" id="_csrf" /> <input type="submit"
 								value=<spring:message code="security.login.button" />
 								class="btn btn-primary">
 						</div>

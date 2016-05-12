@@ -8,7 +8,7 @@ import com.excilys.cdb.util.Constraint;
  * Generic DAO for CRUD implementation
  * @param <T>
  */
-    interface IDAO<T> {
+    interface IDao<T> {
 
     /**
      * Non implemented method error message

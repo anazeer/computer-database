@@ -9,9 +9,9 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.dao.implementation.CompanyDAO;
-import com.excilys.cdb.dto.IDTO;
-import com.excilys.cdb.dto.implementation.ComputerDTO;
+import com.excilys.cdb.dao.implementation.CompanyDao;
+import com.excilys.cdb.dto.IDto;
+import com.excilys.cdb.dto.implementation.ComputerDto;
 import com.excilys.cdb.mapper.IMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
@@ -24,14 +24,17 @@ import com.excilys.cdb.model.Computer;
 public class ComputerMapper implements IMapper<Computer> {
 
     @Autowired
-    private CompanyDAO companyDAO;
+    private CompanyDao companyDAO;
     
     @Autowired
     private MessageSource messageSource;
     
     @Override
-    public Computer getFromDTO(IDTO dto) {
-        ComputerDTO computerDTO = (ComputerDTO) dto;
+    public Computer getFromDTO(IDto dto) {
+    	if (dto == null) {
+    		return null;
+    	}
+        ComputerDto computerDTO = (ComputerDto) dto;
         String name = computerDTO.getName();
         Long id = computerDTO.getId();
         DateTimeFormatter formatter = getFormat();
@@ -49,7 +52,10 @@ public class ComputerMapper implements IMapper<Computer> {
     }
 
     @Override
-    public IDTO getFromModel(Computer model) {
+    public IDto getFromModel(Computer model) {
+    	if (model == null) {
+    		return null;
+    	}
         String name =  model.getName();
         Long id = model.getId();
         DateTimeFormatter formatter = getFormat();
@@ -64,7 +70,7 @@ public class ComputerMapper implements IMapper<Computer> {
             companyId = company.getId();
             companyName = company.getName();
         }
-        return new ComputerDTO.Builder(name)
+        return new ComputerDto.Builder(name)
                 .id(id)
                 .introduced(introduced)
                 .discontinued(discontinued)

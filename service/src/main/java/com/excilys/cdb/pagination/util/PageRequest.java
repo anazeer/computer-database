@@ -9,8 +9,11 @@ import com.excilys.cdb.util.Constraint;
  */
 public class PageRequest {
 	
-	private Constraint query;
+	private Constraint constraint;
 	private int currentPage;
+	
+	public PageRequest() {
+	}
 	
 	public PageRequest(Constraint query, int currentPage) {
     	if (query == null) {
@@ -19,12 +22,12 @@ public class PageRequest {
     	if (query.getLimit() <= 0) {
     		query.setLimit(10);
     	}
-		this.query = query;
+		this.constraint = query;
 		this.currentPage = currentPage;
 	}
 	
 	public void setQuery(Constraint query) {
-		this.query = query;
+		this.constraint = query;
 	}
 
 	public void setCurrentPage(int currentPage) {
@@ -32,7 +35,7 @@ public class PageRequest {
 	}
 
 	public Constraint getQuery() {
-		return query;
+		return constraint;
 	}
 
 	public int getCurrentPage() {
@@ -44,7 +47,7 @@ public class PageRequest {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + currentPage;
-		result = prime * result + ((query == null) ? 0 : query.hashCode());
+		result = prime * result + ((constraint == null) ? 0 : constraint.hashCode());
 		return result;
 	}
 
@@ -59,10 +62,10 @@ public class PageRequest {
 		PageRequest other = (PageRequest) obj;
 		if (currentPage != other.currentPage)
 			return false;
-		if (query == null) {
-			if (other.query != null)
+		if (constraint == null) {
+			if (other.constraint != null)
 				return false;
-		} else if (!query.equals(other.query))
+		} else if (!constraint.equals(other.constraint))
 			return false;
 		return true;
 	}

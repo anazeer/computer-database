@@ -2,7 +2,7 @@ package com.excilys.cdb.mapper;
 
 import java.util.Map;
 
-import com.excilys.cdb.dto.implementation.ComputerDTO;
+import com.excilys.cdb.dto.implementation.ComputerDto;
 
 /**
  * Computer mapper for request
@@ -26,7 +26,7 @@ public class ComputerRequestMapper {
 	 * @param request the user request
 	 * @return the DTO depending on the user inputs
 	 */
-	public ComputerDTO getFromRequest(Map<String, String> request) {
+	public ComputerDto getFromRequest(Map<String, String> request) {
 		
 		// We first get the parameters from the POST form
 		String computerId = request.get(idParam);
@@ -52,7 +52,7 @@ public class ComputerRequestMapper {
 		}
 		
 		// We build and return the DTO with those information
-		ComputerDTO dto = new ComputerDTO
+		ComputerDto dto = new ComputerDto
 				.Builder(name)
 				.id(idComputer)
 				.introduced(introduced)

@@ -19,6 +19,7 @@
 		<module>persistence</module>
 		<module>service</module>
 		<module>webapp</module>
+		<module>webservice</module>
 
 	</modules>
 
@@ -37,7 +38,12 @@
 		<checkstyleVersion>2.17</checkstyleVersion>
 		<seleniumVersion>2.53.0</seleniumVersion>
 		<httpclientVersion>4.3.5</httpclientVersion>
-		<springVersion>4.2.5.RELEASE</springVersion>
+		<restVersion>2.0.1</restVersion>
+		<jerseyVersion>2.22.2</jerseyVersion>
+		<jacksonVersion>2.7.4</jacksonVersion>
+		<gensonVersion>1.4</gensonVersion>
+		<jerseyJsonVersion>1.19.1</jerseyJsonVersion>
+		<springVersion>4.2.6.RELEASE</springVersion>
 		<springSecurityVersion>4.1.0.RELEASE</springSecurityVersion>
 		<servletVersion>3.1.0</servletVersion>
 		<validationVersion>1.1.0.Final</validationVersion>
@@ -51,7 +57,7 @@
 		<appName>computer-database</appName>
 
 		<!-- Application version -->
-		<parentAppVersion>0.8.0-SNAPSHOT</parentAppVersion>
+		<parentAppVersion>0.8.1-SNAPSHOT</parentAppVersion>
 
 	</properties>
 
@@ -107,8 +113,6 @@
 	<!-- Dependencies -->
 
 	<dependencies>
-
-
 
 		<!-- Spring -->
 

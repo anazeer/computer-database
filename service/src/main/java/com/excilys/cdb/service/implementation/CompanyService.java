@@ -3,11 +3,12 @@ package com.excilys.cdb.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.dao.implementation.CompanyDAO;
-import com.excilys.cdb.dao.implementation.ComputerDAO;
+import com.excilys.cdb.dao.implementation.CompanyDao;
+import com.excilys.cdb.dao.implementation.ComputerDao;
 import com.excilys.cdb.mapper.implementation.CompanyMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.pagination.implementation.CompanyPage;
@@ -23,9 +24,9 @@ public class CompanyService implements com.excilys.cdb.service.IService<Company>
 	
 	// Dao's references
 	@Autowired
-	private CompanyDAO companyDAO;
+	private CompanyDao companyDAO;
 	@Autowired
-	private ComputerDAO computerDAO;
+	private ComputerDao computerDAO;
 	
 	// Mappers
 	@Autowired
@@ -34,6 +35,7 @@ public class CompanyService implements com.excilys.cdb.service.IService<Company>
 	public CompanyService() {
 	}
 	
+	@Cacheable(value = "company")
 	@Override
 	public Company findById(Long id) {
 		return companyDAO.findById(id);
@@ -49,6 +51,7 @@ public class CompanyService implements com.excilys.cdb.service.IService<Company>
 		return companyPage;
 	}
 
+	@Cacheable(value = "company")
 	@Override
 	public List<Company> list(Constraint constraint) {
 		return companyDAO.find(constraint);
@@ -61,8 +64,8 @@ public class CompanyService implements com.excilys.cdb.service.IService<Company>
 
 	@Override
 	@Transactional(readOnly=false)
-	public void delete(Long id) {
+	public boolean delete(Long id) {
 		computerDAO.deleteByCompanyId(id);
-		companyDAO.delete(id);
+		return companyDAO.delete(id);
 	}
 }

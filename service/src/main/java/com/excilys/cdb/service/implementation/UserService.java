@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.dao.implementation.UserDAO;
+import com.excilys.cdb.dao.implementation.UserDao;
 import com.excilys.cdb.model.User;
 import com.excilys.cdb.pagination.AbstractPage;
 import com.excilys.cdb.pagination.util.PageRequest;
@@ -24,7 +24,7 @@ import com.excilys.cdb.util.Constraint;
 public class UserService implements IService<User> {
 	
     @Autowired
-    private UserDAO dao;
+    private UserDao dao;
      
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -67,7 +67,7 @@ public class UserService implements IService<User> {
 	}
 
 	@Override
-	public void delete(Long id) {
-		dao.delete(id);
+	public boolean delete(Long id) {
+		return dao.delete(id);
 	}
 }

@@ -3,10 +3,11 @@ package com.excilys.cdb.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.dao.implementation.ComputerDAO;
+import com.excilys.cdb.dao.implementation.ComputerDao;
 import com.excilys.cdb.mapper.implementation.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.implementation.ComputerPage;
@@ -21,7 +22,7 @@ import com.excilys.cdb.util.Constraint;
 public class ComputerService implements com.excilys.cdb.service.IService<Computer> {
 
 	@Autowired
-	private ComputerDAO computerDAO;
+	private ComputerDao computerDAO;
 	
 	@Autowired
 	private ComputerMapper computerMapper;
@@ -29,6 +30,7 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 	public ComputerService() {
 	}
 	
+	@Cacheable(value = "computer")
 	@Override
 	public Computer findById(Long id) {
 		return computerDAO.findById(id);
@@ -44,6 +46,7 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 		return computerPage;
 	}
 
+	@Cacheable(value = "computer")
 	@Override
 	public List<Computer> list(Constraint constraint) {
 		return computerDAO.find(constraint);
@@ -52,10 +55,6 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 	@Override
 	public int count(Constraint constraint) {
 		return computerDAO.count(constraint);
-	}
-	
-	public Computer getComputer(Long id) {
-		return computerDAO.findById(id);
 	}
 	
 	@Override
@@ -69,7 +68,7 @@ public class ComputerService implements com.excilys.cdb.service.IService<Compute
 	}
 	
 	@Override
-	public void delete(Long id) {
-		computerDAO.delete(id);
+	public boolean delete(Long id) {
+		return computerDAO.delete(id);
 	}
 }

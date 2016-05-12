@@ -91,6 +91,31 @@
 			<version>${jstlVersion}</version>
 		</dependency>
 
+		<!-- Jackson -->
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
+		<!-- Rest Service API -->
+
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>${restVersion}</version>
+		</dependency>
+
+		<!-- Jersey for response -->
+
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-common</artifactId>
+			<version>${jerseyVersion}</version>
+		</dependency>
+
+
 		<!-- Compile time -->
 
 		<!-- Servlet dependency for maven build -->

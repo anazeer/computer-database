@@ -4,8 +4,8 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>computer-database-service</artifactId>
-	<packaging>jar</packaging>
+	<artifactId>computer-database-webservice</artifactId>
+	<packaging>war</packaging>
 
 	<parent>
 		<artifactId>computer-database</artifactId>
@@ -16,6 +16,8 @@
 	<!-- Dependencies -->
 
 	<dependencies>
+
+		<!-- Computer database dependencies -->
 
 		<!-- CDB Core model dependency -->
 
@@ -33,37 +35,47 @@
 			<version>${parentAppVersion}</version>
 		</dependency>
 
-		<!-- CDB Persistence dao dependency -->
+		<!-- CDB Service dependency -->
 
 		<dependency>
 			<groupId>com.excilys.cdb</groupId>
-			<artifactId>computer-database-persistence</artifactId>
+			<artifactId>computer-database-service</artifactId>
 			<version>${parentAppVersion}</version>
 		</dependency>
 
+		<!-- Spring web and security -->
+
+		<!-- Spring web -->
+
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
+			<artifactId>spring-web</artifactId>
 			<version>${springVersion}</version>
 		</dependency>
 
-		<!-- Cache -->
+		<!-- Spring web mvc -->
 
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-ehcache</artifactId>
-			<version>${hibernateVersion}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${springVersion}</version>
 		</dependency>
 
-		<!-- Spring web security -->
+		<!-- JSTL API -->
 
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-			<version>${springSecurityVersion}</version>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstlVersion}</version>
 		</dependency>
 
-		<!-- Rest services -->
+		<!-- Jackson -->
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.5.0</version>
+		</dependency>
 
 		<!-- Rest Service API -->
 
@@ -74,42 +86,49 @@
 		</dependency>
 
 		<!-- Jersey for response -->
+
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-common</artifactId>
 			<version>${jerseyVersion}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>${jerseyVersion}</version>
-		</dependency>
-		
-		<!-- Jackson / JSon converters -->
 
+		<!-- Compile time -->
+
+		<!-- Servlet dependency for maven build -->
 		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>${jerseyVersion}</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servletVersion}</version>
+			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>${jacksonVersion}</version>
-		</dependency>
+		<!-- Test dependencies -->
+
+		<!-- Selenium API -->
 
 		<dependency>
-			<groupId>com.owlike</groupId>
-			<artifactId>genson</artifactId>
-			<version>${gensonVersion}</version>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${seleniumVersion}</version>
+			<scope>test</scope>
 		</dependency>
 
+		<!-- Use by Selenium -->
+
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>${jerseyJsonVersion}</version>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpclientVersion}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- slf4j simple, used by the web driver (Selenium) -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4jSimpleVersion}</version>
 		</dependency>
 
 	</dependencies>

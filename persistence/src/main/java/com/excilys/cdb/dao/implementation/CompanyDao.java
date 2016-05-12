@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.dao.AbstractDAO;
+import com.excilys.cdb.dao.AbstractDao;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.util.Constraint;
 import com.excilys.cdb.util.Order;
@@ -16,7 +16,7 @@ import com.excilys.cdb.util.Order;
  * DAO implementation for companies
  */
 @Repository
-public final class CompanyDAO extends AbstractDAO<Company> {
+public final class CompanyDao extends AbstractDao<Company> {
 	
 	// Logger
 	private Logger log = LoggerFactory.getLogger(getClass());
@@ -24,7 +24,7 @@ public final class CompanyDAO extends AbstractDAO<Company> {
 	/**
 	 * DAO dependency is only injected by spring
 	 */
-	private CompanyDAO() {
+	private CompanyDao() {
 	}
 	
 	@Override

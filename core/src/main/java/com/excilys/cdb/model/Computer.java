@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.Filters;
@@ -44,6 +46,7 @@ public class Computer {
 	
 	@ManyToOne
 	@JoinColumn
+	@Fetch(FetchMode.SELECT)
 	private Company company;
 
 	public Computer() {

@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.dao.AbstractDAO;
+import com.excilys.cdb.dao.AbstractDao;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.Constraint;
 import com.excilys.cdb.util.Order;
@@ -17,7 +17,7 @@ import com.excilys.cdb.util.Order;
  * DAO implementation for computers
  */
 @Repository
-public final class ComputerDAO extends AbstractDAO<Computer> {
+public final class ComputerDao extends AbstractDao<Computer> {
 
 	// Logger
 	private Logger log = LoggerFactory.getLogger(getClass());
@@ -25,13 +25,16 @@ public final class ComputerDAO extends AbstractDAO<Computer> {
 	/**
 	 * DAO dependency is only injected by spring
 	 */
-	private ComputerDAO() {
+	private ComputerDao() {
 	}
 
 	@Override
 	public List<Computer> find(Constraint constraint) {
 		// Build the query
-		String hql = "FROM Computer as computer LEFT JOIN fetch computer.company as company";
+		String hql = "FROM Computer as computer"; ;
+		if (constraint != null && constraint.getFilter() != null) {
+			hql += " LEFT JOIN fetch computer.company as company";
+		}
 		Query query = getQuery(constraint, hql, true);
 		// Execute the query
 		@SuppressWarnings("unchecked")

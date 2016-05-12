@@ -1,7 +1,7 @@
 package com.excilys.cdb.mapper.implementation;
 
-import com.excilys.cdb.dto.IDTO;
-import com.excilys.cdb.dto.implementation.CompanyDTO;
+import com.excilys.cdb.dto.IDto;
+import com.excilys.cdb.dto.implementation.CompanyDto;
 import com.excilys.cdb.mapper.IMapper;
 import com.excilys.cdb.model.Company;
 
@@ -14,8 +14,8 @@ public class CompanyMapper implements IMapper<Company> {
 	}
 
     @Override
-    public Company getFromDTO(IDTO dto) {
-        CompanyDTO companyDTO = (CompanyDTO) dto;
+    public Company getFromDTO(IDto dto) {
+        CompanyDto companyDTO = (CompanyDto) dto;
         Company company = new Company();
         company.setId(companyDTO.getId());
         company.setName(companyDTO.getName());
@@ -23,8 +23,8 @@ public class CompanyMapper implements IMapper<Company> {
     }
 
     @Override
-    public IDTO getFromModel(Company model) {
-        CompanyDTO dto = new CompanyDTO();
+    public IDto getFromModel(Company model) {
+        CompanyDto dto = new CompanyDto();
         dto.setId(model.getId());
         dto.setName(model.getName());
         return dto;

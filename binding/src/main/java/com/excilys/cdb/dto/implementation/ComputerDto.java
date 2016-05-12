@@ -3,18 +3,20 @@ package com.excilys.cdb.dto.implementation;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.excilys.cdb.dto.IDTO;
+import com.excilys.cdb.dto.IDto;
 import com.excilys.cdb.dto.validation.ConsistentDate;
 import com.excilys.cdb.dto.validation.DateFormat;
 
 /**
  * DTO implementation for computers
  */
+@XmlRootElement
 @ConsistentDate
-public class ComputerDTO implements IDTO {
+public class ComputerDto implements IDto {
 
 	private Long id;
 	@NotNull(message="{error.name.null}")
@@ -29,10 +31,10 @@ public class ComputerDTO implements IDTO {
 	private Long companyId;
 	private String companyName;
 
-	public ComputerDTO() {
+	public ComputerDto() {
 	}
 
-	private ComputerDTO(Long id, String name, String introduced, String discontinued, Long companyId, String companyName) {
+	private ComputerDto(Long id, String name, String introduced, String discontinued, Long companyId, String companyName) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
@@ -41,7 +43,7 @@ public class ComputerDTO implements IDTO {
 		this.companyName = companyName;
 	}
 
-	public ComputerDTO(String name) {
+	public ComputerDto(String name) {
 		setName(name);
 	}
 
@@ -114,7 +116,7 @@ public class ComputerDTO implements IDTO {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ComputerDTO other = (ComputerDTO) obj;
+		ComputerDto other = (ComputerDto) obj;
 		if (companyId == null) {
 			if (other.companyId != null)
 				return false;
@@ -190,8 +192,8 @@ public class ComputerDTO implements IDTO {
 			return this;
 		}
 
-		public ComputerDTO build() {
-			return new ComputerDTO(id, name, introduced, discontinued, companyId, companyName);
+		public ComputerDto build() {
+			return new ComputerDto(id, name, introduced, discontinued, companyId, companyName);
 		}
 	}
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.cdb.dto.implementation.ComputerDTO;
+import com.excilys.cdb.dto.implementation.ComputerDto;
 import com.excilys.cdb.mapper.implementation.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.pagination.implementation.ComputerPage;
@@ -118,7 +118,7 @@ public class ComputerController {
 		
 		// Set the companies list for the JSP
 		model.addAttribute(COMPANIES, companyService.list(null));
-		model.addAttribute(DTO, new ComputerDTO());
+		model.addAttribute(DTO, new ComputerDto());
 		
 		// Forward to the add computer page with the new attributes
 		return "addComputer";
@@ -132,7 +132,7 @@ public class ComputerController {
 	 * @return the name of the result JSP (result view)
 	 */
 	@RequestMapping(path = "/addComputer", method = RequestMethod.POST)
-	public String postAdd(Model model, @Valid ComputerDTO dto, BindingResult result) {
+	public String postAdd(Model model, @Valid ComputerDto dto, BindingResult result) {
 		model.addAttribute(COMPANIES, companyService.list(null));
 		// If the validation have some errors, we print it
 		if (result.hasErrors()) {
@@ -169,7 +169,7 @@ public class ComputerController {
 			return "error/404";
 		}
         // The id is correct, we retrieve the computer and send its DTO to the JSP
-		ComputerDTO dto = (ComputerDTO) computerMapper.getFromModel(computer);
+		ComputerDto dto = (ComputerDto) computerMapper.getFromModel(computer);
 		model.addAttribute(DTO, dto);
 		// The JSP also need the list of the companies
 		model.addAttribute(COMPANIES, companyService.list(null));
@@ -184,7 +184,7 @@ public class ComputerController {
 	 * @return the name of the result JSP (result view)
 	 */
 	@RequestMapping(path="/editComputer", method = RequestMethod.POST)
-	public String doPost(Model model, @Valid ComputerDTO dto, BindingResult result) {
+	public String doPost(Model model, @Valid ComputerDto dto, BindingResult result) {
 		model.addAttribute(DTO, dto);
 		model.addAttribute(COMPANIES, companyService.list(null));
 		// The validation have some errors,

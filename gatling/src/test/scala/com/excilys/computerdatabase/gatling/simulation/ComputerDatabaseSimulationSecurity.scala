@@ -31,7 +31,7 @@ class ComputerDatabaseSimulationSecurity extends Simulation {
   val admins = scenario("Admins").exec(new Authenticate("data/admin.csv").authenticate, Browse.browse,Search.search, AddSecurity.add, EditSecurity.edit, DeleteSecurity.delete)
 
   setUp(
-    users.inject(rampUsers(500) over (30 seconds)),
+    users.inject(rampUsers(1000) over (30 seconds)),
     admins.inject(rampUsers(10) over (30 seconds))
   ).protocols(httpConf)
 

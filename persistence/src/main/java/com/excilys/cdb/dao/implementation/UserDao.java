@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.dao.AbstractDAO;
+import com.excilys.cdb.dao.AbstractDao;
 import com.excilys.cdb.model.User;
 import com.excilys.cdb.model.UserRole;
 import com.excilys.cdb.util.Constraint;
@@ -27,7 +27,7 @@ import com.excilys.cdb.util.Constraint;
 @Filters( {
 	@Filter(name="filter", condition="name like :filter")
 } )
-public class UserDAO extends AbstractDAO<User> {
+public class UserDao extends AbstractDao<User> {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 

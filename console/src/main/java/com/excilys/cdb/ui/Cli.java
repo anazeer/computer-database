@@ -17,17 +17,20 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 
-import com.excilys.cdb.dto.implementation.ComputerDTO;
+import com.excilys.cdb.dto.implementation.ComputerDto;
 import com.excilys.cdb.mapper.implementation.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.User;
 import com.excilys.cdb.model.UserRole;
 import com.excilys.cdb.pagination.AbstractPage;
+import com.excilys.cdb.pagination.implementation.CompanyPage;
+import com.excilys.cdb.pagination.implementation.ComputerPage;
 import com.excilys.cdb.pagination.util.PageRequest;
-import com.excilys.cdb.service.IService;
 import com.excilys.cdb.service.implementation.CompanyService;
 import com.excilys.cdb.service.implementation.ComputerService;
 import com.excilys.cdb.service.implementation.UserService;
+import com.excilys.cdb.service.implementation.ComputerRestService;
+import com.excilys.cdb.util.Constraint;
 import com.excilys.cdb.util.Role;
 
 @Controller
@@ -48,6 +51,10 @@ public class Cli {
 	// Properties messages
 	@Autowired
 	private MessageSource messageSource;
+	
+	// Call to the rest service
+	@Autowired
+	private ComputerRestService webCli;
 
 	// List containing valid inputs for each menu
 	private List<Integer> generalInstr = new ArrayList<>();
@@ -63,6 +70,10 @@ public class Cli {
 	private final int countComputerInstr = 6;
 	private final int countUserInstr = 5;
 	private final int countRoleInstr = 3;
+	
+	// Default page constraints
+	private Constraint constraint = new Constraint.Builder().limit(10).build();
+	private PageRequest pageRequest = new PageRequest(constraint, 1);
 
 	// Read inputs
 	private Scanner scan;
@@ -318,19 +329,15 @@ public class Cli {
 	 * Navigate through the object pages
 	 * @param service the service of the paginated object
 	 */
-	private void navigatePage(IService<?> service) {
-		int currentPage = 1;
+	private void navigatePage(AbstractPage<?> page) {
 		boolean end = false;
 		while (!end) {
-			PageRequest pageRequest = new PageRequest(null, currentPage);
-			AbstractPage<?> page = service.getPage(pageRequest);
 			showPage(page.getElements());
 			switch (readPage()) {
 			case 'n' : page.next(); break;
 			case 'p' : page.previous(); break;
 			case 'q' : end = true; break;
 			}
-			currentPage = page.getCurrentPage();
 		}
 	}
 
@@ -338,7 +345,7 @@ public class Cli {
 	 * Construct a new computer in line command
 	 * @return the created computer
 	 */
-	private ComputerDTO constructComputer() {
+	private ComputerDto constructComputer() {
 		String name = readString("Choose the name:");
 
 		LocalDate introduced;
@@ -354,7 +361,7 @@ public class Cli {
 
 		System.out.println("Select company id");
 		Long company_id = readId();
-		ComputerDTO computer = new ComputerDTO(name);
+		ComputerDto computer = new ComputerDto(name);
 		String pattern = messageSource.getMessage("util.date.format", null, LocaleContextHolder.getLocale());
 		DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
 		if (introduced != null) {
@@ -384,8 +391,9 @@ public class Cli {
 
 	/**
 	 * The main UI
+	 * @param callRestApi true if the session call the rest API, call the service otherwise
 	 */
-	public void session() {
+	public void session(boolean callRestApi) {
 		scan = new Scanner(System.in);
 		initLists();
 		boolean exit = false;
@@ -401,20 +409,21 @@ public class Cli {
 				}
 				entry = readOption(step);
 			}
-			if (step == 0) {
+			if (step == 0) { // Main menu
 				switch (entry) {
 				case 1 : step = 1; break;
 				case 2 : step = 2; break;
 				case 3 : step = 3; break;
 				case 4 : exit = true; break;
 				}
-			} else if (step == 1) {
+			} else if (step == 1) { // Company
 				switch (entry) {
 				case 1 : 
 					System.out.println("---------------------");
 					System.out.println("- List of companies -");
 					System.out.println("---------------------");
-					navigatePage(companyService);
+					CompanyPage page = companyService.getPage(pageRequest);
+					navigatePage(page);
 					break;
 				case 2 : 
 					Long id = readId();
@@ -423,19 +432,29 @@ public class Cli {
 				case 3 : step = 0;
 				break;
 				}
-			} else if (step == 2) {
+			} else if (step == 2) { // Computer
 				Computer computer;
-				ComputerDTO computerDTO;
+				ComputerDto computerDTO;
 				switch (entry) {
 				case 1 :
 					System.out.println("---------------------");
 					System.out.println("- List of computers -");
 					System.out.println("---------------------");
-					navigatePage(computerService);
+					ComputerPage page = null;
+					if (callRestApi) {
+						showPage(webCli.getPage(pageRequest));
+					} else {
+						page = computerService.getPage(pageRequest);
+						navigatePage(page);
+					}
 					break;
 				case 2 :
 					Long id = readId();
-					computer = computerService.getComputer(id);
+					if (callRestApi) {
+						computer = computerMapper.getFromDTO(webCli.findById(id));
+					} else {
+						computer = computerService.findById(id);
+					}
 					if (computer == null) {
 						System.out.println("No computer is referenced by id " + id);
 					} else {
@@ -444,20 +463,36 @@ public class Cli {
 					break;
 				case 3 :
 					computerDTO = constructComputer();
-					computer = computerMapper.getFromDTO(computerDTO);
-					computerService.create(computer);
+					if (callRestApi) {
+						webCli.create(computerDTO);
+					} else {
+						computer = computerMapper.getFromDTO(computerDTO);
+						computerService.create(computer);
+					}
 					break;
 				case 4 :
 					Long updateId = readId();
 					computerDTO = constructComputer();
 					computerDTO.setId(updateId);
+					if (callRestApi) {
+						webCli.update(computerDTO);
+					} else {
 					computer = computerMapper.getFromDTO(computerDTO);
-					computerService.update(computer);                     
+					computerService.update(computer);
+					}
 					break;
-				case 5 : Long delId = readId(); computerService.delete(delId); break;
+				case 5 :
+					Long delId = readId();
+					if (callRestApi) {
+						String result = webCli.delete(delId);
+						System.out.println(result);
+					} else {
+						computerService.delete(delId);
+					}
+					break;
 				case 6 : step = 0; break;
 				}
-			} else {
+			} else { // User
 				User user;
 				Long id;
 				switch (entry) {
@@ -465,7 +500,7 @@ public class Cli {
 					System.out.println("---------------------");
 					System.out.println("- List of users -");
 					System.out.println("---------------------");
-					navigatePage(userService);
+					navigatePage(userService.getPage(pageRequest));
 					break;
 				case 2:
 					id = readId();

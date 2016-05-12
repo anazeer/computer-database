@@ -61,6 +61,7 @@ public interface IService<T> {
 	/**
 	 * Delete the row referenced by id
 	 * @param id the row reference
+	 * @return true if the object have been successfully deleted
 	 */
-	void delete(Long id);
+	boolean delete(Long id);
 }

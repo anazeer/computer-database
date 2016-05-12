@@ -3,7 +3,7 @@ package com.excilys.cdb.pagination;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.excilys.cdb.dto.IDTO;
+import com.excilys.cdb.dto.IDto;
 import com.excilys.cdb.mapper.IMapper;
 import com.excilys.cdb.pagination.util.PageRequest;
 import com.excilys.cdb.util.Constraint;
@@ -57,7 +57,7 @@ public abstract class AbstractPage<T> {
     /**
      * The list containing the result of the pagination
      */
-    protected List<IDTO> elements;
+    protected List<IDto> elements;
     
     protected AbstractPage(IMapper<T> mapper, PageRequest pageRequest, int totalCount) {
     	this.mapper = mapper;
@@ -98,7 +98,7 @@ public abstract class AbstractPage<T> {
     }
     
     public void setElements(List<T> elements) {
-		List<IDTO> dto = elements.stream()
+		List<IDto> dto = elements.stream()
 		        .map(model -> mapper.getFromModel(model))
 		        .collect(Collectors.toList());
 		this.elements = dto;
@@ -132,7 +132,11 @@ public abstract class AbstractPage<T> {
 		return order;
 	}
 
-	public List<IDTO> getElements() {
+	public List<IDto> getElements() {
 		return elements;
+	}
+
+	public IMapper<T> getMapper() {
+		return mapper;
 	}
 }

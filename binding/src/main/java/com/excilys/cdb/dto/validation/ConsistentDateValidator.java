@@ -11,14 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import com.excilys.cdb.dto.implementation.ComputerDTO;
+import com.excilys.cdb.dto.implementation.ComputerDto;
 
 /**
  * Date validator
  * Validate the ComputerDTO class
  * Check whether the introduced date is before the discontinued date
  */
-public class ConsistentDateValidator implements ConstraintValidator<ConsistentDate, ComputerDTO> {
+public class ConsistentDateValidator implements ConstraintValidator<ConsistentDate, ComputerDto> {
 	
 	@Autowired
 	private MessageSource messageSource;
@@ -28,7 +28,7 @@ public class ConsistentDateValidator implements ConstraintValidator<ConsistentDa
 	}
 
 	@Override
-	public boolean isValid(ComputerDTO value, ConstraintValidatorContext context) {
+	public boolean isValid(ComputerDto value, ConstraintValidatorContext context) {
 
 		String date1 = value.getIntroduced();
 		String date2 = value.getDiscontinued();

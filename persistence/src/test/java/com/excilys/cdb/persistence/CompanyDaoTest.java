@@ -14,60 +14,52 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.dao.implementation.UserDAO;
-import com.excilys.cdb.model.User;
+import com.excilys.cdb.dao.implementation.CompanyDao;
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.util.Constraint;
 
 /**
- * UserDAO test class. We assume that the database for testing is not empty and contains 2 elements
+ * CompanyDAO test class. We assume that the database for testing is not empty and contains 42 elements
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/persistence-context.xml"})
 @Transactional
-public class UserDAOTest {
+public class CompanyDaoTest {
 
 	@Autowired
-	private UserDAO userDAO;
+	private CompanyDao companyDAO;
 	
 	/**
-	 * The test database contains a 24th element that is Nintendo User
+	 * The test database contains a 24th element that is Nintendo company
 	 */
 	@Test
 	public void testFindById() {
-		User user = userDAO.findById(1L);
-		assertNotNull(user);
-		assertEquals("admin", user.getUsername());
-	}
-	
-	@Test
-	public void testFindByUsername() {
-		String username = "user";
-		User user = userDAO.findByUsername(username);
-		assertNotNull(user);
-		assertEquals(username, user.getUsername());
+		Company company = companyDAO.findById(24L);
+		assertNotNull(company);
+		assertEquals("Nintendo", company.getName());
 	}
 	
 	@Test
 	public void testFindNotOk() {
-		User user = userDAO.findById(300L);
-		assertNull(user);
+		Company company = companyDAO.findById(300L);
+		assertNull(company);
 	}
 	
 	@Test
 	public void testFindPageQuery() {
-		Constraint query = new Constraint.Builder().offset(0).limit(1).build();
-		List<User> list = userDAO.find(query);
+		Constraint query = new Constraint.Builder().offset(0).limit(10).build();
+		List<Company> list = companyDAO.find(query);
 		assertNotNull(list);
-		assertTrue(list.size() == 1);
+		assertTrue(list.size() == 10);
 	}
 	
 	@Test
 	public void testFindFilterQuery() {
 		String filter = "in";
 		Constraint query = new Constraint.Builder().filter(filter).build();
-		List<User> list = userDAO.find(query);
-		for (User u : list) {
-			assertTrue(u.getUsername().toLowerCase().contains(filter));
+		List<Company> list = companyDAO.find(query);
+		for (Company c : list) {
+			assertTrue(c.getName().toLowerCase().contains(filter));
 		}
 	}
 	
@@ -75,28 +67,28 @@ public class UserDAOTest {
 	public void testFindQuery() {
 		String filter = "In";
 		Constraint query = new Constraint.Builder().offset(0).limit(10).filter(filter).build();
-		List<User> list = userDAO.find(query);
+		List<Company> list = companyDAO.find(query);
 		assertTrue(list.size() <= 10);
 	}
 	
 	@Test
 	public void testCount() {
-		int count = userDAO.count(null);
-		assertEquals(2, count);
+		int count = companyDAO.count(null);
+		assertEquals(42, count);
 	}
 	
 	@Test
 	public void testCountFilter() {
 		String filter = "a";
 		Constraint query = new Constraint.Builder().filter(filter).build();
-		List<User> list = userDAO.find(query);
-		assertEquals(list.size(), userDAO.count(query));
+		List<Company> list = companyDAO.find(query);
+		assertEquals(list.size(), companyDAO.count(query));
 	}
 	
 	@Test
 	public void testFindAll() throws Exception {
-		List<User> list = userDAO.find(null);
+		List<Company> list = companyDAO.find(null);
 		assertNotNull(list);
-		assertEquals(2, list.size());
+		assertEquals(42, list.size());
 	}
 }

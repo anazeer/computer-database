@@ -15,7 +15,7 @@ import com.excilys.cdb.util.Constraint;
  * Abstract implementation of DAO
  */
 @Repository
-public abstract class AbstractDAO<T> implements IDAO<T> {
+public abstract class AbstractDao<T> implements IDao<T> {
 	
 	@Autowired
 	protected SessionFactory sessionFactory;

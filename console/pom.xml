@@ -40,7 +40,7 @@
 			<artifactId>computer-database-binding</artifactId>
 			<version>${parentAppVersion}</version>
 		</dependency>
-
+		
 	</dependencies>
 
 </project>

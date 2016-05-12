@@ -1,4 +1,4 @@
 package com.excilys.cdb.dto;
 
-public interface IDTO {
+public interface IDto {
 }

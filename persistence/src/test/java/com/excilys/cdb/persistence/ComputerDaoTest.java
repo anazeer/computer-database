@@ -16,7 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.dao.implementation.ComputerDAO;
+import com.excilys.cdb.dao.implementation.ComputerDao;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.Constraint;
@@ -28,10 +28,10 @@ import com.excilys.cdb.util.Order;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/persistence-context.xml"})
 @Transactional
-public class ComputerDAOTest {
+public class ComputerDaoTest {
 
 	@Autowired
-	private ComputerDAO computerDAO;
+	private ComputerDao computerDAO;
 	private final String msgId = "id should be not null";
 
 	/**

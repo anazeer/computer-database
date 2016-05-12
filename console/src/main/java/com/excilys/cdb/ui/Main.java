@@ -8,7 +8,7 @@ public class Main {
 		try (ClassPathXmlApplicationContext context = 
 				new ClassPathXmlApplicationContext("console-context.xml")) {
 			Cli cli = context.getBean(Cli.class);
-			cli.session();
+			cli.session(true);
 		}
 	}
 }

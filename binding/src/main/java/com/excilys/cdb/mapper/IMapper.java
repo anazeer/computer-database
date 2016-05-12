@@ -1,6 +1,6 @@
 package com.excilys.cdb.mapper;
 
-import com.excilys.cdb.dto.IDTO;
+import com.excilys.cdb.dto.IDto;
 
 /**
  * Generic interface for mapping object
@@ -13,13 +13,13 @@ import com.excilys.cdb.dto.IDTO;
      * @param dto the DTO implementation of the model
      * @return the model from the dto
      */
-    T getFromDTO(IDTO dto);
+    T getFromDTO(IDto dto);
 
     /**
      * Maps a model object into a DTO
      * @param model the object model
      * @return the DTO from the model
      */
-    IDTO getFromModel(T model);
+    IDto getFromModel(T model);
 
 }

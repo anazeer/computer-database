@@ -1,16 +1,16 @@
 package com.excilys.cdb.dto.implementation;
 
-import com.excilys.cdb.dto.IDTO;
+import com.excilys.cdb.dto.IDto;
 
 /**
  * DTO implementation for companies
  */
-public class CompanyDTO implements IDTO {
+public class CompanyDto implements IDto {
 	
 	private Long id;
 	private String name;
 
-	public CompanyDTO() {
+	public CompanyDto() {
 	}
 
 	public Long getId() {
@@ -46,7 +46,7 @@ public class CompanyDTO implements IDTO {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CompanyDTO other = (CompanyDTO) obj;
+		CompanyDto other = (CompanyDto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

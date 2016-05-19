@@ -45,6 +45,20 @@
 
 		<!-- Spring web and security -->
 
+        <!-- Spring web security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${springSecurityVersion}</version>
+        </dependency>
+
+        <!-- Spring security configuration -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${springSecurityVersion}</version>
+        </dependency>
+
 		<!-- Spring web -->
 
 		<dependency>

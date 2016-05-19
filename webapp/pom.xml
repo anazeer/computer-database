@@ -75,7 +75,6 @@
 			<version>${springSecurityVersion}</version>
 		</dependency>
 
-
 		<!-- Spring security configuration -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>

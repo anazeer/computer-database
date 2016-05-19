@@ -34,9 +34,8 @@ public class ComputerRestController {
 	private ComputerMapper computerMapper;
 
 	/**
-	 *
-	 * @param id the object reference
-	 * @return the object referenced by id
+	 * By default, the index shows the total count of computers
+	 * @return the singleton map containing the count of computers
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<?, ?> index() {
@@ -45,9 +44,9 @@ public class ComputerRestController {
 	}
 
 	/**
-	 *
-	 * @param id the object reference
-	 * @return the object referenced by id
+	 * Get the computer referenced by id
+	 * @param id the computer reference
+	 * @return the computer referenced by id
 	 */
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ComputerDto findById(@PathVariable Long id) {
@@ -58,9 +57,8 @@ public class ComputerRestController {
 	}
 
 	/**
-	 * 
-	 * @param query the object containing the query constraints 
-	 * @param currentPage the number of the requested page
+	 * Get the computers corresponding to the post request constraints
+	 * @param pageRequest the object containing the page constraints
 	 * @return the list containing the result
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,9 +67,9 @@ public class ComputerRestController {
 	}
 
 	/**
-	 * Persist the object
-	 * @param obj the object to persist
-	 * @return the object with the new id
+	 * Persist a computer in the database
+	 * @param dto the computer to persist
+	 * @return the persisted computer with its new id
 	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ComputerDto create(@RequestBody @Valid ComputerDto dto) {
@@ -81,10 +79,10 @@ public class ComputerRestController {
 	}
 
 	/**
-	 * Update the object
-	 * @param obj the object with an existing id and the new state
+	 * Update the computer
+	 * @param dto the computer with an existing id and the new state
 	 */
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/edit", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ComputerDto update(@RequestBody @Valid ComputerDto dto) {
 		Computer computer = computerMapper.getFromDTO(dto);
 		computerService.update(computer);
@@ -92,10 +90,10 @@ public class ComputerRestController {
 	}
 
 	/**
-	 * Delete the row referenced by id
-	 * @param id the row reference
+	 * Delete the computer referenced by id
+	 * @param id the computer reference
 	 */
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> delete(@PathVariable Long id) {
 		boolean success = computerService.delete(id);
 		String message = success ? "computer deleted" : "computer not found";

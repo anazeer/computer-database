@@ -1,49 +1,55 @@
 <?xml version="1.0"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
 
-	<artifactId>computer-database-webservice</artifactId>
-	<packaging>war</packaging>
+    <artifactId>computer-database-webservice</artifactId>
+    <packaging>war</packaging>
 
-	<parent>
-		<artifactId>computer-database</artifactId>
-		<groupId>com.excilys.cdb</groupId>
-		<version>${parentAppVersion}</version>
-	</parent>
+    <parent>
+        <artifactId>computer-database</artifactId>
+        <groupId>com.excilys.cdb</groupId>
+        <version>${parentAppVersion}</version>
+    </parent>
 
-	<!-- Dependencies -->
+    <!-- Dependencies -->
 
-	<dependencies>
+    <dependencies>
 
-		<!-- Computer database dependencies -->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-jersey2-jaxrs</artifactId>
+            <version>1.5.9</version>
+        </dependency>
 
-		<!-- CDB Core model dependency -->
+        <!-- Computer database dependencies -->
 
-		<dependency>
-			<groupId>com.excilys.cdb</groupId>
-			<artifactId>computer-database-core</artifactId>
-			<version>${parentAppVersion}</version>
-		</dependency>
+        <!-- CDB Core model dependency -->
 
-		<!-- CDB Binding mapper dependency -->
+        <dependency>
+            <groupId>com.excilys.cdb</groupId>
+            <artifactId>computer-database-core</artifactId>
+            <version>${parentAppVersion}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.excilys.cdb</groupId>
-			<artifactId>computer-database-binding</artifactId>
-			<version>${parentAppVersion}</version>
-		</dependency>
+        <!-- CDB Binding mapper dependency -->
 
-		<!-- CDB Service dependency -->
+        <dependency>
+            <groupId>com.excilys.cdb</groupId>
+            <artifactId>computer-database-binding</artifactId>
+            <version>${parentAppVersion}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.excilys.cdb</groupId>
-			<artifactId>computer-database-service</artifactId>
-			<version>${parentAppVersion}</version>
-		</dependency>
+        <!-- CDB Service dependency -->
 
-		<!-- Spring web and security -->
+        <dependency>
+            <groupId>com.excilys.cdb</groupId>
+            <artifactId>computer-database-service</artifactId>
+            <version>${parentAppVersion}</version>
+        </dependency>
+
+        <!-- Spring web and security -->
 
         <!-- Spring web security -->
         <dependency>
@@ -59,92 +65,98 @@
             <version>${springSecurityVersion}</version>
         </dependency>
 
-		<!-- Spring web -->
+        <!-- Spring web -->
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${springVersion}</version>
+        </dependency>
 
-		<!-- Spring web mvc -->
+        <!-- Spring web mvc -->
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${springVersion}</version>
+        </dependency>
 
-		<!-- JSTL API -->
+        <!-- JSTL API -->
 
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${jstlVersion}</version>
-		</dependency>
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstlVersion}</version>
+        </dependency>
 
-		<!-- Jackson -->
+        <!-- Jackson -->
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.5.0</version>
-		</dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jacksonDatabindVersion}</version>
+        </dependency>
 
-		<!-- Rest Service API -->
+        <!-- Rest Service API -->
 
-		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>javax.ws.rs-api</artifactId>
-			<version>${restVersion}</version>
-		</dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${restVersion}</version>
+        </dependency>
 
-		<!-- Jersey for response -->
+        <!-- Jersey for response -->
 
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-common</artifactId>
-			<version>${jerseyVersion}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>${jerseyVersion}</version>
+        </dependency>
 
+        <!-- Swagger (rest doc) -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swaggerVersion}</version>
+        </dependency>
 
-		<!-- Compile time -->
+        <!-- Compile time -->
 
-		<!-- Servlet dependency for maven build -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${servletVersion}</version>
-			<scope>provided</scope>
-		</dependency>
+        <!-- Servlet dependency for maven build -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servletVersion}</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- Test dependencies -->
+        <!-- Test dependencies -->
 
-		<!-- Selenium API -->
+        <!-- Selenium API -->
 
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<version>${seleniumVersion}</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${seleniumVersion}</version>
+            <scope>test</scope>
+        </dependency>
 
-		<!-- Use by Selenium -->
+        <!-- Use by Selenium -->
 
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>${httpclientVersion}</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclientVersion}</version>
+            <scope>test</scope>
+        </dependency>
 
-		<!-- slf4j simple, used by the web driver (Selenium) -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>${slf4jSimpleVersion}</version>
-		</dependency>
+        <!-- slf4j simple, used by the web driver (Selenium) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4jSimpleVersion}</version>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>

@@ -20,6 +20,7 @@
 		<module>service</module>
 		<module>webapp</module>
 		<module>webservice</module>
+        <module>swagger</module>
 
 	</modules>
 
@@ -43,12 +44,14 @@
 		<jacksonVersion>2.7.4</jacksonVersion>
 		<gensonVersion>1.4</gensonVersion>
 		<jerseyJsonVersion>1.19.1</jerseyJsonVersion>
+		<jacksonDatabindVersion>2.5.0</jacksonDatabindVersion>
 		<springVersion>4.2.6.RELEASE</springVersion>
 		<springSecurityVersion>4.1.0.RELEASE</springSecurityVersion>
 		<servletVersion>3.1.0</servletVersion>
 		<validationVersion>1.1.0.Final</validationVersion>
 		<hibernateValidationVersion>5.2.4.Final</hibernateValidationVersion>
 		<hibernateVersion>5.1.0.Final</hibernateVersion>
+		<swaggerVersion>2.4.0</swaggerVersion>
 
 		<!-- Source encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -57,7 +60,7 @@
 		<appName>computer-database</appName>
 
 		<!-- Application version -->
-		<parentAppVersion>0.8.1-SNAPSHOT</parentAppVersion>
+		<parentAppVersion>0.8.3-SNAPSHOT</parentAppVersion>
 
 	</properties>
 

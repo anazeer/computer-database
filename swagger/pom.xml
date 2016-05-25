@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>computer-database-swagger</artifactId>
+    <packaging>war</packaging>
+
+    <parent>
+        <artifactId>computer-database</artifactId>
+        <groupId>com.excilys.cdb</groupId>
+        <version>${parentAppVersion}</version>
+    </parent>
+
+    <!-- Dependencies -->
+
+    <dependencies>
+
+        <!-- CDB webservice dependency -->
+        <dependency>
+            <groupId>com.excilys.cdb</groupId>
+            <artifactId>computer-database-webservice</artifactId>
+            <version>${parentAppVersion}</version>
+        </dependency>
+
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jacksonDatabindVersion}</version>
+        </dependency>
+
+        <!-- Spring web mvc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${springVersion}</version>
+        </dependency>
+
+        <!-- Swagger (rest doc) -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swaggerVersion}</version>
+        </dependency>
+
+        <!-- Swagger UI -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swaggerVersion}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

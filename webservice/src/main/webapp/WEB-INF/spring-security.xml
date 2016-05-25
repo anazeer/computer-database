@@ -9,11 +9,13 @@
     <!-- Enable use-expressions -->
     <http auto-config="true" use-expressions="true">
 
-
-        <intercept-url pattern="/computer-database/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" method="GET"/>
-        <intercept-url pattern="/computer-database/**" access="hasRole('ROLE_ADMIN')" method="POST"/>
-        <intercept-url pattern="/computer-database/**" access="hasRole('ROLE_ADMIN')" method="PUT"/>
-        <intercept-url pattern="/computer-database/**" access="hasRole('ROLE_ADMIN')" method="DELETE"/>
+        <intercept-url pattern="/" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" method="GET"/>
+        <intercept-url pattern="/create" access="hasRole('ROLE_ADMIN')" method="POST"/>
+        <intercept-url pattern="/delete/**" access="hasRole('ROLE_ADMIN')" method="DELETE"/>
+        <intercept-url pattern="/edit" access="hasRole('ROLE_ADMIN')" method="PUT"/>
+        <intercept-url pattern="/get/** " access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" method="GET"/>
+        <intercept-url pattern="/list" access="hasRole('ROLE_ADMIN')" method="POST"/>
+        <intercept-url pattern="/v2-api-docs" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" method="GET"/>
 
         <!-- Enable basic auth -->
         <http-basic/>

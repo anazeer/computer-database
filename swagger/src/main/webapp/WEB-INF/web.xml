@@ -5,28 +5,17 @@
     <description>Computer database web service</description>
     <display-name>Web Service</display-name>
 
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:webservice-context.xml /WEB-INF/spring-dispatcher-servlet.xml
-            /WEB-INF/spring-security.xml
+        <param-value>classpath:swagger-context.xml /WEB-INF/spring-dispatcher-servlet.xml
         </param-value>
     </context-param>
-
-    <!-- Spring Security -->
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy
-        </filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+
     <servlet>
         <servlet-name>spring-dispatcher</servlet-name>
         <servlet-class>
@@ -34,9 +23,9 @@
         </servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>spring-dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
 </web-app>
